@@ -36,7 +36,7 @@ const WelcomeNotificationControl = ({navigation}: NavigProps<null>) => {
           style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
-              onPress={() => navigation?.navigate('WelcomeName')}
+              onPress={() => navigation?.navigate('basicInfo')}
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

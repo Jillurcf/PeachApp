@@ -7,7 +7,6 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import LinearGradient from 'react-native-linear-gradient';
 import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
 import InputText from '../components/inputs/InputText';

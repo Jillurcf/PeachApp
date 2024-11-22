@@ -7,18 +7,13 @@ import {
     TextInput,
     View,
   } from 'react-native';
-  import React, {useEffect, useState} from 'react';
-  import LinearGradient from 'react-native-linear-gradient';
   import tw from '../lib/tailwind';
   import TButton from '../components/buttons/TButton';
-  import InputText from '../components/inputs/InputText';
-  import {RadioButton} from 'react-native-ui-lib';
-  import {TouchableOpacity} from 'react-native-gesture-handler';
-  import { NavigProps } from '../interfaces/NaviProps';
+   import { NavigProps } from '../interfaces/NaviProps';
   
   type Props = {};
   
-  const WelcomeScreen = ({navigation}: NavigProps<null>) => {
+  const BasicInfo = ({navigation}: NavigProps<null>) => {
    
   
     
@@ -26,11 +21,12 @@ import {
     return (
       <View style={tw`flex-1 items-center justify-center`}>
         <View style={tw`flex-col justify-between h-[100%]`}>
-          <View style={tw`my-[10%]  justify-center px-[4%]`}>
-            <Text style={tw` font-MontserratRegular`}>Welcome to Peace app</Text>
-            <Text style={tw`font-MontserratBlack text-black text-2xl`}>Meet. Match. Move On... Together</Text>
+          <View style={tw`my-[10%]  justify-center`}>
+          
+            <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>The More you share</Text>
+            <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>better we match</Text>
             <View style={tw`items-center justify-center`}>
-            <Image style={tw`w-[70%] h-[70%]`} source={require('../assets/images/OpeningScreenImg.png')} />
+            <Image style={tw`w-[70%] h-[70%]`} source={require('../assets/images/BasicInfo.png')} />
             </View>
               </View>
 
@@ -38,10 +34,10 @@ import {
             style={tw``}>
             <View style={tw``}>
               <TButton
-              onPress={() => navigation?.navigate('WelcomeName')}
+              onPress={() => navigation?.navigate('location')}
                 titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
-                title="Continue"
-                containerStyle={tw`bg-primary w-[100%] rounded-b-full`}
+                title="Enter Basic Information"
+                containerStyle={tw`bg-primary w-full rounded-b-full`}
               />
             </View>
           </View>
@@ -52,7 +48,7 @@ import {
     );
   };
   
-  export default WelcomeScreen;
+  export default BasicInfo;
   
   const styles = StyleSheet.create({
     container: {

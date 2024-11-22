@@ -7,42 +7,41 @@ import {
     TextInput,
     View,
   } from 'react-native';
-  import React, {useEffect, useState} from 'react';
-  import LinearGradient from 'react-native-linear-gradient';
   import tw from '../lib/tailwind';
   import TButton from '../components/buttons/TButton';
-  import InputText from '../components/inputs/InputText';
-  import {RadioButton} from 'react-native-ui-lib';
-  import {TouchableOpacity} from 'react-native-gesture-handler';
-  import { NavigProps } from '../interfaces/NaviProps';
+   import { NavigProps } from '../interfaces/NaviProps';
+import IwtButton from '../components/buttons/IwtButton';
+import { PlusIcon } from '../assets/icons/icon';
   
   type Props = {};
   
-  const WelcomeScreen = ({navigation}: NavigProps<null>) => {
+  const CreateYourProfile = ({navigation}: NavigProps<null>) => {
    
   
     
   
     return (
       <View style={tw`flex-1 items-center justify-center`}>
-        <View style={tw`flex-col justify-between h-[100%]`}>
-          <View style={tw`my-[10%]  justify-center px-[4%]`}>
-            <Text style={tw` font-MontserratRegular`}>Welcome to Peace app</Text>
-            <Text style={tw`font-MontserratBlack text-black text-2xl`}>Meet. Match. Move On... Together</Text>
+        <View style={tw`flex-col justify-between h-[95%]`}>
+          <View style={tw`my-[10%]  justify-center`}>
+          
+            <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>Profiles with personality lead to better convos.</Text>
             <View style={tw`items-center justify-center`}>
-            <Image style={tw`w-[70%] h-[70%]`} source={require('../assets/images/OpeningScreenImg.png')} />
+            <Image style={tw`w-[70%] h-[70%]`} source={require('../assets/images/createProfile.png')} />
             </View>
               </View>
 
             <View
             style={tw``}>
             <View style={tw``}>
-              <TButton
-              onPress={() => navigation?.navigate('WelcomeName')}
-                titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
-                title="Continue"
-                containerStyle={tw`bg-primary w-[100%] rounded-b-full`}
-              />
+                <IwtButton
+                svg={PlusIcon}
+                onPress={() => navigation?.navigate('uploadPhotos')}
+                titleStyle={tw`text-white font-MontserratBold text-center `}
+                title="Create your profile"
+                containerStyle={tw`bg-primary items-center justify-center mx-auto w-[90%] rounded-full`}
+                />
+              
             </View>
           </View>
         </View>
@@ -52,7 +51,7 @@ import {
     );
   };
   
-  export default WelcomeScreen;
+  export default CreateYourProfile;
   
   const styles = StyleSheet.create({
     container: {

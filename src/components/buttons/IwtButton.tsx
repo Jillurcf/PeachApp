@@ -18,7 +18,7 @@ interface IButton {
 
 const IwtButton = ({containerStyle,icon,svg,title,titleStyle,onPress} :IButton) => {
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={.5} style={[tw`bg-[#003CFF] py-4 px-3 flex-row justify-center gap-3 rounded-2xl shadow-md w-36`,containerStyle]}>
+    <TouchableOpacity onPress={onPress} activeOpacity={.5} style={[tw`bg-[#003CFF] py-4 px-3 flex-row  rounded-2xl shadow-md `,containerStyle]}>
     {
         icon ? icon :  <SvgXml
         xml={svg ?svg: `<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@ const IwtButton = ({containerStyle,icon,svg,title,titleStyle,onPress} :IButton) 
       />
     }
     {
-        title &&    <Text style={[tw`text-white font-semibold`,titleStyle]}>{title}</Text>
+        title &&    <Text style={[tw`text-white font-MontserratBold`,titleStyle]}>{title}</Text>
     }
  
   </TouchableOpacity>
