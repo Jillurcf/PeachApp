@@ -1,31 +1,78 @@
-// import * as React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ExploreScreen from '../screen/ExploreScreen';
+import DetailsScreen from '../screen/DetailsScreen';
+import ChatScreen from '../screen/ChatScreen';
 
-// import {NavigationContainer} from '@react-navigation/native';
-// import {GestureHandlerRootView} from 'react-native-gesture-handler';
-// import {Provider} from 'react-redux';
-// import {useDeviceContext} from 'twrnc';
-// import tw from '../lib/tailwind';
-// import store from '../redux/store';
-// import SplashScreen from '../screens/spalsh/SplashScreen';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import tw from '../lib/tailwind';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import NotificationScreen from '../screen/NotificationScreen';
+import { ExploreFocus, Explore, Chat, ChatFocus, Profile, ProfileFocus, Notification, NotificationFocus } from '../assets/icons/icon';
+import ProfileScreen from '../screen/ProfileScreen';
 
-// const Stack = createNativeStackNavigator();
-// function AppRoutes() {
-// //   const [isSplash, setIsSplash] = React.useState(true);
-//   useDeviceContext(tw);
-//   return (
-//     <Provider store={store}>
-//       {/* {isSplash ? (
-//         <SplashScreen setIsSplash={setIsSplash} />
-//       ) : ( */}
-//         <GestureHandlerRootView>
-//           <NavigationContainer>
-//           <Stack.Screen name="accountCreationOpening"  />
-//           </NavigationContainer>
-//         </GestureHandlerRootView>
-//       {/* )} */}
-//     </Provider>
-//   );
-// }
+const Tab = createBottomTabNavigator();
 
-// export default AppRoutes;
+const BottomRoutes = ( ) =>  {
+    return (
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            headerShown: false,
+            tabBarStyle: tw`h-16 bg-primaryBase shadow-none border-0 `,
+            contentStyle: tw`h-16 bg-primaryBase shadow-none border-0 `, 
+            tabBarItemStyle: tw`my-[10px] tablet:my-5 flex-col`,
+            tabBarButton: props => <TouchableOpacity {...props} />,
+            tabBarIcon: ({ focused }) => {
+              let icon: any;
+    
+              // Choose icon based on route name and focused state
+              switch (route.name) {
+                case 'explore':
+                  icon = focused ? ExploreFocus : Explore;
+                  break;
+                case 'notification':
+                  icon = focused ? NotificationFocus : Notification ; // Corrected the name
+                  break;
+                case 'chat':
+                  icon = focused ? ChatFocus : Chat;
+                  break;
+                case 'profileScreen':
+                  icon = focused ? ProfileFocus : Profile;
+                  break;
+                default:
+                  icon = null;
+              }
+    
+              return icon ? <SvgXml xml={icon} /> : null;
+            },
+            tabBarLabel: ({ focused }) => {
+              const color = focused ? 'gray' : 'gray';
+              const font = focused ? 'NunitoSansBold' : 'NunitoSansRegular';
+    
+              return (
+                <Text
+                  style={{
+                    color,
+                    fontSize: 12,
+                    textTransform: 'capitalize',
+                    fontFamily: font,
+                  }}
+                >
+                  {route.name}
+                </Text>
+              );
+            },
+          })}
+        >
+          <Tab.Screen name="explore" component={ExploreScreen} />
+          <Tab.Screen name="notification" component={NotificationScreen} />
+          <Tab.Screen name="chat" component={ChatScreen} />
+          <Tab.Screen name="profileScreen" component={ProfileScreen} />
+         
+         
+    
+        </Tab.Navigator>
+      );
+}
+
+export default BottomRoutes;

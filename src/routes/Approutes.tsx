@@ -34,6 +34,9 @@ import DrugStatus from '../screen/DrugStatus';
 import Privacy from '../screen/Privacy';
 import CreateYourProfile from '../screen/CreateYourProfile';
 import UploadPhotos from '../screen/UploadPhotos';
+import PromptScreen from '../screen/PromptScreen';
+import LikeSendingScreen from '../screen/LikeSendingScreen';
+import BottomRoutes from './BottomRoutes';
 
 
 
@@ -238,12 +241,33 @@ function AppRoutes() {
             name="createYourProfile"
             component={CreateYourProfile}
           /> */}
-          <Stack.Screen
+          {/* <Stack.Screen
           options={{
             headerShown: false,
           }}
             name="uploadPhotos"
             component={UploadPhotos}
+          />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="promptScreen"
+            component={PromptScreen}
+          /> */}
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="likeSendingScreen"
+            component={LikeSendingScreen}
+          />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="bottomRoute"
+            component={BottomRoutes}
           />
          
         </Stack.Navigator>
