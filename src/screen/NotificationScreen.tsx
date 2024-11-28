@@ -1,176 +1,189 @@
-// import React from 'react';
-// import { Dimensions, Image, View } from 'react-native';
-// import Carousel from 'react-native-reanimated-carousel';
-// import tw from 'twrnc';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { Avatar, Badge } from "react-native-ui-lib"; // Using rnulib components
 
-// const { width, height } = Dimensions.get('window');
+import tw from "../lib/tailwind";
 
-// // Example data with local image paths
-// const DATA = [
-//   { id: '1', image: require('../assets/images/openingImg.png') },
-//   { id: '2', image: require('../assets/images/openingImg.png') },
-//   { id: '3', image: require('../assets/images/openingImg.png') },
-// ];
-
-// const NotificationScreen = () => {
-//   return (
-//     <View style={tw`flex-1 bg-black`}>
-//       <Carousel
-//         loop
-//         width={width} // Full-screen width
-//         height={height} // Full-screen height
-//         autoPlay={false} // Auto-slide
-//         autoPlayInterval={3000} 
-//         data={DATA} // Data array with image paths
-//         scrollAnimationDuration={3000} // Smooth animation
-//         mode="horizontal-stack" // Horizontal stack mode
-//         modeConfig={{
-//           stackInterval: 20, // Adjust stack spacing
-//           scaleInterval: 0.9, // Scale for inactive cards
-//           translationInterval: 20, // Adjust side translation
-//         }}
-//         onSnapToItem={(index) => console.log('Current Index:', index)} // Track current slide
-//         renderItem={({ item }) => (
-//           <View style={tw`flex-1 justify-center items-center`}>
-//             <Image
-//               source={item.image} // Local image source
-//               style={tw`w-full h-full`} // Full-screen image
-//               resizeMode="cover" // Cover image for full size
-//             />
-//           </View>
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
-// export default NotificationScreen;
-
-import React from 'react';
-import { Dimensions, ImageBackground, View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
-import LinearGradient from 'react-native-linear-gradient'; // Ensure you have this library installed
-import tw from 'twrnc';
-
-const { width, height } = Dimensions.get('window');
-
-// Example data for the carousel
-const DATA = [
-  {
-    id: '1',
-    profile: {
-      name: 'Lana',
-      age: 26,
-      distance: '0.5 mi. away from you',
-      image: require('../assets/images/ExploreImg.png'),
-      interests: ['Online shopping', 'Amateur cook', 'Anime', 'Horror films', 'Skincare'],
+const NotificationsScreen = () => {
+  // Static Data for Notifications
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "John Doe commented on your post.",
+        creator_name: "John Doe",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
     },
-  },
-  {
-    id: '2',
-    profile: {
-      name: 'John',
-      age: 30,
-      distance: '1.0 mi. away from you',
-      image: require('../assets/images/openingImg.png'),
-      interests: ['Photography', 'Travel', 'Music', 'Technology', 'Cooking'],
+    {
+      id: 2,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Your profile picture was liked.",
+        creator_name: "User",
+      },
+      created_at: new Date().toISOString(),
+      read_at: new Date().toISOString(),
     },
-  },
-  {
-    id: '3',
-    profile: {
-      name: 'Sophia',
-      age: 24,
-      distance: '2.3 mi. away from you',
-      image: require('../assets/images/promptImg.png'),
-      interests: ['Art', 'Yoga', 'Nature', 'Reading', 'Fitness'],
+    {
+      id: 3,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
     },
-  },
-];
+    {
+      id: 4,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 5,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 6,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 7,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 8,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 9,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+    {
+      id: 10,
+      data: {
+        creator_image: require('../assets/images/NotificationImg.png'),
+        message: "Anna followed you.",
+        creator_name: "Anna",
+      },
+      created_at: new Date().toISOString(),
+      read_at: null,
+    },
+  ]);
 
-const NotificationScreen = () => {
+  // Count of unread notifications
+  const nullCount = notifications.filter((item) => !item.read_at).length;
+
+  // Handlers
+  const handleBack = () => {
+    console.log("Back pressed");
+  };
+
+  const handleRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, read_at: new Date().toISOString() } : item
+      )
+    );
+  };
+
   return (
-    <View style={tw`flex-1 bg-black`}>
-      <Carousel
-        loop
-        width={width} // Full-screen width
-        height={height} // Full-screen height
-        autoPlay={false} // Auto-slide
-        autoPlayInterval={3000}
-        data={DATA} // Data array with profiles
-        scrollAnimationDuration={3000} // Smooth animation
-        mode="horizontal-stack" // Horizontal stack mode
-        modeConfig={{
-          stackInterval: 20, // Adjust stack spacing
-          scaleInterval: 0.9, // Scale for inactive cards
-          translationInterval: 20, // Adjust side translation
-        }}
-        onSnapToItem={(index) => console.log('Current Index:', index)} // Track current slide
-        renderItem={({ item }) => (
-          <ImageBackground
-            source={item.profile.image} // Replace with your local image path
-            style={tw`flex-1`}
-            imageStyle={tw`w-full h-full`}
-          >
-            {/* Gradient Overlay */}
-            <LinearGradient
-              colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']} // Transition from transparent to black
-              style={tw`absolute inset-0`}
+    <View style={tw`px-8 flex-1 my-6`}>
+     
+      {/* Header */}
+      <View style={tw`flex-row justify-between py-6`}>
+        <View style={tw`flex-row items-center`}>
+          <Text style={tw`text-xl font-bold`}>Notifications</Text>
+          {nullCount > 0 && (
+            <Badge
+              label={nullCount.toString()}
+              backgroundColor="red"
+              containerStyle={tw`ml-2`}
             />
+          )}
+        </View>
+        <Text style={tw`text-blue-500`}>View All</Text>
+      </View>
 
-            <ScrollView contentContainerStyle={tw`flex-1 justify-center items-center p-5`}>
-              {/* <View style={tw`items-center`}>
-           
-                <ImageBackground
-                  source={ item.profile.image}
-                  style={tw`w-64 h-80 rounded-xl`}
-                  resizeMode="cover"
-                />
-              </View> */}
+      {/* Notifications List */}
+      <FlatList
+        data={notifications}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={tw`flex-row items-center gap-2 py-2`}>
+            {/* Avatar */}
+            {item.data.creator_image && (
+              <Avatar
+                source={item.data.creator_image}
+                size={40}
+                containerStyle={tw`mr-4`}
+              />
+            )}
 
-              {/* User Details */}
-              <View style={tw`items-center mt-48`}>
-                <Text style={tw`text-3xl font-bold text-white`}>{item.profile.name}</Text>
-                <Text style={tw`text-xl text-gray-300`}>{item.profile.age}</Text>
-                <Text style={tw`text-sm text-gray-400`}>{item.profile.distance}</Text>
-              </View>
+            {/* Notification Content */}
+            <View style={tw`flex-1 border-b border-gray-200 pb-2`}>
+              <Text style={tw`text-base`}>{item.data.message}</Text>
 
-              {/* Interests */}
-              <View style={tw`flex-row flex-wrap justify-center my-6`}>
-                {item.profile.interests.map((interest, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={tw`bg-gray-300 py-1 px-3 rounded-full m-2`}
-                  >
-                    <Text style={tw`text-gray-800 text-sm`}>{interest}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              {/* Action Buttons */}
-              <View style={tw`flex-row justify-between w-3/5 my-6`}>
+              {/* Read/Unread Status */}
+              {item.read_at === null ? (
                 <TouchableOpacity
-                  style={tw`w-12 h-12 justify-center items-center bg-gray-300 rounded-full`}
+                  onPress={() => handleRead(item?.id)}
+                  style={tw`flex-row items-center mt-2`}
                 >
-                  <Text style={tw`text-3xl text-gray-800`}>❌</Text>
+                  <Text style={tw`text-blue-500 px-2`}>
+                    {new Date(item.created_at).toLocaleString()}
+                  </Text>
+                  <View style={tw`w-3 h-3 bg-red-500 rounded-full`} />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={tw`w-12 h-12 justify-center items-center bg-gray-300 rounded-full`}
-                >
-                  <Text style={tw`text-3xl text-gray-800`}>⭐</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={tw`w-12 h-12 justify-center items-center bg-gray-300 rounded-full`}
-                >
-                  <Text style={tw`text-3xl text-gray-800`}>💚</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </ImageBackground>
+              ) : (
+                <Text style={tw`text-gray-500 mt-2`}>
+                  {new Date(item.created_at).toLocaleString()}
+                </Text>
+              )}
+            </View>
+          </View>
         )}
       />
     </View>
   );
 };
 
-export default NotificationScreen;
+export default NotificationsScreen;

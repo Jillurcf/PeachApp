@@ -11,22 +11,30 @@
 // module.exports = mergeConfig(getDefaultConfig(__dirname), config);
 
 
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-module.exports = (() => {
+module.exports = () => {
+  // Get the default Metro config for your project
   const config = getDefaultConfig(__dirname);
 
-  const { transformer, resolver } = config;
+  // Modify transformer and resolver settings to handle SVG files
+  const updatedConfig = mergeConfig(config, {
+    transformer: {
+      ...config.transformer,
+      babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    },
+    resolver: {
+      ...config.resolver,
+      assetExts: config.resolver.assetExts.filter((ext) => ext !== 'svg'),
+      sourceExts: [...config.resolver.sourceExts, 'svg'],
+    },
+  });
 
-  config.transformer = {
-    ...transformer,
-    babelTransformerPath: require.resolve("react-native-svg-transformer"),
-  };
-  config.resolver = {
-    ...resolver,
-    assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),
-    sourceExts: [...resolver.sourceExts, "svg"],
+  // If you need to disable strict mode for Reanimated (optional, not recommended for production)
+  updatedConfig.transformer = {
+    ...updatedConfig.transformer,
+    experimentalImportSupport: true, // Adds support for importing SVG files and other experimental features
   };
 
-  return config;
-})();
+  return updatedConfig;
+};
