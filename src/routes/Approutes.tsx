@@ -6,38 +6,15 @@ import { useDeviceContext } from 'twrnc';
 import tw from '../lib/tailwind';
 // import store from '../redux/store';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AccountCreationOpening from '../screen/AccountCreationOpening';
-import AccountCreationEmail from '../screen/AccountCreationEmail';
-import AccountCreationOtpVerificaton from '../screen/AccountCreationOtpVerification';
-import WelComeScreen from '../screen/WelComeScreen';
-import WelcomeName from '../screen/WelcomeName';
-import WelcomeDob from '../screen/WelcomeDob';
-import WelcomeNotificationControl from '../screen/WelcomeNotificationControl';
-import BasicInfo from '../screen/BasicInfo';
-import Location from '../screen/Location';
-import Gender from '../screen/Gender';
-import Choice from '../screen/Choice';
-import Height from '../screen/Height';
-import Passion from '../screen/Passion';
-import Ethinicity from '../screen/Ethinicity';
-import Children from '../screen/Children';
-import HomeTown from '../screen/HomeTown';
-import WorkPlace from '../screen/WorkPlace';
-import JobTitle from '../screen/JobTitile';
-import School from '../screen/School';
-import Study from '../screen/Study';
-import Religion from '../screen/Religion';
-import DrinkingStatus from '../screen/DrinkingStatus';
-import SmokingStatus from '../screen/SmokingStatus';
-import WeedStatus from '../screen/WeedStatus';
-import DrugStatus from '../screen/DrugStatus';
-import Privacy from '../screen/Privacy';
-import CreateYourProfile from '../screen/CreateYourProfile';
-import UploadPhotos from '../screen/UploadPhotos';
-import PromptScreen from '../screen/PromptScreen';
+
+
 import LikeSendingScreen from '../screen/LikeSendingScreen';
 import BottomRoutes from './BottomRoutes';
-
+import EditProfile from '../screen/EditProfile';
+// import { Toast } from 'react-native-toast-notifications';
+import Toast from 'react-native-toast-message';
+import AccountsSettings from '../screen/AccountsSettings';
+import UpdatePassword from '../screen/UpdatePassword';
 
 
 
@@ -45,11 +22,17 @@ const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
 //   const [isSplash, setIsSplash] = React.useState(true);
+// React.useEffect(() => {
+//   // Set the reference to Toast when it's mounted
+//   Toast.setRef(Toast);
+// }, []);
+
   useDeviceContext(tw);
 
   return (
     
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* <Toast.Provider> */}
       <NavigationContainer>
         <Stack.Navigator >
           {/* <Stack.Screen
@@ -269,9 +252,34 @@ function AppRoutes() {
             name="bottomRoute"
             component={BottomRoutes}
           />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="editProfile"
+            component={EditProfile}
+          />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="accountSettings"
+            component={AccountsSettings}
+          />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="updatePassword"
+            component={UpdatePassword}
+          />
          
         </Stack.Navigator>
       </NavigationContainer>
+      {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
+      <Toast />
+      {/* </Toast.Provider> */}
+     
     </GestureHandlerRootView>
   
   

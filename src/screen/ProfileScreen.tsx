@@ -5,166 +5,250 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  ScrollView,
+  SafeAreaView,
+  Image,
+  FlatList,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  Easing,
-} from 'react-native-reanimated';
-import {SvgXml} from 'react-native-svg';
-import {StarIcon} from '../assets/icons/icon';
 import tw from '../lib/tailwind';
-// import { FontAwesome } from '@expo/vector-icons'; // For star icons
+import {launchImageLibrary} from 'react-native-image-picker';
+import * as Progress from 'react-native-progress';
+import {SvgXml} from 'react-native-svg';
+import {
+  EditIcon,
+  ProfileCameraIcon,
+  SettingsIcon,
+  TickIcon,
+  VerifiedIcon,
+} from '../assets/icons/icon';
+import NormalModal from '../components/modals/NormalModal';
+import { NavigProps } from '../interfaces/NaviProps';
 
 const {width, height} = Dimensions.get('window');
 
-const ProfileScreen = () => {
-  const [ratings, setRatings] = useState<number[]>([]); // Array to track active animations
-  const iconPositions = useSharedValue<{x: number; y: number}[]>([]);
+const ProfileScreen = ({navigation}) => {
+  const [imageUri, setImageUri] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const addFlourish = (x: number, y: number) => {
-    const newId = ratings.length;
-    setRatings(prev => [...prev, newId]);
-
-    // Add position to shared value for animation
-    iconPositions.value = [...iconPositions.value, {x, y}];
+  const selectImage = () => {
+    launchImageLibrary({mediaType: 'photo'}, response => {
+      if (response.assets && response.assets.length > 0) {
+        const file = response.assets[0];
+        setImageUri(file.uri);
+        uploadImage(file);
+      }
+    });
   };
 
-  const removeFlourish = (id: number) => {
-    setRatings(prev => prev.filter(ratingId => ratingId !== id));
+  const uploadImage = async file => {
+    const formData = new FormData();
+    formData.append('file', {
+      uri: file.uri,
+      type: file.type,
+      name: file.fileName,
+    });
+
+    // try {
+    //   await axios.post("https://example.com/upload", formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //     onUploadProgress: (progressEvent) => {
+    //       const percent = progressEvent.loaded / progressEvent.total;
+    //       setUploadProgress(percent);
+    //     },
+    //   });
+
+    //   // Reset progress after upload
+    //   setTimeout(() => setUploadProgress(0), 2000);
+    // } catch (error) {
+    //   console.error("Upload failed:", error);
+    // }
+  };
+
+  const Data = [
+    {
+      id: 1,
+      title: 'Monthly',
+      Amount: '20.00/mo',
+    },
+    {
+      id: 2,
+      title: '6 Month',
+      Amount: '40.00/mo',
+    },
+    {
+      id: 3,
+      title: '12 Monthly',
+      Amount: '60.00/mo',
+    },
+  ];
+
+  const handleSubsriptionModal = () => {
+    setOpenModal(true);
   };
 
   return (
-    <View style={styles.container}>
-      {/* Rating Icons */}
-      <View style={styles.ratingRow}>
-        {[1].map((star, index) => (
+    <ScrollView style={tw`flex-1  my-12`}>
+      <View style={tw`items-center`}>
+        <TouchableOpacity onPress={selectImage}>
+          <View
+            style={tw`w-30 h-30 rounded-full overflow-hidden justify-center items-center`}>
+            {/* {imageUri ? ( */}
+            <Image
+              source={require('../assets/images/ProfileImg.png')}
+              style={tw`w-full h-full`}
+            />
+            {/* ) : (
+          <View style={tw`justify-center items-center bg-white w-full h-full`}>
+            <Text>Select Image</Text>
+          </View>
+        )} */}
+            {uploadProgress > 0 && uploadProgress < 1 && (
+              <Progress.Circle
+                progress={uploadProgress}
+                size={100}
+                showsText
+                formatText={() => `${Math.round(uploadProgress * 100)}%`}
+                style={tw`absolute`}
+              />
+            )}
+          </View>
+          <View style={tw`flex-row gap-2 items-center justify-center my-4`}>
+            <Text style={tw`text-2xl font-MontserratBold`}>Immi, 26</Text>
+            <SvgXml xml={VerifiedIcon} width={20} height={20} />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <View
+          style={tw`flex-row mx-auto gap-2 w-[85%] items-center justify-center`}>
           <TouchableOpacity
-            key={index}
-            onPress={event => {
-              const {pageX, pageY} = event.nativeEvent;
-              addFlourish(pageX, pageY);
-            }}>
-            <SvgXml xml={StarIcon} width={20} height={20} />
+            onPress={selectImage}
+            style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
+            <SvgXml xml={ProfileCameraIcon} width={30} height={30} />
+            <Text style={tw`font-MontserratRegular py-1`}>Add media</Text>
           </TouchableOpacity>
-        ))}
+          <TouchableOpacity
+          onPress={() => navigation.navigate('editProfile')}
+            style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
+            <SvgXml xml={EditIcon} width={30} height={30} />
+            <Text style={tw`font-MontserratRegular py-1`}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('accountSettings')}
+            style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
+            <SvgXml xml={SettingsIcon} width={30} height={30} />
+            <Text style={tw`font-MontserratRegular py-1`}>Sttings</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      {/* Flourishing Stars */}
-      {ratings.map((id, index) => (
-        <FlourishIcon
-          key={id}
-          x={iconPositions.value[index]?.x || width / 2}
-          y={iconPositions.value[index]?.y || height / 2}
-          index={index} // Pass index for sequential animation
-          onComplete={() => removeFlourish(id)}
+      <View style={tw`my-4 flex mx-auto`}>
+        <Text style={tw`text-2xl font-MontserratBold`}>
+          See Who Likes You and Start Matching Instantly on Peach!
+        </Text>
+      </View>
+      <Text style={tw`justify-start px-[4%]`}>Select your plan</Text>
+      <View>
+        <FlatList
+          horizontal
+        
+          data={Data}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                onPress={handleSubsriptionModal}
+                style={tw`p-6 ml-12 my-4 bg-white rounded-lg`}>
+                <Text style={tw`text-lg font-MontserratBold`}>
+                  {item.title}
+                </Text>
+                <Text style={tw`text-lg font-MontserratBold`}>
+                  {item.Amount}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         />
-      ))}
-    </View>
+      </View>
+      <NormalModal
+        visible={openModal}
+        setVisible={setOpenModal}
+        animationType="fade"
+        containerStyle={tw`p-4 mt-[20%] border-gray-300`}>
+        <View style={tw`bg-white border-gray-300 border p-4 rounded-2xl`}>
+          <Text style={tw`text-center text-2xl font-MontserratBold py-4`}>Your Benifits</Text>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold `}>Unlimited Like</Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold`}>See Who like you</Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold`}>1 Free bosst per month</Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold`}>5 free super like per week</Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+            <Text style={tw`text-xl font-MontserratBold`}>Global match</Text>
+            <Text style={tw`font-MontserratRegular`}>Connect and chat with people worldwide.</Text>
+            </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+           <View>
+           <Text style={tw`text-xl font-MontserratBold`}>Control your profile</Text>
+           <Text style={tw`font-MontserratRegular`}>Decide what others can see about you.</Text>
+           </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+            <Text style={tw`text-xl font-MontserratBold`}>Control who see you</Text>
+            <Text style={tw`font-MontserratRegular`}>Manage your visibility</Text>
+            </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+            <Text style={tw`text-xl font-MontserratBold`}>Control who follow you</Text>
+            <Text style={tw`font-MontserratRegular`}>Find the type of people you are looking for</Text>
+            </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold`}>Add free experiences</Text>
+          </View>
+         
+        </View>
+
+       <View style={tw`flex-row w-[60%] mx-auto justify-between items-center`}>
+       <TouchableOpacity
+          onPress={() => setOpenModal(false)}
+          style={tw`mt-4 bg-gray-600 py-2 px-6 rounded-lg`}>
+          <Text style={tw`text-white text-center`}>Select</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setOpenModal(false)}
+          style={tw`mt-4 bg-red-400 py-2 px-6 rounded-lg`}>
+          <Text style={tw`text-white text-center`}>Close</Text>
+        </TouchableOpacity>
+       </View>
+      </NormalModal>
+    </ScrollView>
   );
 };
 
-const FlourishIcon = ({
-  x,
-  y,
-  index,
-  onComplete,
-}: {
-  x: number;
-  y: number;
-  index: number;
-  onComplete: () => void;
-}) => {
-  const position = useSharedValue({x, y});
-  const opacity = useSharedValue(1);
-  const scale = useSharedValue(1);
-
-  // Update animation styles
-  const animatedStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
-    left: position.value.x - 20, // Adjust for icon size
-    top: position.value.y - 20,
-    opacity: opacity.value,
-    transform: [{scale: scale.value}],
-  }));
-
-  React.useEffect(() => {
-    // Sequential animation for each star
-    position.value = {
-      x: position.value.x + Math.random() * 20 - 10, // Small random horizontal movement
-      y: position.value.y - 200, // Move upwards (decrease y)
-    };
-    scale.value = withSpring(1.5); // Slightly increase the size
-    opacity.value = withTiming(0, {
-      duration: 1000,
-      easing: Easing.out(Easing.quad),
-    }); // Fade out
-
-    // Apply delay using setTimeout
-    const delay = index * 100; // 100ms delay between each star
-
-    const timer = setTimeout(() => {
-      position.value.y = withSpring(position.value.y - 200); // Apply upward movement after delay
-      scale.value = withSpring(1.5); // Apply scaling after delay
-      opacity.value = withTiming(0, {
-        duration: 1000,
-        easing: Easing.out(Easing.quad),
-      }); // Fade out after delay
-    }, delay);
-
-    // Remove the icon after animation
-    const removeTimer = setTimeout(() => {
-      onComplete();
-    }, 1000 + delay); // Add delay to ensure icon stays for the full duration
-
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(removeTimer);
-    };
-  }, [index]);
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <View style={tw`flex-row items-center justify-center`}>
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        {/* <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} /> */}
-      </View>
-      <View style={tw`flex-row items-center gap-24 justify-center my-12`}>
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        {/* <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} /> */}
-      </View>
-      <View style={tw`flex-row items-center gap-36 justify-center p-4`}>
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} />
-        {/* <SvgXml xml={StarIcon} width={20} height={20} />
-        <SvgXml xml={StarIcon} width={20} height={20} /> */}
-      </View>
-     
-    </Animated.View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '100%',
-  },
-});
+const styles = StyleSheet.create({});
 
 export default ProfileScreen;

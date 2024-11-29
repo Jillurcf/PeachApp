@@ -1,40 +1,32 @@
 import React, {useState} from 'react';
 import {
   Dimensions,
-  ImageBackground,
+
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  ListRenderItemInfo,
+ 
   FlatList,
 } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
-import LinearGradient from 'react-native-linear-gradient';
 import tw from 'twrnc';
 import {
   BackgroundIcon,
   BookIcon,
   ChildrenIcon,
-  CrossIconBold,
-  Drinks,
+   Drinks,
   DrugIcon,
   EducationIcon,
-  Ehinicity,
   EnginnerIcon,
   EthinicityIcon,
   HeartIcon,
-  Height,
-  HieghtIcon,
+   HieghtIcon,
   InterestIcon,
   LifeStyle,
-  Location,
   LocationIcon,
-  Men,
   Menicon,
   Message,
   PersonalPromptIcon,
-  Profile,
   RedCrossIcon,
   ReligiousIcon,
   SmokeIcon,
@@ -46,11 +38,12 @@ import {
   WorkplaceIcon,
 } from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
-import AnimatedStarRating from '../components/AnimatedStartRating';
 import InputText from '../components/inputs/InputText';
 import TButton from '../components/buttons/TButton';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useNavigation } from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+
 
 // Example data for the carousel
 const DATA = [
@@ -97,6 +90,8 @@ type Topic =
   | 'Anime'
   | 'Horror Films'
   | 'Skincare';
+
+  
 const ExploreScreen = () => {
   const topics: Topic[] = [
     'Online Shopping',
@@ -106,8 +101,18 @@ const ExploreScreen = () => {
     'Skincare',
   ];
 
+  Clipboard.setString('This is the text to copy!');
+
+  // Get string from clipboard
+  Clipboard.getString().then((content) => {
+    console.log(content); // This will log the clipboard content
+  });
+
   // State to track selected items (using type annotation for the array of strings)
   const [selectedItems, setSelectedItems] = useState<Topic[]>([]);
+  // State for modal visibility
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [copySuccess, setCopySuccess] = useState(false);
 
   // Function to handle item selection
   const toggleSelection = (item: Topic): void => {
@@ -143,7 +148,52 @@ const ExploreScreen = () => {
   const handleScrollEndDrag = () => {
     setIsSliding(false);
   };
+// for dynamic handling
+  // const handleShareProfile = () => {
+  //   const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
+    
+  //   // Copy the URL to clipboard
+  //   Clipboard.setString(profileUrl);
 
+  //   // Optional: Display a message to confirm that the URL is copied
+  //   Alert.alert('Profile URL Copied', 'You can now paste this URL anywhere!');
+  // };
+
+
+
+// for static handling
+const navigation = useNavigation();
+  const [selectedProfile, setSelectedProfile] = useState({
+    profile: {
+      name: 'Lana',
+      age: 26,
+      distance: '0.5 mi. away from you',
+      image: require('../assets/images/ExploreImg.png'),
+      interests: ['Online shopping', 'Amateur cook', 'Anime', 'Horror films', 'Skincare'],
+    },
+  });
+
+  // Function to handle "Share Profile" action
+  const handleShareProfile = () => {
+    const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
+    
+    // You can log it to test the generated URL
+    console.log(profileUrl); 
+
+    // Optionally, copy it to the clipboard
+    Clipboard.setString(profileUrl);
+    // Alert.alert('Profile URL Copied', 'You can now paste this URL anywhere!');
+  };
+
+  // Function to navigate to the profile page (simulating the dynamic URL)
+  const handleViewProfile = () => {
+    const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
+    
+    // Simulate navigation to the profile screen with the profile name
+    navigation.navigate('ProfileScreen', {
+      profileName: selectedProfile.profile.name,
+    });
+  };
   return (
     <ScrollView style={tw`flex-1`}>
       {/* <View style={tw`relative`}>
@@ -511,7 +561,7 @@ const ExploreScreen = () => {
      </View>
       </View>
       <View style={tw`w-full flex mx-auto gap-y-2 justify-center items-center my-4`}>
-        <TButton titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Share Lana's profile" />
+        <TButton onPress={handleShareProfile} titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Share Lana's profile" />
         <TButton titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Block"  />
         <TButton titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Report Lana" />
       </View>
