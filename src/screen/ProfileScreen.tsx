@@ -116,7 +116,7 @@ const ProfileScreen = ({navigation}) => {
             )}
           </View>
           <View style={tw`flex-row gap-2 items-center justify-center my-4`}>
-            <Text style={tw`text-2xl font-MontserratBold`}>Immi, 26</Text>
+            <Text style={tw`text-2xl font-MontserratBold text-black`}>Immi, 26</Text>
             <SvgXml xml={VerifiedIcon} width={20} height={20} />
           </View>
         </TouchableOpacity>
@@ -128,27 +128,27 @@ const ProfileScreen = ({navigation}) => {
             onPress={selectImage}
             style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
             <SvgXml xml={ProfileCameraIcon} width={30} height={30} />
-            <Text style={tw`font-MontserratRegular py-1`}>Add media</Text>
+            <Text style={tw`font-MontserratRegular py-1 text-black text-center`}>Add media</Text>
           </TouchableOpacity>
           <TouchableOpacity
           onPress={() => navigation.navigate('editProfile')}
             style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
             <SvgXml xml={EditIcon} width={30} height={30} />
-            <Text style={tw`font-MontserratRegular py-1`}>Edit Profile</Text>
+            <Text style={tw`font-MontserratRegular py-1 text-black text-center`}>Edit Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('accountSettings')}
             style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
             <SvgXml xml={SettingsIcon} width={30} height={30} />
-            <Text style={tw`font-MontserratRegular py-1`}>Sttings</Text>
+            <Text style={tw`font-MontserratRegular py-1 text-black text-center`}>Sttings</Text>
           </TouchableOpacity>
         </View>
       </View>
       <View style={tw`my-4 flex mx-auto`}>
-        <Text style={tw`text-2xl font-MontserratBold`}>
+        <Text style={tw`text-xl font-MontserratBold text-black`}>
           See Who Likes You and Start Matching Instantly on Peach!
         </Text>
       </View>
-      <Text style={tw`justify-start px-[4%]`}>Select your plan</Text>
+      <Text style={tw`justify-start px-[8%] text-black`}>Select your plan</Text>
       <View>
         <FlatList
           horizontal
@@ -158,11 +158,11 @@ const ProfileScreen = ({navigation}) => {
             return (
               <TouchableOpacity
                 onPress={handleSubsriptionModal}
-                style={tw`p-6 ml-12 my-4 bg-white rounded-lg`}>
-                <Text style={tw`text-lg font-MontserratBold`}>
+                style={tw`py-12 px-4 ml-4 my-4 bg-white rounded-lg`}>
+                <Text style={tw`text-lg font-MontserratBold text-black`}>
                   {item.title}
                 </Text>
-                <Text style={tw`text-lg font-MontserratBold`}>
+                <Text style={tw`text-lg font-MontserratBold text-black`}>
                   {item.Amount}
                 </Text>
               </TouchableOpacity>
@@ -179,54 +179,54 @@ const ProfileScreen = ({navigation}) => {
         animationType="fade"
         containerStyle={tw`p-4 mt-[20%] border-gray-300`}>
         <View style={tw`bg-white border-gray-300 border p-4 rounded-2xl`}>
-          <Text style={tw`text-center text-2xl font-MontserratBold py-4`}>Your Benifits</Text>
+          <Text style={tw`text-center text-2xl font-MontserratBold text-black py-4`}>Your Benifits</Text>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
-            <Text style={tw`text-xl font-MontserratBold `}>Unlimited Like</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black `}>Unlimited Like</Text>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
-            <Text style={tw`text-xl font-MontserratBold`}>See Who like you</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>See Who like you</Text>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
-            <Text style={tw`text-xl font-MontserratBold`}>1 Free bosst per month</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>1 Free bosst per month</Text>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
-            <Text style={tw`text-xl font-MontserratBold`}>5 free super like per week</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>5 free super like per week</Text>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
             <View>
-            <Text style={tw`text-xl font-MontserratBold`}>Global match</Text>
-            <Text style={tw`font-MontserratRegular`}>Connect and chat with people worldwide.</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>Global match</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Connect and chat with people worldwide.</Text>
             </View>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
            <View>
-           <Text style={tw`text-xl font-MontserratBold`}>Control your profile</Text>
-           <Text style={tw`font-MontserratRegular`}>Decide what others can see about you.</Text>
+           <Text style={tw`text-xl font-MontserratBold text-black`}>Control your profile</Text>
+           <Text style={tw`font-MontserratRegular text-black`}>Decide what others can see about you.</Text>
            </View>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
             <View>
-            <Text style={tw`text-xl font-MontserratBold`}>Control who see you</Text>
-            <Text style={tw`font-MontserratRegular`}>Manage your visibility</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>Control who see you</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Manage your visibility</Text>
             </View>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
             <View>
-            <Text style={tw`text-xl font-MontserratBold`}>Control who follow you</Text>
-            <Text style={tw`font-MontserratRegular`}>Find the type of people you are looking for</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>Control who follow you</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Find the type of people you are looking for</Text>
             </View>
           </View>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={TickIcon} width={20} height={20} />
-            <Text style={tw`text-xl font-MontserratBold`}>Add free experiences</Text>
+            <Text style={tw`text-xl font-MontserratBold text-black`}>Add free experiences</Text>
           </View>
          
         </View>

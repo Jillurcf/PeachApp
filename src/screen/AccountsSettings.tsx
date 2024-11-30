@@ -25,7 +25,7 @@ const AccountSettings = ({navigation}) => {
         >
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={LeftArrow} width={25} height={25} />
-            <Text style={tw`text-lg font-bold`}> Account settings</Text>
+            <Text style={tw`text-lg font-MontserratBold text-black`}> Account settings</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -42,28 +42,37 @@ const AccountSettings = ({navigation}) => {
             <SvgXml xml={ProfileCameraIcon} width={20} height={20} />
           </TouchableOpacity>
         </View>
-        <Text style={tw`mt-2 text-sm text-gray-500`}>
+        <Text style={tw`mt-2 text-sm font-MontserratRegular text-gray-500`}>
           Upload profile picture or choose avatar
         </Text>
       </View>
 
       {/* Notification Settings */}
       <View style={tw`p-4 bg-white mt-4 rounded-lg`}>
-        <Text style={tw`text-lg font-bold mb-4`}>Notification Settings</Text>
+        <Text style={tw`text-lg font-MontserratBold text-black mb-4`}>Notification Settings</Text>
 
         <View style={tw`flex-row justify-between items-center mb-4`}>
-          <Text style={tw`text-base`}>Push Notifications</Text>
-          <Switch value={pushEnabled} onValueChange={setPushEnabled} />
+          <Text style={tw`text-black font-MontserratRegular`}>Push Notifications</Text>
+          <Switch 
+             trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+             thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
+          value={pushEnabled} onValueChange={setPushEnabled} />
         </View>
 
         <View style={tw`flex-row justify-between items-center mb-4`}>
-          <Text style={tw`text-base`}>E-mail Notifications</Text>
-          <Switch value={emailEnabled} onValueChange={setEmailEnabled} />
+          <Text style={tw`text-black font-MontserratRegular`}>E-mail Notifications</Text>
+          <Switch 
+             trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+             thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
+          value={emailEnabled} onValueChange={setEmailEnabled} />
         </View>
 
         <View style={tw`flex-row justify-between items-center`}>
-          <Text style={tw`text-base`}>In-app Notifications</Text>
-          <Switch value={inAppEnabled} onValueChange={setInAppEnabled} />
+          <Text style={tw`text-black`}>In-app Notifications</Text>
+          <Switch 
+           trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+           thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
+          value={inAppEnabled} onValueChange={setInAppEnabled} />
         </View>
       </View>
 

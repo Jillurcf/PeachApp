@@ -46,6 +46,7 @@ const BottomRoutes = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+      
         tabBarStyle: tw`h-16 bg-primaryBase shadow-none border-0`,
         contentStyle: tw`h-16 bg-primaryBase shadow-none border-0`,
         tabBarItemStyle: tw`my-[10px] tablet:my-5 flex-col`,
@@ -128,11 +129,16 @@ const BottomRoutes = () => {
         },
       })}
     >
-      <Tab.Screen name="explore" component={ExploreScreen} />
+      <Tab.Screen 
+      // options={{
+      //   headerShown: false
+      // }}
+      name="explore" component={ExploreScreen} />
       <Tab.Screen name="notification" component={NotificationScreen} />
       <Tab.Screen name="chat" component={ConnectedChatScreen} />
       <Tab.Screen name="profileScreen" component={ProfileScreen} />
     </Tab.Navigator>
+    
   );
 };
 

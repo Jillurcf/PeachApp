@@ -5,8 +5,8 @@ module.exports = {
     [
       'react-native-reanimated/plugin',
       {
-        // Disable strict mode here
         enableDebugging: true,
+        strictMode: false,  // Disable strict mode here
       },
     ],
   ],

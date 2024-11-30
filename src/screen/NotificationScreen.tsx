@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StatusBar } from "react-native";
 import { Avatar, Badge } from "react-native-ui-lib"; // Using rnulib components
 
 import tw from "../lib/tailwind";
@@ -131,7 +131,7 @@ const NotificationsScreen = () => {
       {/* Header */}
       <View style={tw`flex-row justify-between py-6`}>
         <View style={tw`flex-row items-center`}>
-          <Text style={tw`text-xl font-bold`}>Notifications</Text>
+          <Text style={tw`text-xl font-bold text-black`}>Notifications</Text>
           {nullCount > 0 && (
             <Badge
               label={nullCount.toString()}
@@ -160,7 +160,7 @@ const NotificationsScreen = () => {
 
             {/* Notification Content */}
             <View style={tw`flex-1 border-b border-gray-200 pb-2`}>
-              <Text style={tw`text-base`}>{item.data.message}</Text>
+              <Text style={tw`text-black`}>{item.data.message}</Text>
 
               {/* Read/Unread Status */}
               {item.read_at === null ? (
@@ -182,6 +182,7 @@ const NotificationsScreen = () => {
           </View>
         )}
       />
+      <StatusBar translucent={false}/>
     </View>
   );
 };

@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import {
   Dimensions,
-
+  ImageBackground,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
  
   FlatList,
+  StatusBar,
 } from 'react-native';
-import tw from 'twrnc';
+import tw, { style } from 'twrnc';
 import {
   BackgroundIcon,
   BookIcon,
@@ -42,9 +43,12 @@ import InputText from '../components/inputs/InputText';
 import TButton from '../components/buttons/TButton';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useNavigation } from '@react-navigation/native';
+import Carousel from 'react-native-reanimated-carousel';
+import LinearGradient from 'react-native-linear-gradient';
+import AnimatedStarRating from '../components/AnimatedStartRating';
 
 
-
+const {width, height} = Dimensions.get('window');
 // Example data for the carousel
 const DATA = [
   {
@@ -104,16 +108,18 @@ const ExploreScreen = () => {
   Clipboard.setString('This is the text to copy!');
 
   // Get string from clipboard
-  Clipboard.getString().then((content) => {
-    console.log(content); // This will log the clipboard content
-  });
+ 
 
   // State to track selected items (using type annotation for the array of strings)
   const [selectedItems, setSelectedItems] = useState<Topic[]>([]);
+  const [isSliding, setIsSliding] = useState(false);
   // State for modal visibility
   // const [modalVisible, setModalVisible] = useState(false);
   // const [copySuccess, setCopySuccess] = useState(false);
 
+  Clipboard.getString().then((content) => {
+    console.log(content); // This will log the clipboard content
+  });
   // Function to handle item selection
   const toggleSelection = (item: Topic): void => {
     setSelectedItems(prevSelected => {
@@ -196,7 +202,7 @@ const navigation = useNavigation();
   };
   return (
     <ScrollView style={tw`flex-1`}>
-      {/* <View style={tw`relative`}>
+     <View style={tw`relative`}>
         <Carousel
           loop
           width={width}
@@ -262,53 +268,53 @@ const navigation = useNavigation();
             </ImageBackground>
           )}
         />
-        {isSliding && (
+        {/* {isSliding && (
           <View style={tw`absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2`}>
             <CrossIconBold width={50} height={50} color="white" />
           </View>
-        )}
-      </View> */}
+        )} */}
+      </View>
       {/* Additional content */}
       <View style={tw`pb-2 bg-white`}>
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
             <SvgXml xml={UserIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Basic Information</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Basic Information</Text>
           </View>
-          <Text>Current Location</Text>
+          <Text style={tw`text-black font-MontserratRegular`}>Current Location</Text>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
             <SvgXml xml={LocationIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>New York, USA</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>New York, USA</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Want to date</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Want to date</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={Menicon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Men</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Men</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Height</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Height</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={HieghtIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Men</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Men</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Ethinicity</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Ethinicity</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={EthinicityIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>East Asian</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>East Asian</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
@@ -317,7 +323,7 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%]`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={InterestIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>Interest</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Interest</Text>
           </View>
 
           <View style={tw`pb-2 mt-2 bg-white`}>
@@ -343,52 +349,52 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={LifeStyle} width={12} height={12} />
-            <Text style={tw`font-MontserratBold font-bold`}>Lifestyle</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Lifestyle</Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Drinks</Text>
+          <Text style={tw`font-MontserratBold font-bold pt-2 text-black`}>Drinks</Text>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
             <SvgXml xml={Drinks} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Occatonally</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Occatonally</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Smokes</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Smokes</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={SmokeIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Occatonally</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Occatonally</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Weed</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Weed</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={WeedIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Occatonally</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Occatonally</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Drugs</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Drugs</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={DrugIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>No</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>No</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Children</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Children</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={ChildrenIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>
+            <Text style={tw`font-MontserratRegular text-black`}>
               I do not hanve children
             </Text>
           </View>
@@ -399,24 +405,24 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={BackgroundIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>Background </Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Background </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Home Town</Text>
+          <Text style={tw`font-MontserratBold font-bold pt-2 text-black`}>Home Town</Text>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
             <SvgXml xml={LocationIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>San Francisco, CA</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>San Francisco, CA</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>
               Religious Beliefs
             </Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={ReligiousIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Christian</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Christian</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
@@ -425,46 +431,46 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={EducationIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>
               Education & Career{' '}
             </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>School</Text>
+          <Text style={tw`font-MontserratBold font-bold pt-2 text-black`}>School</Text>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
             <SvgXml xml={UnivesityIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Harvard University</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Harvard University</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>
               Highest Level of Education
             </Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={BookIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Post-graduate</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Post-graduate</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Job Title</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Job Title</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={EnginnerIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Software Engineer</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Software Engineer</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Work Place</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Work Place</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={WorkplaceIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Google</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Google</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
@@ -473,14 +479,14 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={PersonalPromptIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>
-              Personal Prompts{' '}
+            <Text style={tw`font-MontserratBold font-bold text-black`}>
+              Personal Prompts
             </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Prompt 1</Text>
+          <Text style={tw`font-MontserratBold font-bold pt-2 text-black`}>Prompt 1</Text>
           <View style={tw`flex-row mb-2 gap-2 items-center`}>
             {/* <SvgXml xml={UnivesityIcon} width={20} height={20} /> */}
-            <Text style={tw`font-MontserratRegular`}>
+            <Text style={tw`font-MontserratRegular text-black`}>
               Exploring life, one adventure at a time 🌍✨
             </Text>
           </View>
@@ -488,11 +494,11 @@ const navigation = useNavigation();
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Prompt 2</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Prompt 2</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             {/* <SvgXml xml={BookIcon} width={20} height={20} /> */}
-            <Text style={tw`font-MontserratRegular`}>
+            <Text style={tw`font-MontserratRegular text-black`}>
               Here for genuine connections and good vibes 🌞
             </Text>
           </View>
@@ -500,11 +506,11 @@ const navigation = useNavigation();
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Prompt 3</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Prompt 3</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             {/* <SvgXml xml={EnginnerIcon} width={20} height={20} /> */}
-            <Text style={tw`font-MontserratRegular`}>
+            <Text style={tw`font-MontserratRegular text-black`}>
               Looking for someone to join me on spontaneous road trips 🚗💨
             </Text>
           </View>
@@ -512,17 +518,17 @@ const navigation = useNavigation();
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Work Place</Text>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>Work Place</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml xml={WorkplaceIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratRegular`}>Google</Text>
+            <Text style={tw`font-MontserratRegular text-black`}>Google</Text>
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
       </View>
       <View style={tw`flex-row items-center justify-center gap-1  my-4`}>
-        <Text style={tw`font-MontserratBold`}>Show Less</Text>
+        <Text style={tw`font-MontserratBold text-black`}>Show Less</Text>
         <SvgXml xml={Uparrow} width={20} height={20} />
       </View>
 
@@ -530,11 +536,11 @@ const navigation = useNavigation();
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={Message} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold font-bold text-black`}>
               Send Message to Lana{' '}
             </Text>
           </View>
-          <Text style={tw`font-MontserratBold pt-2`}>
+          <Text style={tw`font-MontserratBold pt-2 text-black`}>
             Boost your profile for a 25% better chance of finding your perfect
             match!
           </Text>
@@ -565,6 +571,7 @@ const navigation = useNavigation();
         <TButton titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Block"  />
         <TButton titleStyle={tw`text-black font-MontserratBold`} containerStyle={tw`w-[90%] bg-gray-100`} title="Report Lana" />
       </View>
+      <StatusBar translucent={false}/>
     </ScrollView>
   );
 };

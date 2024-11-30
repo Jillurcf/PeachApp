@@ -15,6 +15,7 @@ import EditProfile from '../screen/EditProfile';
 import Toast from 'react-native-toast-message';
 import AccountsSettings from '../screen/AccountsSettings';
 import UpdatePassword from '../screen/UpdatePassword';
+import ChatScreen from '../screen/ChatScreen';
 
 
 
@@ -31,10 +32,16 @@ function AppRoutes() {
 
   return (
     
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView >
       {/* <Toast.Provider> */}
-      <NavigationContainer>
-        <Stack.Navigator >
+      <NavigationContainer
+      >
+        <Stack.Navigator
+        screenOptions={{
+          // statusBarTranslucent:false,
+         
+          
+        }} >
           {/* <Stack.Screen
           options={{
             headerShown: false,
@@ -248,6 +255,7 @@ function AppRoutes() {
           <Stack.Screen
           options={{
             headerShown: false,
+            statusBarTranslucent:false
           }}
             name="bottomRoute"
             component={BottomRoutes}
@@ -273,12 +281,19 @@ function AppRoutes() {
             name="updatePassword"
             component={UpdatePassword}
           />
+          <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="chatScreen"
+            component={ChatScreen}
+          />
          
         </Stack.Navigator>
       </NavigationContainer>
-      {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
+    
       <Toast />
-      {/* </Toast.Provider> */}
+    
      
     </GestureHandlerRootView>
   

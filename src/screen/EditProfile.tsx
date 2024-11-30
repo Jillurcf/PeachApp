@@ -133,13 +133,13 @@ const EditProfile = ({navigation}) => {
     <View style={tw`relative flex-row items-center mb-2 mr-2`}>
       <TouchableOpacity
         onPress={() => removeInterest(item)}
-        style={tw`absolute top-0 right-0 p-1 bg-red-500 rounded-full`}>
+        style={tw`absolute top-0 right-0 p-1 bg-red-500 text-black rounded-full`}>
         <SvgXml xml={CrossIcon} width={12} height={12} />
       </TouchableOpacity>
 
       <View
         style={tw`bg-gray-200 text-gray-700 py-2 px-4 rounded-lg border border-gray-300 text-sm`}>
-        <Text>{item}</Text>
+        <Text style={tw`text-black font-MontserratRegular`}>{item}</Text>
       </View>
     </View>
   );
@@ -161,20 +161,20 @@ const showToast = () => {
     <ScrollView style={tw`flex-1 `}>
       <TouchableOpacity onPress={() =>navigation.goBack()} style={tw`flex-row gap-4 my-6 p-[4%]`}>
         <SvgXml xml={LeftArrow} width={30} height={30} />
-        <Text style={tw`font-MontserratBold text-2xl`}>Edit your info.</Text>
+        <Text style={tw`font-MontserratBold text-2xl text-black`}>Edit your info.</Text>
       </TouchableOpacity>
     
       <View style={tw`pb-2 bg-white`}>
         <View style={tw` py-2 px-[4%] mt-4`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
+          <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={UserIcon} width={20} height={20} />
             <View style={tw`flex-row justify-between w-[90%]`}>
-              <Text style={tw`font-MontserratRegular`}>Basic Information</Text>
+              <Text style={tw`font-MontserratBold text-black`}>Basic Information</Text>
               <Text style={tw`text-red-700 font-MontserratBold`}>20%</Text>
             </View>
           </View>
           <Text>Current Location</Text>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
+          <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml
               style={tw`absolute ml-2 z-30`}
               xml={LocationIcon}
@@ -185,13 +185,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="New york, USA"
+                placeholderTextColor={tw`text-black font-MontserratRegular`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Want to date</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Want to date</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -203,12 +204,13 @@ const showToast = () => {
             <InputText
               containerStyle={tw`px-8 border-b border-0`}
               placeholder="Men"
+              placeholderTextColor={tw`text-black font-MontserratRegular`}
             />
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Height</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Height</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -220,13 +222,14 @@ const showToast = () => {
             <InputText
               containerStyle={tw`px-8 border-b border-0`}
               placeholder="172 cm"
+              placeholderTextColor={tw`text-black font-MontserratRegular`}
             />
           </View>
           <View style={tw`border-b border-b-gray-200`}></View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Ethinicity</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Ethinicity</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -238,6 +241,7 @@ const showToast = () => {
             <InputText
               containerStyle={tw`px-8 border-b border-0`}
               placeholder="East Asian"
+              placeholderTextColor={tw`text-black font-MontserratRegular`}
             />
           </View>
         </View>
@@ -246,38 +250,40 @@ const showToast = () => {
         <View style={tw`py-2 px-[4%]`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={InterestIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>Interest</Text>
+            <Text style={tw`font-MontserratBold text-black`}>Interest</Text>
           </View>
           {/* Interest section */}
-          <View style={tw`pb-2 mt-2 bg-white`}>
+          <View style={tw`pb-2 bg-white`}>
             <View style={tw`py-2 px-[4%]`}>
               <View style={tw`pb-2 mt-2 bg-white`}>
                 <View style={tw`py-2`}>
                   {/* Add New Interest Input */}
                   <View style={tw`flex-row items-center mb-4`}>
                     <TextInput
-                      style={tw`border border-gray-300 p-2 rounded-lg flex-1 bg-white`}
+                    cursorColor={'black'}
+                      style={tw`border border-gray-300 p-2 text-black rounded-lg flex-1 bg-white`}
                       value={newInterest}
                       onChangeText={setNewInterest}
                       placeholder="Add new interest"
+                      placeholderTextColor={tw`text-black font-MontserratRegular`}
                     />
                     <TouchableOpacity
                       onPress={addInterest}
                       style={tw`ml-2 p-2 bg-blue-500 rounded-full`}>
-                      <Text style={tw`text-white font-bold`}>Add</Text>
+                      <Text style={tw`text-white font-MontserratBold`}>Add</Text>
                     </TouchableOpacity>
                   </View>
 
                   {/* FlatList for Interests */}
                   <View style={tw`flex-row`}>
                     <FlatList
-                    horizontal
+                    horizontal={true}
                       data={topics}
+                      style={tw`text-black`}
                       renderItem={renderItem}
                       keyExtractor={(item, index) => index.toString()}
-                    
                       scrollEnabled={false} // Disable scrolling for tags
-                      contentContainerStyle={tw`flex-row `}
+                      contentContainerStyle={tw`flex-row text-black font-MontserratRegular`}
                     />
                   </View>
                 </View>
@@ -293,27 +299,28 @@ const showToast = () => {
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={LifeStyle} width={12} height={12} />
-            <Text style={tw`font-MontserratBold font-bold`}>Lifestyle</Text>
+            <Text style={tw`font-MontserratBold text-black`}>Lifestyle</Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Drinks</Text>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
+          <Text style={tw`font-MontserratBold text-black pt-2`}>Drinks</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml
               style={tw`absolute ml-2 z-30`}
               xml={Drinks}
               width={20}
               height={20}
             />
-            <View style={tw`w-full relative`}>
+            <View style={tw`w-full px-4 relative`}>
               <InputText
-                containerStyle={tw`px-8 border-b border-0`}
+                containerStyle={tw` border-b border-0`}
                 placeholder="Occationally"
+                placeholderTextColor={tw`text-black font-MontserratRegular`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Smokes</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Smokes</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -326,13 +333,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Occationally"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
-        <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Weed</Text>
+        <View style={tw`px-[4%]`}>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Weed</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -345,13 +353,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Occationally"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Drugs</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Drugs</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -364,13 +373,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="No"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Children</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Children</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -383,6 +393,7 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="I do not have children"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
@@ -392,10 +403,10 @@ const showToast = () => {
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={BackgroundIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>Background </Text>
+            <Text style={tw`font-MontserratBold text-black`}>Background </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Home Town</Text>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
+          <Text style={tw`font-MontserratBold text-black pt-2`}>Home Town</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml
               style={tw`absolute ml-2 z-30`}
               xml={LocationIcon}
@@ -406,13 +417,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="San Francisco"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>
               Religious Beliefs
             </Text>
           </View>
@@ -427,6 +439,7 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Christian"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
@@ -436,12 +449,12 @@ const showToast = () => {
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={EducationIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold text-black`}>
               Education & Career{' '}
             </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>School</Text>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
+          <Text style={tw`font-MontserratBold text-black pt-2`}>School</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml
               style={tw`absolute ml-2 z-30`}
               xml={UnivesityIcon}
@@ -452,13 +465,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Harbard University"
+                placeholderTextColor={tw`text-black font-MontserratRegular`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>
               Highest Level of Education
             </Text>
           </View>
@@ -469,17 +483,18 @@ const showToast = () => {
               width={20}
               height={20}
             />
-            <View style={tw`w-full relative`}>
+            <View style={tw`w-full relative items-center justify-center`}>
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Post-Graduate"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Job Title</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Job Title</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -492,13 +507,14 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Softwae Engineer"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Work Place</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Work Place</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
             <SvgXml
@@ -511,6 +527,7 @@ const showToast = () => {
               <InputText
                 containerStyle={tw`px-8 border-b border-0`}
                 placeholder="Google"
+                placeholderTextColor={tw`text-black font-MontserratRegular`}
               />
             </View>
           </View>
@@ -520,24 +537,25 @@ const showToast = () => {
         <View style={tw` py-2 px-[4%] mt-4`}>
           <View style={tw`flex-row gap-2 items-center`}>
             <SvgXml xml={PersonalPromptIcon} width={20} height={20} />
-            <Text style={tw`font-MontserratBold font-bold`}>
+            <Text style={tw`font-MontserratBold text-black`}>
               Personal Prompts{' '}
             </Text>
           </View>
-          <Text style={tw`font-MontserratBold font-bold pt-2`}>Prompt 1</Text>
+          <Text style={tw`font-MontserratBold text-black pt-2`}>Prompt 1</Text>
           <View style={tw`flex-row mb-2 gap-2 items-center`}>
             {/* <SvgXml xml={UnivesityIcon} width={20} height={20} /> */}
             <View style={tw`w-full relative`}>
               <InputText
                 containerStyle={tw` border-b border-0`}
                 placeholder="Exploring life, one adventure at a time 🌍✨"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
           </View>
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Prompt 2</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Prompt 2</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
     
@@ -545,6 +563,7 @@ const showToast = () => {
               <InputText
                 containerStyle={tw` border-b border-0`}
                 placeholder="Here for genuine connections and good vibes 🌞"
+                placeholderTextColor={tw`text-black`}
               />
             </View>
             
@@ -552,14 +571,15 @@ const showToast = () => {
         
         </View>
         <View style={tw` px-[4%]`}>
-          <View style={tw`flex-row my-4 gap-2 items-center`}>
-            <Text style={tw`font-MontserratBold font-bold`}>Prompt 3</Text>
+          <View style={tw`flex-row gap-2 items-center`}>
+            <Text style={tw`font-MontserratBold text-black`}>Prompt 3</Text>
           </View>
           <View style={tw`flex-row pb-2 gap-2 items-center`}>
           <View style={tw`w-full relative`}>
               <InputText
                 containerStyle={tw` border-b border-0`}
                 placeholder="Looking for someone to join me on spontaneous road..."
+                placeholderTextColor={tw`text-black`}
               />
             </View>
            
