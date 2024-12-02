@@ -1,6 +1,7 @@
 import {
    
     Image,
+    ScrollView,
     StatusBar,
     StyleSheet,
     Text,
@@ -21,7 +22,7 @@ import { PlusIcon } from '../assets/icons/icon';
     
   
     return (
-      <View style={tw`flex-1 items-center justify-center`}>
+      <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center`}>
         <View style={tw`flex-col justify-between h-[95%]`}>
           <View style={tw`my-[10%]  justify-center`}>
           
@@ -32,7 +33,7 @@ import { PlusIcon } from '../assets/icons/icon';
               </View>
 
             <View
-            style={tw``}>
+            style={tw`my-6`}>
             <View style={tw``}>
                 <IwtButton
                 svg={PlusIcon}
@@ -46,8 +47,8 @@ import { PlusIcon } from '../assets/icons/icon';
           </View>
         </View>
   
-        <StatusBar backgroundColor={'gray'} translucent />
-      </View>
+        <StatusBar backgroundColor={'gray'} translucent={false} />
+      </ScrollView>
     );
   };
   

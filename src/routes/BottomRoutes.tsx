@@ -46,7 +46,7 @@ const BottomRoutes = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-      
+        animation: 'fade',
         tabBarStyle: tw`h-16 bg-primaryBase shadow-none border-0`,
         contentStyle: tw`h-16 bg-primaryBase shadow-none border-0`,
         tabBarItemStyle: tw`my-[10px] tablet:my-5 flex-col`,

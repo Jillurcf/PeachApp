@@ -52,9 +52,9 @@ const HomeTown = ({ navigation }: NavigProps<null>) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
-        <View style={tw`my-[20%]`}>
+    <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
+     
+        <View style={tw`my-[10%]`}>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
             Where is your home town?
           </Text>
@@ -63,6 +63,7 @@ const HomeTown = ({ navigation }: NavigProps<null>) => {
           <View style={tw`h-14 my-12`}> 
             <InputText
               placeholder="e.g New York USA"
+              placeholderTextColor={'black'}
               style={tw`font-MontserratRegular`}
               cursorColor={'black'}
               containerStyle={tw`border-0 bg-transparent border-b-2 border-b-black`}
@@ -72,13 +73,13 @@ const HomeTown = ({ navigation }: NavigProps<null>) => {
           </View>
           <View style={tw`flex-row justify-between my-8`}>
               <Text style={tw`font-MontserratBold text-primary`}>Show on your profile</Text>
-              <Switch value={value} onValueChange={setValue} />
+              <Switch value={value} onColor={'black'} offColor={'gray'} onValueChange={setValue} />
             </View>
    
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}
+          style={tw` flex mx-auto my-12 items-center justify-center px-[4%]`}
         >
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
@@ -89,10 +90,10 @@ const HomeTown = ({ navigation }: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
+   
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

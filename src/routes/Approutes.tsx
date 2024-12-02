@@ -16,6 +16,35 @@ import Toast from 'react-native-toast-message';
 import AccountsSettings from '../screen/AccountsSettings';
 import UpdatePassword from '../screen/UpdatePassword';
 import ChatScreen from '../screen/ChatScreen';
+import AccountCreationOpening from '../screen/AccountCreationOpening';
+import AccountCreationEmail from '../screen/AccountCreationEmail';
+import AccountCreationOtpVerificaton from '../screen/AccountCreationOtpVerification';
+import WelcomeScreen from '../screen/WelComeScreen';
+import WelcomeName from '../screen/WelcomeName';
+import WelcomeDob from '../screen/WelcomeDob';
+import WelcomeNotificationControl from '../screen/WelcomeNotificationControl';
+import BasicInfo from '../screen/BasicInfo';
+import Location from '../screen/Location';
+import Gender from '../screen/Gender';
+import Choice from '../screen/Choice';
+import Height from '../screen/Height';
+import Passion from '../screen/Passion';
+import Ethinicity from '../screen/Ethinicity';
+import Children from '../screen/Children';
+import HomeTown from '../screen/HomeTown';
+import WorkPlace from '../screen/WorkPlace';
+import JobTitle from '../screen/JobTitile';
+import School from '../screen/School';
+import Study from '../screen/Study';
+import Religion from '../screen/Religion';
+import DrinkingStatus from '../screen/DrinkingStatus';
+import SmokingStatus from '../screen/SmokingStatus';
+import WeedStatus from '../screen/WeedStatus';
+import DrugStatus from '../screen/DrugStatus';
+import Privacy from '../screen/Privacy';
+import CreateYourProfile from '../screen/CreateYourProfile';
+import UploadPhotos from '../screen/UploadPhotos';
+import PromptScreen from '../screen/PromptScreen';
 
 
 
@@ -39,10 +68,10 @@ function AppRoutes() {
         <Stack.Navigator
         screenOptions={{
           // statusBarTranslucent:false,
-         
+         animation: 'slide_from_right'
           
         }} >
-          {/* <Stack.Screen
+          <Stack.Screen
           options={{
             headerShown: false,
           }}
@@ -68,7 +97,7 @@ function AppRoutes() {
             headerShown: false,
           }}
             name="WelcomeScreen"
-            component={WelComeScreen}
+            component={WelcomeScreen}
           />
           <Stack.Screen
           options={{
@@ -138,7 +167,7 @@ function AppRoutes() {
             headerShown: false,
           }}
             name="ethinicity"
-            component={Ethinicity   }
+            component={Ethinicity  }
           />
           <Stack.Screen
           options={{
@@ -230,8 +259,8 @@ function AppRoutes() {
           }}
             name="createYourProfile"
             component={CreateYourProfile}
-          /> */}
-          {/* <Stack.Screen
+          />
+          <Stack.Screen
           options={{
             headerShown: false,
           }}
@@ -244,7 +273,7 @@ function AppRoutes() {
           }}
             name="promptScreen"
             component={PromptScreen}
-          /> */}
+          />
           <Stack.Screen
           options={{
             headerShown: false,

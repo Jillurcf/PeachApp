@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Button, StyleSheet, StatusBar, Text} from 'react-native';
+import {View, Button, StyleSheet, StatusBar, Text, ScrollView} from 'react-native';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
@@ -11,14 +11,15 @@ const Height = ({navigation}: NavigProps<null>) => {
   const [currentValue, setCurrentValue] = useState('yes');
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%]`}>
-        <View style={tw`my-[20%]`}>
-          <Text style={tw`my-4 font-MontserratBlack text-primary text-2xl`}>
+    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[98%] px-[4%]`}>
+     
+        <View style={tw``}>
+          <Text style={tw`my-6 font-MontserratBlack text-primary text-2xl`}>
             How tall you are?
           </Text>
           <View style={tw`my-12`}>
             <WheelPicker
+           
               items={[
                 {label: "5.3' (161 cm)", value: "5.3' (161 cm)"},
                 {label: "5.4' (161 cm)", value: "5.4' (161 cm)"},
@@ -37,12 +38,16 @@ const Height = ({navigation}: NavigProps<null>) => {
               ]}
               initialValue={'yes'}
               onChange={() => console.log('changed')}
+              // itemHeight={200}
+              // labelStyle={tw`text-red-600`}
+ 
+              
             />
           </View>
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
+          style={tw`z-2 flex mx-auto my-12 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
               onPress={() => navigation?.navigate('passion')}
@@ -52,10 +57,10 @@ const Height = ({navigation}: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

@@ -23,11 +23,11 @@ const WelcomeNotificationControl = ({navigation}: NavigProps<null>) => {
           <View style={tw`bg-[#E0E0E0] h-36 rounded-xl my-12 p-6`}>
             <View style={tw`flex-row justify-between py-4`}>
               <Text style={tw`font-MontserratBold text-primary`}>Enable Notifications</Text>
-              <Switch value={valueOne} onValueChange={setValueOne} />
+              <Switch value={valueOne} offColor={'gray'} onColor={'black'} onValueChange={setValueOne} />
             </View>
             <View style={tw`flex-row justify-between`}>
               <Text style={tw`font-MontserratBold text-primary`}>Disable Notifications</Text>
-              <Switch value={value} onValueChange={setValue} />
+              <Switch value={value}  offColor={'gray'} onColor={'black'} onValueChange={setValue} />
             </View>
           </View>
         </View>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Button, StyleSheet, StatusBar, Text, Image} from 'react-native';
+import {View, Button, StyleSheet, StatusBar, Text, Image, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
@@ -14,9 +14,9 @@ const Gender = ({navigation}: NavigProps<null>) => {
   const [currentValue, setCurrentValue] = useState('yes');
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%]`}>
-        <View style={tw`my-[20%]`}>
+    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[98%]`}>
+      <View style={tw``}>
+        <View style={tw`m-[10%]`}>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
             I'm a
           </Text>
@@ -54,8 +54,8 @@ const Gender = ({navigation}: NavigProps<null>) => {
         </View>
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

@@ -14,7 +14,7 @@ import {NavigProps} from '../interfaces/NaviProps';
 import {Notification, warningRed} from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
 import TButton from '../components/buttons/TButton';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Avatar} from 'react-native-ui-lib';
 
 type ItemData = {
@@ -163,7 +163,7 @@ const ConnectedChatScreen = ({navigation}: NavigProps<null>) => {
     navigation?.navigate('chatScreen')
   }
   return (
-    <View style={tw`flex-1 my-12 h-screen px-[4%]`}>
+    <ScrollView style={tw`flex-1 my-12 h-screen px-[4%]`}>
       <View style={tw`flex-row justify-between w-full`}>
         <Text style={tw`font-MontserratBold text-black text-xl`}>Chats</Text>
         <SvgXml xml={Notification} width={25} height={25} />
@@ -233,7 +233,7 @@ const ConnectedChatScreen = ({navigation}: NavigProps<null>) => {
       </View>
 
       <StatusBar backgroundColor={'gray'} translucent={false} />
-    </View>
+    </ScrollView>
   );
 };
 

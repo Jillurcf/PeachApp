@@ -12,33 +12,32 @@ import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
 import PromptImg from '../assets/images/promptImg.png';
-import {
-   BulbIcon,
- 
-} from '../assets/icons/icon';
+import {BulbIcon} from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
 import DropdownComponent from '../components/DropDown';
 
 const PromptScreen = ({navigation}: NavigProps<null>) => {
   return (
-    <ScrollView
-      style={tw`flex-1`}
-      contentContainerStyle={tw`items-center justify-center px-4`}>
-      <View style={tw`my-12`}>
-        <View style={tw`flex-row justify-between m-[4%] p`}>
-            <TouchableOpacity onPress={() => navigation?.navigate('uploadPhotos')}>
-                <Text style={tw`font-MontserratBold`}>Cancel</Text>
-            </TouchableOpacity>
-            <Text style={tw`font-MontserratBold text-primary text-xl`}>Add Media</Text>
-            <TouchableOpacity onPress={()=> navigation?.navigate('likeSendingScreen')}>
-                <Text style={tw`font-MontserratBold text-blue-700`}>Done</Text>
-            </TouchableOpacity>
+    <ScrollView contentContainerStyle={tw`items-center justify-center `}>
+      <View style={tw``}>
+        <View style={tw`flex-row justify-between m-[4%] px-[4%]`}>
+          <TouchableOpacity
+            onPress={() => navigation?.navigate('uploadPhotos')}>
+            <Text style={tw`font-MontserratBold text-black`}>Cancel</Text>
+          </TouchableOpacity>
+          <Text style={tw`font-MontserratBold text-primary text-xl`}>
+            Add Media
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation?.navigate('likeSendingScreen')}>
+            <Text style={tw`font-MontserratBold text-blue-700`}>Done</Text>
+          </TouchableOpacity>
         </View>
-        <View style={tw`w-96`}>
+        <View style={tw`w-96 px-[4%]`}>
           <DropdownComponent />
         </View>
         <View
-          style={tw`border border-gray-100 h-80 mx-[4%] rounded-lg overflow-hidden`}>
+          style={tw`border border-gray-100 h-80 rounded-lg `}>
           <Image
             style={tw`w-full h-full`}
             source={PromptImg}
@@ -47,7 +46,7 @@ const PromptScreen = ({navigation}: NavigProps<null>) => {
         </View>
 
         <View
-          style={tw`bg-gray-100 mx-4 my-12 rounded-lg p-5 border border-gray-300 relative`}>
+          style={tw`bg-gray-100 w-[90%] mx-auto my-12 rounded-lg p-5 border border-gray-300 relative`}>
           <SvgXml
             style={tw`absolute top-[-25px] left-[50%] translate-x-[-50%]`}
             width={50}
@@ -64,14 +63,14 @@ const PromptScreen = ({navigation}: NavigProps<null>) => {
       {/* Continue button */}
       <View style={tw`flex items-center justify-center w-full`}>
         <TButton
-          onPress={() => navigation?.navigate('uploadPhotos')}
+          onPress={() => navigation?.navigate('likeSendingScreen')}
           titleStyle={tw`text-white font-MontserratBold text-center`}
           title="1/6 add more photos"
           containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}
         />
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
+      <StatusBar backgroundColor={'gray'} translucent={false} />
     </ScrollView>
   );
 };

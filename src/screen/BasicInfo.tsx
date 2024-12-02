@@ -20,7 +20,7 @@ import {
   
     return (
       <View style={tw`flex-1 items-center justify-center`}>
-        <View style={tw`flex-col justify-between h-[100%]`}>
+        <View style={tw`flex-col justify-between`}>
           <View style={tw`my-[10%]  justify-center`}>
           
             <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>The More you share</Text>
@@ -32,18 +32,18 @@ import {
 
             <View
             style={tw``}>
-            <View style={tw``}>
+            <View style={tw`w-[90%] mx-auto`}>
               <TButton
               onPress={() => navigation?.navigate('location')}
                 titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
                 title="Enter Basic Information"
-                containerStyle={tw`bg-primary w-full rounded-b-full`}
+                containerStyle={tw`bg-primary w-full rounded-3xl`}
               />
             </View>
           </View>
         </View>
   
-        <StatusBar backgroundColor={'gray'} translucent />
+        <StatusBar backgroundColor={'gray'} translucent={false} />
       </View>
     );
   };

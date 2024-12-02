@@ -54,7 +54,8 @@ const AccountSettings = ({navigation}) => {
         <View style={tw`flex-row justify-between items-center mb-4`}>
           <Text style={tw`text-black font-MontserratRegular`}>Push Notifications</Text>
           <Switch 
-             trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+          
+             trackColor={{ false: 'gray', true: 'black' }}  // Custom track colors
              thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
           value={pushEnabled} onValueChange={setPushEnabled} />
         </View>
@@ -62,7 +63,7 @@ const AccountSettings = ({navigation}) => {
         <View style={tw`flex-row justify-between items-center mb-4`}>
           <Text style={tw`text-black font-MontserratRegular`}>E-mail Notifications</Text>
           <Switch 
-             trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+             trackColor={{ false: 'gray', true: 'black' }} // Custom track colors
              thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
           value={emailEnabled} onValueChange={setEmailEnabled} />
         </View>
@@ -70,7 +71,7 @@ const AccountSettings = ({navigation}) => {
         <View style={tw`flex-row justify-between items-center`}>
           <Text style={tw`text-black`}>In-app Notifications</Text>
           <Switch 
-           trackColor={{ false: '#E5E7EB', true: '#3B82F6' }}  // Custom track colors
+           trackColor={{ false: 'gray', true: 'black' }} // Custom track colors
            thumbColor={emailEnabled ? '#FFF' : '#6B7280'}  // Custom thumb color
           value={inAppEnabled} onValueChange={setInAppEnabled} />
         </View>

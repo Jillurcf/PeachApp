@@ -27,6 +27,7 @@ const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
           <View style={tw`h-14`}>
             <InputText
               placeholder="exam@ple.com"
+              placeholderTextColor={tw`text-black font-MontserratRegular`}
               style={tw`font-MontserratRegular`}
               cursorColor={'black'}
               containerStyle={tw`border-0 bg-transparent border-b-2 border-b-black`}

@@ -1,5 +1,6 @@
 import {
   Image,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -23,9 +24,9 @@ const Privacy = ({navigation}: NavigProps<null>) => {
   };
 
   return (
-    <View style={tw`flex-1 items-center justify-center px-[4%]`}>
-      <View style={tw`flex-col justify-between h-[95%]`}>
-        <View style={tw`my-[10%]  justify-center`}>
+    <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center h-[95%] px-[4%]`}>
+      <View style={tw`flex-col justify-between `}>
+        <View style={tw`  justify-center`}>
           <Text
             style={tw`font-MontserratBlack text-black text-2xl text-center`}>
             We value your privacy
@@ -47,7 +48,7 @@ const Privacy = ({navigation}: NavigProps<null>) => {
           </View>
         </View>
 
-        <View style={tw``}>
+        <View style={tw`my-6`}>
           <View style={tw`justify-center items-center`}>
             <TButton
               onPress={() => navigation?.navigate('createYourProfile')}
@@ -59,8 +60,8 @@ const Privacy = ({navigation}: NavigProps<null>) => {
         </View>
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

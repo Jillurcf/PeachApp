@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Button, StyleSheet, StatusBar, Text, Image} from 'react-native';
+import {View, Button, StyleSheet, StatusBar, Text, Image, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
@@ -12,15 +12,16 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
   const [isPickerOpen, setPickerOpen] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
-        <View style={tw`my-[20%]`}>
+    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[95%] px-[4%]`}>
+      
+        <View style={tw`my-[10%]`}>
           <Text style={tw`font-MontserratBlack text-primaryText text-2xl`}>
             What is your date of birth
           </Text>
 
-          <View style={tw`my-[20%] flex items-center justify-center border-b-2 border-primaryText`}>
+          <View style={tw`flex items-center my-4 justify-center `}>
             <DatePicker
+           
               open={true}
               date={date}
               onConfirm={selectedDate => {
@@ -29,23 +30,25 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
               }}
               onCancel={() => setPickerOpen(false)}
               minuteInterval={15} // Allows selecting minutes in 5-minute intervals
-              mode="datetime" // Picker mode: 'date', 'time', or 'datetime'
+              mode="datetime" // Picker mode: 'date', 'time', or 'datetime'\
+              textColor="#007AFF" 
+              style={tw`bg-black`}
             />
           </View>
           <Text
-            style={tw`font-MontserratBold text-primary text-2xl text-center`}>
+            style={tw`font-MontserratBold my-4 text-primary text-2xl text-center`}>
             Age: 27
           </Text>
-          <View style={tw`flex-row gap-4 my-6`}>
+          <View style={tw`flex-row gap-4 my-2`}>
             <SvgXml xml={warningRed} width={25} height={25} />
-            <Text style={tw`font-MontserratRegular`}>
+            <Text style={tw`text-black font-MontserratRegular`}>
               Age can’t be changed later
             </Text>
           </View>
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
+          style={tw`z-2 flex mx-auto my-6 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
               onPress={() => navigation?.navigate('WelcomeNotification')}
@@ -55,10 +58,10 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
+      
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

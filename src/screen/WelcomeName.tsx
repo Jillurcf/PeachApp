@@ -7,12 +7,9 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import LinearGradient from 'react-native-linear-gradient';
 import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
 import InputText from '../components/inputs/InputText';
-import {RadioButton} from 'react-native-ui-lib';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NavigProps} from '../interfaces/NaviProps';
 
 type Props = {};
@@ -29,6 +26,7 @@ const WelcomeName = ({navigation}: NavigProps<null>) => {
           <View style={tw`flex-row gap-2`}>
             <View style={tw`h-14 w-6/12`}>
               <InputText
+              placeholderTextColor={tw`text-black`}
                 placeholder="First Name"
                 style={tw`font-MontserratRegular`}
                 cursorColor={'black'}
@@ -39,6 +37,7 @@ const WelcomeName = ({navigation}: NavigProps<null>) => {
             </View>
             <View style={tw`h-14 w-6/12`}>
               <InputText
+              placeholderTextColor={tw`text-black`}
                 placeholder="Last Name"
                 style={tw`font-MontserratRegular`}
                 cursorColor={'black'}
@@ -48,7 +47,7 @@ const WelcomeName = ({navigation}: NavigProps<null>) => {
               />
             </View>
           </View>
-          <Text style={tw`my-6 font-MontserratRegular text-sm px-[4%]`}>Last name is optional, and only shared with matches.</Text>
+          <Text style={tw`my-6 font-MontserratRegular text-black text-sm px-[4%]`}>Last name is optional, and only shared with matches.</Text>
         </View>
 
         <View

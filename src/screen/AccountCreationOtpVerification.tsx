@@ -49,6 +49,7 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
   const renderInputs = () => {
     return otp.map((digit, index) => (
       <TextInput
+      cursorColor={'black'}
         key={index}
         style={tw`h-12 w-12 border-b-2 border-b-primaryText`}
         keyboardType="numeric"
@@ -74,19 +75,19 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
           <Text style={tw`text-primary my-4 text-2xl font-MontserratBold`}>
             6-digit code
           </Text>
-          <Text style={tw`text-sm font-MontserratRegular`}>
+          <Text style={tw`text-sm text-black font-MontserratRegular`}>
             Please enter the code we've sent to your email
           </Text>
 
           <View style={tw`flex-row justify-between w-[100%] mx-auto`}>{renderInputs()}</View>
 
           {timer > 0 ? (
-            <Text style={tw`mt-5 font-MontserratRegular text-primaryText`}>
+            <Text style={tw`mt-5 font-MontserratRegular text-black`}>
               Resend code in 00:{timer < 10 ? `0${timer}` : timer}
             </Text>
           ) : (
             <TouchableOpacity>
-              <Text style={tw`mt-5 font-MontserratRegular`}>Didn’t received code? <Text style={tw` text-blue-800 border-b-2 border-b-blue-700`}>Send again</Text> </Text>
+              <Text style={tw`mt-5 text-black font-MontserratRegular`}>Didn’t received code? <Text style={tw` text-blue-800 border-b-2 border-b-blue-700`}>Send again</Text> </Text>
             </TouchableOpacity>
           )}
         </View>

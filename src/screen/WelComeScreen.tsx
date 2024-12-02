@@ -25,7 +25,7 @@ import {
   
     return (
       <View style={tw`flex-1 items-center justify-center`}>
-        <View style={tw`flex-col justify-between h-[100%]`}>
+        <View style={tw`flex-col justify-between h-[95%]`}>
           <View style={tw`my-[10%]  justify-center px-[4%]`}>
             <Text style={tw` font-MontserratRegular`}>Welcome to Peace app</Text>
             <Text style={tw`font-MontserratBlack text-black text-2xl`}>Meet. Match. Move On... Together</Text>
@@ -36,12 +36,12 @@ import {
 
             <View
             style={tw``}>
-            <View style={tw``}>
+            <View style={tw`w-[90%] items-center justify-center flex mx-auto`}>
               <TButton
               onPress={() => navigation?.navigate('WelcomeName')}
                 titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
                 title="Continue"
-                containerStyle={tw`bg-primary w-[100%] rounded-b-full`}
+                containerStyle={tw`bg-primary w-[100%] rounded-3xl`}
               />
             </View>
           </View>

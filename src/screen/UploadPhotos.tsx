@@ -120,8 +120,8 @@ const UploadPhotos = ({ navigation }: NavigProps<null>) => {
 
   return (
     <ScrollView
-      style={tw`flex-1`}
-      contentContainerStyle={tw`items-center justify-center px-4`}>
+
+      contentContainerStyle={tw`flex-1 flex h-[95%] items-center justify-center px-4`}>
       <View style={tw`my-20`}>
         <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
           Pair with photos & videos with prompts.
@@ -214,16 +214,16 @@ const UploadPhotos = ({ navigation }: NavigProps<null>) => {
       </View>
 
       {/* Continue button */}
-      <View style={tw`flex items-center justify-center w-full`}>
+      <View style={tw`flex mb-6 items-center justify-center w-full`}>
         <TButton
-          onPress={() => navigation?.navigate('ethinicity')}
+          onPress={() => navigation?.navigate('promptScreen')}
           titleStyle={tw`text-white font-MontserratBold text-center`}
           title="Continue"
           containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}
         />
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
+      <StatusBar backgroundColor={'gray'} translucent={false} />
     </ScrollView>
   );
 };

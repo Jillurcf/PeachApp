@@ -58,9 +58,9 @@ const Passion = ({ navigation }: NavigProps<null>) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
-        <View style={tw`my-[20%]`}>
+    <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
+    
+        <View style={tw`my-[10%]`}>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
             What is your passion?
           </Text>
@@ -112,10 +112,10 @@ const Passion = ({ navigation }: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

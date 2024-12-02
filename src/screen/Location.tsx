@@ -15,10 +15,10 @@ type Props = {};
 
 const Location = ({navigation}: NavigProps<null>) => {
   return (
-    <View style={tw`flex-1 items-center justify-center`}>
-      <View style={tw`flex-col justify-between h-[100%]`}>
-        <View style={tw`my-[10%]  justify-center`}>
-          <View style={tw`px-[4%] my-6`}>
+    <View style={tw`flex-1 items-center justify-center h-[95%]`}>
+      <View style={tw`flex-col justify-between`}>
+        <View style={tw`  justify-center`}>
+          <View style={tw`px-[4%]`}>
             <Text style={tw`font-MontserratBlack text-black text-2xl`}>
               Where do you live?
             </Text>
@@ -27,16 +27,17 @@ const Location = ({navigation}: NavigProps<null>) => {
               By sharing your location, get match near you
             </Text>
           </View>
-          <View style={tw`items-center justify-center border border-gray-600 h-[66%]`}>
-            
+          <View style={tw`items-center justify-center border border-gray-600 rounded-xl h-[60%] mx-[4%]`}>
+            <Text style={tw`text-black`}>Map</Text>
           </View>
         </View>
 
-        <View style={tw` rounded-t-3xl bg-white`}>
+        <View style={tw` rounded-3xl bg-white mx-[4%]`}>
         <View style={tw`h-14 w-[90%] px-[4%] mx-auto`}>
             <InputText
               placeholder="New York USA"
-              placeholderTextColor={''}
+             
+              placeholderTextColor={'black'}
               style={tw`font-MontserratRegular`}
               cursorColor={'black'}
               containerStyle={tw`border-0 bg-transparent border-b-2 border-b-black`}
@@ -44,7 +45,7 @@ const Location = ({navigation}: NavigProps<null>) => {
               fieldStyle={tw`text-black`}
             />
           </View>
-          <View style={tw`px-[4%] mx-auto my-2`}>
+          <View style={tw`px-[4%] mx-auto my-6`}>
             <TButton
               onPress={() => navigation?.navigate('gender')}
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
@@ -55,7 +56,7 @@ const Location = ({navigation}: NavigProps<null>) => {
         </View>
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
+      <StatusBar backgroundColor={'gray'} translucent={false} />
     </View>
   );
 };

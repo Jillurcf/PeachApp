@@ -56,9 +56,9 @@ const Religion = ({ navigation }: NavigProps<null>) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
-        <View style={tw`my-[20%]`}>
+    <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
+  
+        <View style={tw`my-[10%]`}>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
           What is your religious beliefs?
           </Text>
@@ -93,13 +93,13 @@ const Religion = ({ navigation }: NavigProps<null>) => {
           </View>
           <View style={tw`flex-row justify-between`}>
               <Text style={tw`font-MontserratBold text-primary`}>Show on your profile</Text>
-              <Switch value={value} onValueChange={setValue} />
+              <Switch value={value} onColor={'black'} offColor={'gray'} onValueChange={setValue} />
             </View>
    
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}
+          style={tw`z-2 flex mx-auto my-12 items-center justify-center px-[4%]`}
         >
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
@@ -110,10 +110,9 @@ const Religion = ({ navigation }: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
-
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+     
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 

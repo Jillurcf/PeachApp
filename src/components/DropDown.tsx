@@ -22,28 +22,31 @@ const DropdownComponent: React.FC = () => {
   const [value, setValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
-//   const renderLabel = () => {
-//     if (value || isFocus) {
-//       return (
-//         <Text style={tw`absolute bg-white left-5 top-2 z-10 px-2 text-sm ${isFocus ? 'text-blue-500' : 'text-gray-500'}`}>
-//           Dropdown label
-//         </Text>
-//       );
-//     }
-//     return null;
-//   };
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={tw`absolute bg-white left-5 top-2 z-10 px-2 text-sm ${isFocus ? 'text-blue-500' : 'text-gray-500'}`}>
+          Dropdown label
+        </Text>
+      );
+    }
+    return null;
+  };
 
   return (
     <View style={tw` p-4`}>
       {/* {renderLabel()} */}
       <Dropdown
-        style={tw`h-12 border border-gray-300 rounded-lg px-2 ${isFocus ? 'border-blue-500' : ''}`}
-        placeholderStyle={tw`text-base text-gray-500`}
+        style={tw`h-12 border text-black border-gray-300 rounded-lg px-2 ${isFocus ? 'border-blue-500' : ''}`}
+        placeholderStyle={tw`text-base text-black`}
+        searchPlaceholderTextColor='black'
         selectedTextStyle={tw`text-base text-black`}
         inputSearchStyle={tw`h-10 text-base`}
         iconStyle={tw`w-5 h-5`}
+        itemTextStyle={tw`text-black`}
+        
         data={data}
-        search
+        // search
         maxHeight={300}
         labelField="label"
         valueField="value"

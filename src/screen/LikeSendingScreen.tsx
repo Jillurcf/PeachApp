@@ -1,5 +1,6 @@
 import {
   Image,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -25,15 +26,15 @@ const LikeSendingScreen = ({navigation}: NavigProps<null>) => {
   };
 
   return (
-    <View style={tw`flex-1 items-center justify-center px-[4%]`}>
+    <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center h-[90%] px-[4%]`}>
       <View style={tw``}>
-        <View style={tw`my-[10%]  justify-center`}>
+        <View style={tw`  justify-center`}>
           <Text
             style={tw`font-MontserratBlack text-black text-2xl text-center`}>
             Thoughtful connections make for better dates.
           </Text>
           
-          <View style={tw`items-center justify-center px-[4%] my-24 h-72`}>
+          <View style={tw`items-center justify-center px-[4%] my-6 h-72`}>
             <Image
               style={tw`w-full h-full`}
               source={require('../assets/images/likeSendingImg.png')}
@@ -54,8 +55,8 @@ const LikeSendingScreen = ({navigation}: NavigProps<null>) => {
         </View>
       </View>
 
-      <StatusBar backgroundColor={'gray'} translucent />
-    </View>
+      <StatusBar backgroundColor={'gray'} translucent={false} />
+    </ScrollView>
   );
 };
 
