@@ -14,7 +14,9 @@ import TButton from '../components/buttons/TButton';
 import InputText from '../components/inputs/InputText';
 import {RadioButton} from 'react-native-ui-lib';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import { NavigProps } from '../interfaces/NaviProps';
+import {NavigProps} from '../interfaces/NaviProps';
+import {SvgXml} from 'react-native-svg';
+import {LeftArrow} from '../assets/icons/icon';
 
 type Props = {};
 
@@ -49,7 +51,7 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
   const renderInputs = () => {
     return otp.map((digit, index) => (
       <TextInput
-      cursorColor={'black'}
+        cursorColor={'black'}
         key={index}
         style={tw`h-12 w-12 border-b-2 border-b-primaryText`}
         keyboardType="numeric"
@@ -71,15 +73,23 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
   return (
     <View style={tw`flex-1 items-center justify-center`}>
       <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
-        <View style={tw`my-[10%]`}>
-          <Text style={tw`text-primary my-4 text-2xl font-MontserratBold`}>
-            6-digit code
-          </Text>
+        <View style={tw`my-[20%]`}>
+          <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBold text-primary  text-2xl`}>
+              6-digit code
+            </Text>
+          </TouchableOpacity>
+
           <Text style={tw`text-sm text-black font-MontserratRegular`}>
             Please enter the code we've sent to your email
           </Text>
 
-          <View style={tw`flex-row justify-between w-[100%] mx-auto`}>{renderInputs()}</View>
+          <View style={tw`flex-row justify-between w-[100%] mx-auto`}>
+            {renderInputs()}
+          </View>
 
           {timer > 0 ? (
             <Text style={tw`mt-5 font-MontserratRegular text-black`}>
@@ -87,7 +97,12 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
             </Text>
           ) : (
             <TouchableOpacity>
-              <Text style={tw`mt-5 text-black font-MontserratRegular`}>Didn’t received code? <Text style={tw` text-blue-800 border-b-2 border-b-blue-700`}>Send again</Text> </Text>
+              <Text style={tw`mt-5 text-black font-MontserratRegular`}>
+                Didn’t received code?{' '}
+                <Text style={tw` text-blue-800 border-b-2 border-b-blue-700`}>
+                  Send again
+                </Text>{' '}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -96,7 +111,7 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
           style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
-            onPress={() => navigation?.navigate('WelcomeScreen')}
+              onPress={() => navigation?.navigate('WelcomeScreen')}
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}
@@ -119,12 +134,12 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Centers content horizontally
   },
 
-   otpContainer: {
+  otpContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
   },
-  
+
   timer: {
     marginTop: 20,
     fontSize: 14,

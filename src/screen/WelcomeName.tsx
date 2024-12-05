@@ -11,6 +11,9 @@ import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
 import InputText from '../components/inputs/InputText';
 import {NavigProps} from '../interfaces/NaviProps';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 type Props = {};
 
@@ -19,10 +22,15 @@ const WelcomeName = ({navigation}: NavigProps<null>) => {
     <View style={tw`flex-1 items-center justify-center`}>
       <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
         <View style={tw`my-[10%]  justify-center`}>
-          
-          <Text style={tw` font-MontserratBlack text-black text-2xl my-24`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-[20%] gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             What is your name?
-          </Text>
+            </Text>
+          </TouchableOpacity>
+         
           <View style={tw`flex-row gap-2`}>
             <View style={tw`h-14 w-6/12`}>
               <InputText

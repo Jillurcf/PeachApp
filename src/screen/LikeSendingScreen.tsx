@@ -13,7 +13,8 @@ import {NavigProps} from '../interfaces/NaviProps';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import IwtButton from '../components/buttons/IwtButton';
-import {Love} from '../assets/icons/icon';
+import {LeftArrow, Love} from '../assets/icons/icon';
+import { SvgXml } from 'react-native-svg';
 
 type Props = {};
 
@@ -26,13 +27,21 @@ const LikeSendingScreen = ({navigation}: NavigProps<null>) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center h-[90%] px-[4%]`}>
-      <View style={tw``}>
+    <ScrollView contentContainerStyle={tw`flex-1 h-[95%] justify-between px-[4%]`}>
+       
+       <TouchableOpacity
+          onPress={() => navigation?.goBack()}
+          style={tw`flex-row gap-4 py-4`}>
+          <SvgXml xml={LeftArrow} width={25} height={25} />
+         
+        </TouchableOpacity>
         <View style={tw`  justify-center`}>
+       
           <Text
-            style={tw`font-MontserratBlack text-black text-2xl text-center`}>
+            style={tw`font-MontserratBlack text-black text-2xl text-center py-[4%]`}>
             Thoughtful connections make for better dates.
           </Text>
+       
           
           <View style={tw`items-center justify-center px-[4%] my-6 h-72`}>
             <Image
@@ -42,7 +51,7 @@ const LikeSendingScreen = ({navigation}: NavigProps<null>) => {
           </View>
         </View>
 
-        <View style={tw``}>
+        <View style={tw` my-12`}>
           <View style={tw`justify-center items-center`}>
             <IwtButton
               svg={Love}
@@ -53,7 +62,7 @@ const LikeSendingScreen = ({navigation}: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
+
 
       <StatusBar backgroundColor={'gray'} translucent={false} />
     </ScrollView>

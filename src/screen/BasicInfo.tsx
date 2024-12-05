@@ -10,6 +10,9 @@ import {
   import tw from '../lib/tailwind';
   import TButton from '../components/buttons/TButton';
    import { NavigProps } from '../interfaces/NaviProps';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
   
   type Props = {};
   
@@ -19,10 +22,16 @@ import {
     
   
     return (
-      <View style={tw`flex-1 items-center justify-center`}>
+      <View style={tw`flex-1 p-[4%]`}>
+          <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+          </TouchableOpacity>
         <View style={tw`flex-col justify-between`}>
-          <View style={tw`my-[10%]  justify-center`}>
-          
+      
+          <View style={tw`  justify-center`}>
+         
             <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>The More you share</Text>
             <Text style={tw`font-MontserratBlack text-black text-2xl text-center`}>better we match</Text>
             <View style={tw`items-center justify-center`}>

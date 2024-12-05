@@ -10,6 +10,8 @@ import {
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import { NavigProps } from '../interfaces/NaviProps';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 const Passion = ({ navigation }: NavigProps<null>) => {
   const options = [
@@ -61,9 +63,14 @@ const Passion = ({ navigation }: NavigProps<null>) => {
     <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
     
         <View style={tw`my-[10%]`}>
-          <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-6 gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             What is your passion?
-          </Text>
+            </Text>
+          </TouchableOpacity>
           <Text style={tw`font-MontserratRegular text-primary text-sm`}>
             Let everyone know what you are passionate about by adding it to
             your profile.

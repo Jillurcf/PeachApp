@@ -4,9 +4,10 @@ import DatePicker from 'react-native-date-picker';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
-import {warningRed} from '../assets/icons/icon';
+import {LeftArrow, warningRed} from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
 import {Switch} from 'react-native-ui-lib';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const WelcomeNotificationControl = ({navigation}: NavigProps<null>) => {
   const [value, setValue] = useState(false);
@@ -16,9 +17,15 @@ const WelcomeNotificationControl = ({navigation}: NavigProps<null>) => {
     <View style={styles.container}>
       <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
         <View style={tw`my-[20%]`}>
-          <Text style={tw`font-MontserratBlack text-primaryText text-2xl`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             Never miss a message from someone great
-          </Text>
+            </Text>
+          </TouchableOpacity>
+         
 
           <View style={tw`bg-[#E0E0E0] h-36 rounded-xl my-12 p-6`}>
             <View style={tw`flex-row justify-between py-4`}>

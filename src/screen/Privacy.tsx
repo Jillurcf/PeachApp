@@ -12,6 +12,8 @@ import TButton from '../components/buttons/TButton';
 import {NavigProps} from '../interfaces/NaviProps';
 import {useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 type Props = {};
 
@@ -27,12 +29,21 @@ const Privacy = ({navigation}: NavigProps<null>) => {
     <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center h-[95%] px-[4%]`}>
       <View style={tw`flex-col justify-between `}>
         <View style={tw`  justify-center`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+          <View style={tw`w-[90%]`}>
           <Text
             style={tw`font-MontserratBlack text-black text-2xl text-center`}>
             We value your privacy
           </Text>
+          
+          </View>
+          </TouchableOpacity>
+         
           <Text
-            style={tw`font-MontserratRegular text-black text-sm text-start`}>
+            style={tw`font-MontserratRegular text-black text-sm`}>
             {showMore ? text : text.slice(0, 200) + '...'}
             <TouchableOpacity onPress={toggleShowMore}>
               <Text style={tw`text-blue-800`}>

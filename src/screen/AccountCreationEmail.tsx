@@ -11,7 +11,10 @@ import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
 import InputText from '../components/inputs/InputText';
 import {RadioButton} from 'react-native-ui-lib';
-import { NavigProps } from '../interfaces/NaviProps';
+import {NavigProps} from '../interfaces/NaviProps';
+import {SvgXml} from 'react-native-svg';
+import {LeftArrow} from '../assets/icons/icon';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {};
 
@@ -20,10 +23,13 @@ const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
   return (
     <View>
       <View style={tw`flex-col justify-between h-[98%] z-30`}>
-        <View style={tw`z-2 flex px-[4%] my-24`}>
-          <Text style={tw`font-MontserratBold text-primary  text-2xl`}>
-            What's your email?
-          </Text>
+        <View style={tw`z-2 flex px-[4%] my-[20%]`}>
+          <TouchableOpacity onPress={() => navigation?.goBack()} style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBold text-primary  text-2xl`}>
+              What's your email?
+            </Text>
+          </TouchableOpacity>
           <View style={tw`h-14`}>
             <InputText
               placeholder="exam@ple.com"
@@ -36,29 +42,31 @@ const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
             />
           </View>
           <View style={tw`my-2`}>
-              <RadioButton
-                color="black"
-                containerStyle={tw`flex items-start my-4`}
-                labelStyle={tw`font-MontserratRegular text-primaryText text-sm`}
-                label={
-                  'I do not wish to receive marketing communications about peace products & service'
-                }
-                selected={value}
-                onPress={() => setValue(!value)}
-              />
-            </View>
+            <RadioButton
+              color="black"
+              containerStyle={tw`flex items-start my-4`}
+              labelStyle={tw`font-MontserratRegular text-primaryText text-sm`}
+              label={
+                'I do not wish to receive marketing communications about peace products & service'
+              }
+              selected={value}
+              onPress={() => setValue(!value)}
+            />
+          </View>
         </View>
         <View
           style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
           <Text
             style={tw`font-MontserratRegular text-center text-primaryText  text-sm`}>
-          We will send you a text with a verification code. Message and data rates may apply
+            We will send you a text with a verification code. Message and data
+            rates may apply
           </Text>
-        
+
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
-           
             <TButton
-            onPress={() => navigation?.navigate('AccountCreationOtpVerificaton')}
+              onPress={() =>
+                navigation?.navigate('AccountCreationOtpVerificaton')
+              }
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

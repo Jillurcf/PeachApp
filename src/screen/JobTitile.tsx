@@ -12,6 +12,8 @@ import tw from '../lib/tailwind';
 import { NavigProps } from '../interfaces/NaviProps';
 import { RadioButton, Switch } from 'react-native-ui-lib';
 import InputText from '../components/inputs/InputText';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 const JobTitle = ({ navigation }: NavigProps<null>) => {
     const [value, setValue] = useState(false);
@@ -53,10 +55,18 @@ const JobTitle = ({ navigation }: NavigProps<null>) => {
 
   return (
     <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
-      <View style={tw``}>
-        <View style={tw`my-[20%]`}>
+      {/* <View style={tw``}> */}
+        <View style={tw`my-[10%]`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-6 gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
+            What is your job title?
+            </Text>
+          </TouchableOpacity>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
-          What is your job title?
+        
           </Text>
           
 
@@ -90,7 +100,7 @@ const JobTitle = ({ navigation }: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
+      {/* </View> */}
 
       <StatusBar backgroundColor={'gray'} translucent={false} />
     </ScrollView>

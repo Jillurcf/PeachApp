@@ -4,6 +4,9 @@ import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
 import {RadioButton, RadioGroup, Switch, WheelPicker} from 'react-native-ui-lib';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 const Height = ({navigation}: NavigProps<null>) => {
   const [value, setValue] = useState(false);
@@ -11,13 +14,21 @@ const Height = ({navigation}: NavigProps<null>) => {
   const [currentValue, setCurrentValue] = useState('yes');
 
   return (
-    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[98%] px-[4%]`}>
+    <View style={tw`flex-1 flex-col justify-between h-[98%] px-[4%]`}>
      
         <View style={tw``}>
-          <Text style={tw`my-6 font-MontserratBlack text-primary text-2xl`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-6 gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             How tall you are?
+            </Text>
+          </TouchableOpacity>
+          <Text style={tw`my-6 font-MontserratBlack text-primary text-2xl`}>
+         
           </Text>
-          <View style={tw`my-12`}>
+          <View style={tw`my-6`}>
             <WheelPicker
            
               items={[
@@ -60,7 +71,7 @@ const Height = ({navigation}: NavigProps<null>) => {
 
 
       <StatusBar backgroundColor={'gray'} translucent={false} />
-    </ScrollView>
+    </View>
   );
 };
 

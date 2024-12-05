@@ -61,7 +61,7 @@ const PromptScreen = ({navigation}: NavigProps<null>) => {
       </View>
 
       {/* Continue button */}
-      <View style={tw`flex items-center justify-center w-full`}>
+      <View style={tw`flex sm:my-6 lg:my-24 md:my-24 items-center justify-center w-full`}>
         <TButton
           onPress={() => navigation?.navigate('likeSendingScreen')}
           titleStyle={tw`text-white font-MontserratBold text-center`}

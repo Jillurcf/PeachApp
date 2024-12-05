@@ -12,7 +12,9 @@ import {
   import TButton from '../components/buttons/TButton';
    import { NavigProps } from '../interfaces/NaviProps';
 import IwtButton from '../components/buttons/IwtButton';
-import { PlusIcon } from '../assets/icons/icon';
+import { LeftArrow, PlusIcon } from '../assets/icons/icon';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
   
   type Props = {};
   
@@ -22,7 +24,13 @@ import { PlusIcon } from '../assets/icons/icon';
     
   
     return (
-      <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center`}>
+      <ScrollView contentContainerStyle={tw`flex-1 p-[4%]`}>
+         <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+         
+          </TouchableOpacity>
         <View style={tw`flex-col justify-between h-[95%]`}>
           <View style={tw`my-[10%]  justify-center`}>
           

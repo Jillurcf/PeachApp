@@ -10,20 +10,28 @@ import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
 import {NavigProps} from '../interfaces/NaviProps';
 import InputText from '../components/inputs/InputText';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 type Props = {};
 
 const Location = ({navigation}: NavigProps<null>) => {
   return (
-    <View style={tw`flex-1 items-center justify-center h-[95%]`}>
-      <View style={tw`flex-col justify-between`}>
+    <View style={tw`flex-1 p-[4%] `}>
+       <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+          </TouchableOpacity>
+      <View style={tw`flex-col justify-between h-[95%]`}>
         <View style={tw`  justify-center`}>
           <View style={tw`px-[4%]`}>
             <Text style={tw`font-MontserratBlack text-black text-2xl`}>
               Where do you live?
             </Text>
             <Text
-              style={tw`font-MontserratRegular text-primaryText text-lg px`}>
+              style={tw`font-MontserratRegular text-primaryText text-lg`}>
               By sharing your location, get match near you
             </Text>
           </View>

@@ -4,9 +4,10 @@ import DatePicker from 'react-native-date-picker';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
-import {warningRed} from '../assets/icons/icon';
+import {LeftArrow, warningRed} from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
 import {RadioButton, RadioGroup, Switch} from 'react-native-ui-lib';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Gender = ({navigation}: NavigProps<null>) => {
   const [value, setValue] = useState(false);
@@ -14,11 +15,19 @@ const Gender = ({navigation}: NavigProps<null>) => {
   const [currentValue, setCurrentValue] = useState('yes');
 
   return (
-    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[98%]`}>
-      <View style={tw``}>
-        <View style={tw`m-[10%]`}>
-          <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
+    <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[95%] p-[4%]`}>
+      {/* <View style={tw``}> */}
+        <View style={tw``}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             I'm a
+            </Text>
+          </TouchableOpacity>
+          <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
+          
           </Text>
           <View style={tw`my-6`}>
             <RadioGroup
@@ -42,7 +51,7 @@ const Gender = ({navigation}: NavigProps<null>) => {
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
+          style={tw`z-2 flex mx-auto my-2 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
               onPress={() => navigation?.navigate('choice')}
@@ -52,7 +61,7 @@ const Gender = ({navigation}: NavigProps<null>) => {
             />
           </View>
         </View>
-      </View>
+      {/* </View> */}
 
       <StatusBar backgroundColor={'gray'} translucent={false} />
     </ScrollView>

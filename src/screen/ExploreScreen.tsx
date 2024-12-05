@@ -130,7 +130,7 @@ const ExploreScreen = () => {
     'Skincare',
   ];
 
-  Clipboard.setString('This is the text to copy!');
+  // Clipboard.setString('This is the text to copy!');
 
   // Get string from clipboard
 

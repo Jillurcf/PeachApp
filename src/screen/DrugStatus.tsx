@@ -11,6 +11,8 @@ import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import { NavigProps } from '../interfaces/NaviProps';
 import { RadioButton, Switch } from 'react-native-ui-lib';
+import { SvgXml } from 'react-native-svg';
+import { LeftArrow } from '../assets/icons/icon';
 
 const DrugStatus = ({ navigation }: NavigProps<null>) => {
     const [value, setValue] = useState(false);
@@ -51,10 +53,19 @@ const DrugStatus = ({ navigation }: NavigProps<null>) => {
   return (
     <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
      
-        <View style={tw`my-[30%]`}>
+        <View style={tw`my-[10%]`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-6 gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+          <View style={tw`w-[90%]`}>
           <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
          Do you use drugs?
           </Text>
+          
+          </View>
+          </TouchableOpacity>
+       
           
 
           <View style={tw`my-8 flex-row flex-wrap gap-1`}>

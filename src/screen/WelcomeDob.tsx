@@ -4,8 +4,9 @@ import DatePicker from 'react-native-date-picker';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
 import {NavigProps} from '../interfaces/NaviProps';
-import {warningRed} from '../assets/icons/icon';
+import {LeftArrow, warningRed} from '../assets/icons/icon';
 import {SvgXml} from 'react-native-svg';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const WelcomeDob = ({navigation}: NavigProps<null>) => {
   const [date, setDate] = useState(new Date());
@@ -15,9 +16,14 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
     <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[95%] px-[4%]`}>
       
         <View style={tw`my-[10%]`}>
-          <Text style={tw`font-MontserratBlack text-primaryText text-2xl`}>
+        <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row my-[10%] gap-4`}>
+            <SvgXml xml={LeftArrow} width={25} height={25} />
+            <Text style={tw`font-MontserratBlack text-primary  text-2xl`}>
             What is your date of birth
-          </Text>
+            </Text>
+          </TouchableOpacity>
 
           <View style={tw`flex items-center my-4 justify-center `}>
             <DatePicker
