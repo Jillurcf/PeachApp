@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Switch,
   Button,
+  ScrollView,
+  StatusBar,
 } from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import tw from 'twrnc'; // Assuming Tailwind with 'twrnc' setup
@@ -20,9 +22,9 @@ const UpdatePassword = ({navigation}) => {
   const [showConPass, setShowConPass] = useState(true)
 
   return (
-    <View style={tw`flex-1 bg-gray-100`}>
+    <ScrollView style={tw`flex-1 bg-gray-100`}>
       {/* Header */}
-      <View style={tw`flex-row items-center my-6 p-4`}>
+      <View style={tw`flex-row items-center my-2 p-4`}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <View style={tw`flex-row gap-4`}>
             <SvgXml xml={LeftArrow} width={25} height={25} />
@@ -59,7 +61,7 @@ const UpdatePassword = ({navigation}) => {
       {/* Update Password */}
       <View style={tw`relative`}>
       
-        <View style={tw`relative w-[90%] mx-auto my-6 h-14`}>
+        <View style={tw`relative w-[90%] mx-auto my-4 h-14`}>
         <InputText
                   onPress={() => setShowPass(!showPass)}
                   // value={values.password}
@@ -75,7 +77,7 @@ const UpdatePassword = ({navigation}) => {
       </View>
       <View style={tw`relative`}>
         
-        <View style={tw`relative w-[90%] mx-auto my-6 h-14`}>
+        <View style={tw`relative w-[90%] mx-auto my-2 h-14`}>
         <InputText
                   onPress={() => setShowConPass(!showConPass)}
                   // value={values.password}
@@ -92,12 +94,13 @@ const UpdatePassword = ({navigation}) => {
      
 
       {/* Save Changes Button */}
-      <View style={tw`p-4`}>
-        <TouchableOpacity style={tw`bg-black py-3 rounded-full`}>
+      <View style={tw`p-4 my-6`}>
+        <TouchableOpacity style={tw`bg-black py-4 rounded-full`}>
           <Text style={tw`text-center text-white font-bold`}>Save changes</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <StatusBar translucent={false}/>
+    </ScrollView>
   );
 };
 

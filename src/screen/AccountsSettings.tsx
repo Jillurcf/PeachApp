@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Switch,
   Button,
+  StatusBar,
 } from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import tw from 'twrnc'; // Assuming Tailwind with 'twrnc' setup
@@ -19,7 +20,7 @@ const AccountSettings = ({navigation}) => {
   return (
     <View style={tw`flex-1 bg-gray-100`}>
       {/* Header */}
-      <View style={tw`flex-row items-center my-6 p-4`}>
+      <View style={tw`flex-row items-center my-2 p-4`}>
         <TouchableOpacity
         onPress={() => navigation.goBack()}
         >
@@ -86,10 +87,11 @@ const AccountSettings = ({navigation}) => {
 
       {/* Save Changes Button */}
       <View style={tw`p-4`}>
-        <TouchableOpacity style={tw`bg-black py-3 rounded-full`}>
+        <TouchableOpacity style={tw`bg-black py-4 rounded-full`}>
           <Text style={tw`text-center text-white font-bold`}>Save changes</Text>
         </TouchableOpacity>
       </View>
+      <StatusBar translucent={false}/>
     </View>
   );
 };
