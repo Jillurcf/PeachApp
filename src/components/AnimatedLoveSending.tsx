@@ -71,6 +71,55 @@ const AnimatedLoveSending = ({ LoveIcon }: AnimatedStarRatingProps) => {
   );
 };
 
+// const FlourishIcon = ({
+//   x,
+//   y,
+//   onComplete,
+//   StarIcon,
+// }: {
+//   x: number;
+//   y: number;
+//   onComplete: () => void;
+//   StarIcon: string;
+// }) => {
+//   const position = useSharedValue({ x, y });
+//   const opacity = useSharedValue(1);
+//   const scale = useSharedValue(1);
+
+//   // Update animation styles
+//   const animatedStyle = useAnimatedStyle(() => {
+//     return {
+//       position: 'absolute',
+//       left: position.value.x - 20, // Adjust for icon size
+//       top: position.value.y - 20,
+//       opacity: opacity.value,
+//       transform: [{ scale: scale.value }],
+//     };
+//   });
+
+//   React.useEffect(() => {
+//     // Sequential animation for each star
+//     // Randomize the horizontal movement for a more natural effect
+//     position.value = {
+//       x: position.value.x + Math.random() * 50 - 25, // Small random horizontal movement
+//       y: position.value.y - 500, // Move upwards (decrease y)
+//     };
+//     scale.value = withSpring(1.5, { damping: 4, stiffness: 100 }); // Slightly increase the size with a more natural spring effect
+//     opacity.value = withTiming(0, {
+//       duration: 1200, // Increase duration for smoother fade-out
+//       easing: Easing.out(Easing.quad),
+//     });
+
+//     // Remove the icon after animation is complete
+//     const removeTimer = setTimeout(() => {
+//       onComplete();
+//     }, 1200); // Wait for animation to finish before removing
+
+//     return () => {
+//       clearTimeout(removeTimer);
+//     };
+//   }, [position, scale, opacity, onComplete]);
+
 const FlourishIcon = ({
   x,
   y,
@@ -86,11 +135,10 @@ const FlourishIcon = ({
   const opacity = useSharedValue(1);
   const scale = useSharedValue(1);
 
-  // Update animation styles
   const animatedStyle = useAnimatedStyle(() => {
     return {
       position: 'absolute',
-      left: position.value.x - 20, // Adjust for icon size
+      left: position.value.x - 300, // Adjust for star size
       top: position.value.y - 20,
       opacity: opacity.value,
       transform: [{ scale: scale.value }],
@@ -98,22 +146,22 @@ const FlourishIcon = ({
   });
 
   React.useEffect(() => {
-    // Sequential animation for each star
-    // Randomize the horizontal movement for a more natural effect
-    position.value = {
-      x: position.value.x + Math.random() * 50 - 25, // Small random horizontal movement
-      y: position.value.y - 500, // Move upwards (decrease y)
-    };
-    scale.value = withSpring(1.5, { damping: 4, stiffness: 100 }); // Slightly increase the size with a more natural spring effect
-    opacity.value = withTiming(0, {
-      duration: 1200, // Increase duration for smoother fade-out
-      easing: Easing.out(Easing.quad),
-    });
+    // Animate position upwards and fade out
+    position.value = withTiming(
+      { x: position.value.x + Math.random() * 50 - 25, y: -290 }, // Move up to the top
+      { duration: 1600, easing: Easing.out(Easing.quad) }
+    );
 
-    // Remove the icon after animation is complete
+    // Slightly grow the star
+    scale.value = withTiming(1.5, { duration: 500 });
+
+    // Fade out the star
+    opacity.value = withTiming(0, { duration: 1200, easing: Easing.in(Easing.quad) });
+
+    // Clean up after animation
     const removeTimer = setTimeout(() => {
       onComplete();
-    }, 1200); // Wait for animation to finish before removing
+    }, 1200);
 
     return () => {
       clearTimeout(removeTimer);
@@ -123,28 +171,28 @@ const FlourishIcon = ({
   return (
     <Animated.View style={animatedStyle}>
       {/* Only render a single flourish icon (star) */}
-      <View style={tw`items-start gap-24 flex-row justify-center`}>
+      <View style={tw` justify-center my-4 flex-row gap-18`}>
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
       </View>
-      <View style={tw`items-center gap-12 flex-row justify-center`}>
+      <View style={tw`justify-center my-4 flex-row gap-12`}>
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
       </View>
-      <View style={tw`items-center gap-36 flex-row justify-center`}>
+      <View style={tw`items-center gap-16 my-4 flex-row`}>
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
       </View>
-      <View style={tw`items-center flex-row justify-center`}>
+      <View style={tw`items-center flex-row gap-10 justify-center`}>
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />
         <SvgXml xml={StarIcon} width={40} height={40} />

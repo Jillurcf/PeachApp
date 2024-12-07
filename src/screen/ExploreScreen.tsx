@@ -242,11 +242,11 @@ const ExploreScreen = () => {
           autoPlayInterval={3000}
           data={DATA}
           scrollAnimationDuration={3000}
-          mode="horizontal-stack"
+         mode="horizontal-stack"
           modeConfig={{
             stackInterval: 20,
             scaleInterval: 0.9,
-            translationInterval: 50,
+            // translationInterval: 50,
           }}
           onScrollBeginDrag={handleScrollBeginDrag}
           onScrollEndDrag={handleScrollEndDrag}
@@ -266,7 +266,7 @@ const ExploreScreen = () => {
                 currentSlide={currentSlide}
               />
 
-              <View style={tw`px-[4%] mt-0 mb-0 flex justify-end h-[90%]`}>
+              <View style={tw`px-[4%] mt-1 mb-0 flex justify-end h-[90%]`}>
                 <View style={tw`mt-48`}>
                   <View style={tw`flex-row gap-4 items-center`}>
                     <Text style={tw`text-3xl text-white font-MontserratBold`}>

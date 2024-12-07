@@ -15,7 +15,7 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
   return (
     <ScrollView contentContainerStyle={tw`flex-1 flex-col justify-between h-[95%] px-[4%]`}>
       
-        <View style={tw`my-[10%]`}>
+        <View style={tw`my-[10%`}>
         <TouchableOpacity
             onPress={() => navigation?.goBack()}
             style={tw`flex-row my-[10%] gap-4`}>
@@ -38,7 +38,8 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
               minuteInterval={15} // Allows selecting minutes in 5-minute intervals
               mode="datetime" // Picker mode: 'date', 'time', or 'datetime'\
               textColor="#007AFF" 
-              style={tw`bg-black`}
+              
+             style={tw`bg-white`}
             />
           </View>
           <Text
@@ -54,7 +55,7 @@ const WelcomeDob = ({navigation}: NavigProps<null>) => {
         </View>
 
         <View
-          style={tw`z-2 flex mx-auto my-6 items-center justify-center px-[4%]`}>
+          style={tw`z-2 flex mx-auto my-12 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
               onPress={() => navigation?.navigate('WelcomeNotification')}
