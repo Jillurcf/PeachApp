@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ImageBackground,
   StatusBar,
@@ -17,13 +18,21 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NavigProps} from '../interfaces/NaviProps';
 import {SvgXml} from 'react-native-svg';
 import {LeftArrow} from '../assets/icons/icon';
+import { useVerifyEmailMutation } from '../redux/apiSlices/authSlice';
+import { setStorageToken } from '../utils/utils';
 
 type Props = {};
 
-const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
+const AccountCreationOtpVerificaton = ({
+  navigation,
+  route,
+}: NavigProps<null>) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(60); // 60 seconds countdown
+  const { from } = route?.params || {};
+  const [verifyEmail, {isLoading, isError}] = useVerifyEmailMutation()
 
+  // console.log("30", from)
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(prev => (prev > 0 ? prev - 1 : 0));
@@ -69,7 +78,63 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
       />
     ));
   };
+  const handleNext = async () => {
+    console.log('click');
+  
+    // // If otp is an array, join it into a string
+    // const otpString = Array.isArray(otp) ? otp.join('') : otp;
+  
+    // // Ensure otp is a valid number (e.g., "384123" => 384123)
+    // const otpNumber = Number(otpString);
+  
+    // Check if otpNumber is valid
+    // if (isNaN(otpNumber)) {
+    //   console.log('Invalid OTP:', otp);
+    //   return;  // Don't proceed if OTP is invalid
+    // }
 
+  // Join OTP array into a string (without converting to number)
+  const otpString = otp.join('');
+
+
+      // Ensure OTP is exactly 6 digits
+  if (otpString.length !== 6 || isNaN(Number(otpString))) {
+    console.log('Invalid OTP:', otpString);
+    Alert.alert('Invalid OTP! Please enter a 6-digit code.');
+    return;
+  }
+  
+    try {
+      const formData = new FormData();
+      
+      // Append the valid OTP
+      // formData.append('otp', otpNumber);
+      formData.append('otp', otpString); // Send OTP as a string
+      console.log('FormData:', formData._parts);
+  
+      const res = await verifyEmail(formData).unwrap();
+      console.log('Response:', res?.token);
+      if (res.status === "false" || !res?.token) {
+        Alert.alert(res?.error?.message || 'Invalid email or password')
+        return;
+        }
+        if (res?.token) {
+          setStorageToken(res?.token);
+        
+          if (from?.from === 'Login') {
+            // navigation?.navigate('bottomRoute');
+            navigation?.replace('LoadingSplash');
+          } else {
+            navigation?.navigate('WelcomeScreen');
+          }
+        }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
+  
   return (
     <View style={tw`flex-1 items-center justify-center`}>
       <View style={tw`flex-col justify-between h-[98%] px-[4%]`}>
@@ -111,7 +176,8 @@ const AccountCreationOtpVerificaton = ({navigation}: NavigProps<null>) => {
           style={tw`z-2 flex mx-auto mb-0 top-0 items-center justify-center px-[4%]`}>
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
-              onPress={() => navigation?.navigate('WelcomeScreen')}
+              onPress={handleNext}
+              // onPress={() => navigation?.navigate('WelcomeScreen')}
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

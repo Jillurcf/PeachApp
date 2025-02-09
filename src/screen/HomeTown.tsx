@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,39 +14,58 @@ import {RadioButton, Switch} from 'react-native-ui-lib';
 import InputText from '../components/inputs/InputText';
 import {SvgXml} from 'react-native-svg';
 import {LeftArrow} from '../assets/icons/icon';
+import MMKVStorage from 'react-native-mmkv-storage';
+
+type Props = {};
+const MMKV = new MMKVStorage.Loader().initialize();
 
 const HomeTown = ({navigation}: NavigProps<null>) => {
-  const [value, setValue] = useState(false);
-  const options = [
-    "Don't have children",
-    'Have children',
-    "Don't want children",
-    'Want children',
-    'Open to children',
-    'Prefer not to say',
-  ];
+  const [value, setValue] = useState("");
+  const [is_show, setIs_show] = useState<boolean>(false);
 
+ 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-  // Toggle option selection
-  const toggleOption = (option: string) => {
-    setSelectedOptions(prev =>
-      prev.includes(option)
-        ? prev.filter(item => item !== option)
-        : [...prev, option],
-    );
-  };
+  const home_town = {value, is_show};
+  console.log(home_town);
+  useEffect(() => {
+    const storedData = MMKV.getString('dataList');
+    console.log('storedData', storedData);
 
-  // Select a random option
-  const selectRandomOption = () => {
-    const unselectedOptions = options.filter(
-      option => !selectedOptions.includes(option),
-    );
-    if (unselectedOptions.length > 0) {
-      const randomOption =
-        unselectedOptions[Math.floor(Math.random() * unselectedOptions.length)];
-      setSelectedOptions(prev => [...prev, randomOption]);
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      if (parsedData?.home_town) {
+        setSelectedOptions(parsedData?.home_town); // Ensure conversion to Date object
+      }
     }
+  }, []);
+
+  const handleContinue = () => {
+    // Retrieve existing stored data
+    const storedData = MMKV.getString('dataList');
+    let dataList = [];
+
+    if (storedData) {
+      try {
+        dataList = JSON.parse(storedData);
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+      }
+    }
+
+    // Ensure dataList is an array and append new data
+    if (!Array.isArray(dataList)) {
+      dataList = [];
+    }
+
+    // Add or update "dob" entry
+    const updatedDataList = [...dataList, {home_town: home_town}];
+
+    // Save updated data
+    MMKV.setString('dataList', JSON.stringify(updatedDataList));
+
+    // Navigate to the next screen
+    navigation?.navigate('workPlace');
   };
 
   return (
@@ -66,6 +85,7 @@ const HomeTown = ({navigation}: NavigProps<null>) => {
 
         <View style={tw`h-14 my-12`}>
           <InputText
+            onChangeText={value => setValue(value)}
             placeholder="e.g New York USA"
             placeholderTextColor={'black'}
             style={tw`font-MontserratRegular`}
@@ -80,10 +100,10 @@ const HomeTown = ({navigation}: NavigProps<null>) => {
             Show on your profile
           </Text>
           <Switch
-            value={value}
+            value={is_show}
             onColor={'black'}
             offColor={'gray'}
-            onValueChange={setValue}
+            onValueChange={setIs_show}
           />
         </View>
       </View>
@@ -91,7 +111,7 @@ const HomeTown = ({navigation}: NavigProps<null>) => {
       <View style={tw` flex mx-auto my-12 items-center justify-center px-[4%]`}>
         <View style={tw`my-2 flex items-center justify-center mx-auto`}>
           <TButton
-            onPress={() => navigation?.navigate('workPlace')}
+            onPress={handleContinue}
             titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
             title="Continue"
             containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

@@ -16,6 +16,7 @@ import * as Progress from 'react-native-progress';
 import {SvgXml} from 'react-native-svg';
 import {
   EditIcon,
+  LogoutIcon,
   ProfileCameraIcon,
   SettingsIcon,
   TickIcon,
@@ -23,6 +24,8 @@ import {
 } from '../assets/icons/icon';
 import NormalModal from '../components/modals/NormalModal';
 import {NavigProps} from '../interfaces/NaviProps';
+import { usePostLogoutMutation } from '../redux/apiSlices/authSlice';
+import { getStorageToken, removeStorageToken } from '../utils/utils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,6 +33,7 @@ const ProfileScreen = ({navigation}) => {
   const [imageUri, setImageUri] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [postLogout, {isLoading, isError}] = usePostLogoutMutation();
 
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -89,9 +93,43 @@ const ProfileScreen = ({navigation}) => {
     setOpenModal(true);
   };
 
+  const handleLogout = async()=> {
+    // console.log('click')
+    try {
+      const token = getStorageToken();
+          console.log("token", token)
+      // Trigger your logout API call
+      const response = await postLogout(token);
+      // console.log('Logout API Response:', response);
+      removeStorageToken()
+      // Sign out the user using GoogleSignin
+      // await GoogleSignin.signOut();
+      // console.log('Google Signout Successful');
+      
+      // Log success message
+      // console.log('User signed out successfully');
+  
+      // Navigate to the Login screen
+      navigation?.replace('LoadingSplash');
+    
+      // Close the logout confirmation modal
+      // setLogoutConfirmationModalVisible(false);
+    } catch (error) {
+      // Handle errors
+      console.error('Error signing out:', error);
+    }
+  }
+
   return (
     <ScrollView style={tw`flex-1  my-12`}>
+        <TouchableOpacity
+        onPress={handleLogout}
+        style={tw`flex-row justify-end px-[4%] gap-4`}>
+          <Text style={tw`text-black`}>Logout</Text>
+          <SvgXml xml={LogoutIcon}/>
+        </TouchableOpacity>
       <View style={tw`items-center`}>
+      
         <TouchableOpacity onPress={selectImage}>
           <View
             style={tw`w-30 h-30 rounded-full overflow-hidden justify-center items-center`}>
@@ -155,13 +193,13 @@ const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={tw`my-4 px-[4%] flex mx-auto`}>
+      {/* <View style={tw`my-4 px-[4%] flex mx-auto`}>
         <Text
           style={tw`lg:text-lg md:text-lg sm:text-sm font-MontserratRegular text-black`}>
           See Who Likes You and Start Matching Instantly on Peach!
         </Text>
-      </View>
-      <Text style={tw`justify-start px-[8%] text-black`}>Select your plan</Text>
+      </View> */}
+      {/* <Text style={tw`justify-start px-[8%] text-black`}>Select your plan</Text>
       <View style={tw`flex items-center justify-center w-full`}>
         <FlatList
           horizontal
@@ -184,7 +222,7 @@ const ProfileScreen = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         />
-      </View>
+      </View> */}
     
         <NormalModal
           visible={openModal}

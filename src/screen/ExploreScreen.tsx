@@ -49,6 +49,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import AnimatedStarRating from '../components/AnimatedStartRating';
 import AnimatedLoveSending from '../components/AnimatedLoveSending';
+import StoryComponent from '../components/story/StoryComponent';
 // import ProgressBars from '../components/ExploreProgressBar';
 
 const {width, height} = Dimensions.get('window');
@@ -234,12 +235,13 @@ const ExploreScreen = () => {
   return (
     <ScrollView style={tw`flex-1`}>
       <View style={tw`relative`}>
+        {/* <StoryComponent /> */}
         <Carousel
           loop
           width={width}
           height={height}
-          autoPlay={true}
-          autoPlayInterval={3000}
+          // autoPlay={true}
+          // autoPlayInterval={3000}
           data={DATA}
           scrollAnimationDuration={3000}
          mode="horizontal-stack"

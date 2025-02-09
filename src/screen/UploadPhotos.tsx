@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import TButton from '../components/buttons/TButton';
 import tw from '../lib/tailwind';
-import {NavigProps} from '../interfaces/NaviProps';
+import { NavigProps } from '../interfaces/NaviProps';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import Video from 'react-native-video';
 import IButton from '../components/buttons/IButton';
@@ -20,30 +20,42 @@ import {
   VideoCam,
   BulbIcon,
   CrossIcon,
-  LeftArrow, // Add your close icon here
+  LeftArrow,
 } from '../assets/icons/icon';
-import {SvgXml} from 'react-native-svg';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SvgXml } from 'react-native-svg';
+import MMKVStorage from 'react-native-mmkv-storage';
 
-const UploadPhotos = ({navigation}: NavigProps<null>) => {
+// Initialize MMKV
+const storage = new MMKVStorage.Loader().initialize();
+
+const UploadPhotos = ({ navigation }: NavigProps<null>) => {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [capturedVideo, setCapturedVideo] = useState<string | null>(null);
 
-  // Fetch images from AsyncStorage on component mount
+  console.log(selectedImages)
+  // Fetch images from MMKV storage on component mount
   useEffect(() => {
-    const fetchImages = async () => {
+    const fetchImages = () => {
       try {
-        const savedImages = await AsyncStorage.getItem('images');
+        const savedImages = storage.getString('images');
         if (savedImages) {
           setSelectedImages(JSON.parse(savedImages));
         }
       } catch (error) {
-        console.log('Error fetching images from AsyncStorage:', error);
+        console.log('Error fetching images from storage:', error);
       }
     };
-
     fetchImages();
   }, []);
+
+  // Save images to MMKV storage
+  const saveImagesToStorage = (images: string[]) => {
+    try {
+      storage.setString('images', JSON.stringify(images));
+    } catch (error) {
+      console.log('Error saving images to storage:', error);
+    }
+  };
 
   // Open gallery to select images
   const openGallery = () => {
@@ -54,7 +66,9 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
     })
       .then(images => {
         const imagePaths = images.map((image: any) => image.path);
-        setSelectedImages(prev => [...prev, ...imagePaths]);
+        const updatedImages = [...selectedImages, ...imagePaths];
+        setSelectedImages(updatedImages);
+        saveImagesToStorage(updatedImages);
       })
       .catch(error => {
         if (error.message !== 'User cancelled image selection') {
@@ -66,21 +80,15 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
   // Open camera to capture images
   const openCamera = async () => {
     try {
-      // Open the camera and crop the image
       const image = await ImageCropPicker.openCamera({
         width: 300,
         height: 300,
         cropping: true,
       });
 
-      // Retrieve saved images from AsyncStorage
-      const savedImages = await AsyncStorage.getItem('images');
-      const imagesArray = savedImages ? JSON.parse(savedImages) : [];
-
-      // Update local state and AsyncStorage with the new image
-      const updatedImages = [...imagesArray, image.path];
+      const updatedImages = [...selectedImages, image.path];
       setSelectedImages(updatedImages);
-      await AsyncStorage.setItem('images', JSON.stringify(updatedImages));
+      saveImagesToStorage(updatedImages);
 
       Alert.alert('Success', 'Image saved locally!');
     } catch (error) {
@@ -103,19 +111,15 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
       });
   };
 
-  // Remove a specific image by index
+  // Remove a specific image
   const handleRemoveImage = (index: number) => {
-    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    const updatedImages = selectedImages.filter((_, i) => i !== index);
+    setSelectedImages(updatedImages);
+    saveImagesToStorage(updatedImages);
   };
 
   // Clear the captured video
   const clearCapturedVideo = () => {
-    setCapturedVideo(null);
-  };
-
-  // Clear all selections
-  const clearSelection = () => {
-    setSelectedImages([]);
     setCapturedVideo(null);
   };
 
@@ -151,9 +155,7 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
               onPress={captureVideo}
             />
           </View>
-          <Text style={tw`font-MontserratRegular my-2`}>
-            Four Images required
-          </Text>
+          <Text style={tw`font-MontserratRegular my-2`}>Four Images required</Text>
 
           {/* Display selected images */}
           {selectedImages.length > 0 && (
@@ -163,13 +165,13 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
                   <TouchableOpacity
                     onPress={() => navigation?.navigate('promptScreen')}>
                     <Image
-                      source={{uri: image}}
+                      source={{ uri: image }}
                       style={tw`w-24 h-24 rounded-lg`}
                     />
                   </TouchableOpacity>
                   <IButton
                     containerStyle={tw`absolute top-[-8px] right-[-8px] bg-red-500 rounded-full p-1`}
-                    svg={CrossIcon} // Replace `CrossIcon` with your cross icon
+                    svg={CrossIcon}
                     onPress={() => handleRemoveImage(index)}
                   />
                 </View>
@@ -177,35 +179,25 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
             </View>
           )}
 
-          <View style={tw`my-4`} />
           {/* Display captured video */}
           {capturedVideo && (
             <View style={tw`relative`}>
               <Video
-                source={{uri: capturedVideo}}
+                source={{ uri: capturedVideo }}
                 style={tw`w-72 h-48 mt-2`}
                 controls
                 resizeMode="contain"
               />
               <IButton
                 containerStyle={tw`absolute top-[-8px] right-[-8px] bg-red-500 rounded-full p-1`}
-                svg={CrossIcon} // Replace `CrossIcon` with your cross icon
+                svg={CrossIcon}
                 onPress={clearCapturedVideo}
               />
             </View>
           )}
-
-          {/* Clear selection button */}
-          {/* <TButton
-            title="Clear Selection"
-            containerStyle={tw`bg-secondary p-2 mt-2`}
-            titleStyle={tw`text-primary font-MontserratBold`}
-            onPress={clearSelection}
-          /> */}
         </View>
 
-        <View
-          style={tw`bg-gray-100 rounded-lg p-5 border border-gray-300 relative`}>
+        <View style={tw`bg-gray-100 rounded-lg p-5 border border-gray-300 relative`}>
           <SvgXml
             style={tw`absolute top-[-25px] left-[50%]`}
             width={50}
@@ -213,8 +205,7 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
             xml={BulbIcon}
           />
           <Text style={tw`text-center text-gray-600 text-base`}>
-            Tap a photo to add a prompt and make your profile stand out even
-            more
+            Tap a photo to add a prompt and make your profile stand out even more
           </Text>
         </View>
       </View>
@@ -222,7 +213,7 @@ const UploadPhotos = ({navigation}: NavigProps<null>) => {
       {/* Continue button */}
       <View style={tw`flex mb-6 my-12 items-center justify-center w-full`}>
         <TButton
-          onPress={() => navigation?.navigate('promptScreen')}
+          onPress={() => navigation?.navigate('promptScreen', {selectedImages: selectedImages})}
           titleStyle={tw`text-white font-MontserratBold text-center`}
           title="Continue"
           containerStyle={tw`bg-primary w-[90%] rounded-full`}

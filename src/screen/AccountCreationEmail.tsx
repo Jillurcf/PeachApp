@@ -14,17 +14,66 @@ import {RadioButton} from 'react-native-ui-lib';
 import {NavigProps} from '../interfaces/NaviProps';
 import {SvgXml} from 'react-native-svg';
 import {LeftArrow} from '../assets/icons/icon';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  useCreateUserMutation,
+  usePostResendOtpMutation,
+} from '../redux/apiSlices/authSlice';
 
 type Props = {};
 
-const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
+const AccountCreationEmail = ({navigation, route}: NavigProps<null>) => {
   const [value, setValue] = useState(false);
+  const [email, setEmail] = useState(false);
+  const [postResendOtp, {isLoading, isError}] = usePostResendOtpMutation();
+  const [createUser] = useCreateUserMutation();
+  // const from = route?.params;
+  const from = route?.params?.from;
+  console.log('from', from);
+
+  const handleSendOtp = async () => {
+    console.log('click', email);
+    try {
+      if (!email) {
+        console.error('Email is required.');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('email', email); // Trim unnecessary spaces or newlines
+
+      // Manual logging of FormData in React Native
+      console.log('FormData Content:', formData);
+      let response;
+      if (from === 'Login') {
+        response = await postResendOtp(formData).unwrap();
+        console.log(response)
+      } else if (from === 'createUser') {
+        response = await createUser(formData).unwrap();
+        console.log("create user response", response)
+      } else {
+        console.error('Invalid "from" value:', from);
+        return;
+      }
+
+      console.log('Response:', response);
+
+      if (response) {
+        navigation?.navigate('AccountCreationOtpVerificaton', {from});
+      } else {
+        console.error('OTP request failed:', response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View>
       <View style={tw`flex-col justify-between h-[98%] z-30`}>
         <View style={tw`z-2 flex px-[4%] my-[20%]`}>
-          <TouchableOpacity onPress={() => navigation?.goBack()} style={tw`flex-row gap-4`}>
+          <TouchableOpacity
+            onPress={() => navigation?.goBack()}
+            style={tw`flex-row gap-4`}>
             <SvgXml xml={LeftArrow} width={25} height={25} />
             <Text style={tw`font-MontserratBold text-primary  text-2xl`}>
               What's your email?
@@ -32,6 +81,8 @@ const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
           </TouchableOpacity>
           <View style={tw`h-14`}>
             <InputText
+              // value={email}
+              onChangeText={value => setEmail(value)}
               placeholder="exam@ple.com"
               placeholderTextColor={tw`text-black font-MontserratRegular`}
               style={tw`font-MontserratRegular`}
@@ -64,9 +115,10 @@ const AccountCreationEmail = ({navigation}: NavigProps<null>) => {
 
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
-              onPress={() =>
-                navigation?.navigate('AccountCreationOtpVerificaton')
-              }
+              onPress={handleSendOtp}
+              // onPress={() =>
+              //   navigation?.navigate('AccountCreationOtpVerificaton', {from})
+              // }
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

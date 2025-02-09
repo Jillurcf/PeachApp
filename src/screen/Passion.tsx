@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,11 @@ import tw from '../lib/tailwind';
 import { NavigProps } from '../interfaces/NaviProps';
 import { SvgXml } from 'react-native-svg';
 import { LeftArrow } from '../assets/icons/icon';
+import MMKVStorage from 'react-native-mmkv-storage';
+
+
+type Props = {};
+const MMKV = new MMKVStorage.Loader().initialize();
 
 const Passion = ({ navigation }: NavigProps<null>) => {
   const options = [
@@ -35,7 +40,7 @@ const Passion = ({ navigation }: NavigProps<null>) => {
   ];
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-
+console.log("selected option", selectedOptions)
   // Toggle option selection
   const toggleOption = (option: string) => {
     setSelectedOptions((prev) =>
@@ -58,6 +63,45 @@ const Passion = ({ navigation }: NavigProps<null>) => {
       setSelectedOptions((prev) => [...prev, randomOption]);
     }
   };
+
+useEffect(() => {
+      const storedData = MMKV.getString('dataList');
+      console.log('storedData', storedData);
+  
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        if (parsedData?.passions) {
+          setSelectedOptions(parsedData?.passions); // Ensure conversion to Date object
+        }
+      }
+    }, []);
+    const handleContinue = () => {
+      // Retrieve existing stored data
+      const storedData = MMKV.getString('dataList');
+      let dataList = [];
+  
+      if (storedData) {
+        try {
+          dataList = JSON.parse(storedData);
+        } catch (error) {
+          console.error('Error parsing stored data:', error);
+        }
+      }
+  
+      // Ensure dataList is an array and append new data
+      if (!Array.isArray(dataList)) {
+        dataList = [];
+      }
+  
+      // Add or update "dob" entry
+      const updatedDataList = [...dataList, {passions: selectedOptions}];
+  
+      // Save updated data
+      MMKV.setString('dataList', JSON.stringify(updatedDataList));
+  
+      // Navigate to the next screen
+      navigation?.navigate('ethinicity')
+    };
 
   return (
     <ScrollView contentContainerStyle={tw`flex-col justify-between h-[95%] px-[4%]`}>
@@ -112,7 +156,8 @@ const Passion = ({ navigation }: NavigProps<null>) => {
         >
           <View style={tw`my-2 flex items-center justify-center mx-auto`}>
             <TButton
-              onPress={() => navigation?.navigate('ethinicity')}
+            onPress={handleContinue}
+            
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue 3/5"
               containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

@@ -45,6 +45,9 @@ import Privacy from '../screen/Privacy';
 import CreateYourProfile from '../screen/CreateYourProfile';
 import UploadPhotos from '../screen/UploadPhotos';
 import PromptScreen from '../screen/PromptScreen';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
+import LoadingSplash from '../screen/splash/LoadingSplash';
 
 
 
@@ -63,14 +66,25 @@ function AppRoutes() {
     
     <GestureHandlerRootView >
       {/* <Toast.Provider> */}
-      <NavigationContainer
+     <Provider store={store}>
+     <NavigationContainer
       >
         <Stack.Navigator
         screenOptions={{
+          
           // statusBarTranslucent:false,
          animation: 'slide_from_right'
           
-        }} >
+        }} 
+        // initialRouteName="LoadingSplash"
+        >
+          {/* <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+            name="LoadingSplash"
+            component={LoadingSplash}
+          />
           <Stack.Screen
           options={{
             headerShown: false,
@@ -78,6 +92,7 @@ function AppRoutes() {
             name="AccountCreationOpening"
             component={AccountCreationOpening}
           />
+          
           <Stack.Screen
           options={{
             headerShown: false,
@@ -259,7 +274,7 @@ function AppRoutes() {
           }}
             name="createYourProfile"
             component={CreateYourProfile}
-          />
+          /> */}
           <Stack.Screen
           options={{
             headerShown: false,
@@ -320,6 +335,7 @@ function AppRoutes() {
          
         </Stack.Navigator>
       </NavigationContainer>
+     </Provider>
     
       <Toast />
     

@@ -47,6 +47,7 @@ const DropdownComponent: React.FC = () => {
         
         data={data}
         // search
+        
         maxHeight={300}
         labelField="label"
         valueField="value"

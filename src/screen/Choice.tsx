@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Button,
@@ -14,12 +14,53 @@ import {RadioButton, RadioGroup, Switch} from 'react-native-ui-lib';
 import {SvgXml} from 'react-native-svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LeftArrow} from '../assets/icons/icon';
+import MMKVStorage from 'react-native-mmkv-storage';
 
+type Props = {};
+const MMKV = new MMKVStorage.Loader().initialize();
 const Choice = ({navigation}: NavigProps<null>) => {
   const [value, setValue] = useState(false);
   const [valueOne, setValueOne] = useState(false);
-  const [currentValue, setCurrentValue] = useState('yes');
+  const [currentValue, setCurrentValue] = useState('');
+  const [choice, setChoice] = useState()
+  useEffect(() => {
+    const storedData = MMKV.getString('dataList');
+    console.log('storedData', storedData);
 
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      if (parsedData?.gender) {
+        setChoice(parsedData?.choice); // Ensure conversion to Date object
+      }
+    }
+  }, []);
+  const handleContinue = () => {
+    // Retrieve existing stored data
+    const storedData = MMKV.getString('dataList');
+    let dataList = [];
+
+    if (storedData) {
+      try {
+        dataList = JSON.parse(storedData);
+      } catch (error) {
+        console.error('Error parsing stored data:', error);
+      }
+    }
+
+    // Ensure dataList is an array and append new data
+    if (!Array.isArray(dataList)) {
+      dataList = [];
+    }
+
+    // Add or update "dob" entry
+    const updatedDataList = [...dataList, {dating_with: currentValue}];
+
+    // Save updated data
+    MMKV.setString('dataList', JSON.stringify(updatedDataList));
+
+    // Navigate to the next screen
+     navigation?.navigate('height')
+  };
   return (
     <ScrollView
       contentContainerStyle={tw`flex-1 flex-col justify-between items-center px-[4%]`} // move styles here
@@ -74,7 +115,8 @@ const Choice = ({navigation}: NavigProps<null>) => {
         style={tw`z-2 flex mx-auto my-12 items-center justify-center px-[4%]`}>
         <View style={tw`my-2 flex items-center justify-center mx-auto`}>
           <TButton
-            onPress={() => navigation?.navigate('height')}
+            onPress={handleContinue}
+          
             titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
             title="Continue"
             containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

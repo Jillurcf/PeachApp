@@ -10,11 +10,22 @@ import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import tw from '../lib/tailwind';
 import TButton from '../components/buttons/TButton';
-import { NavigProps } from '../interfaces/NaviProps';
+import {NavigProps} from '../interfaces/NaviProps';
+import {useCreateUserMutation} from '../redux/apiSlices/authSlice';
 
 type Props = {};
 
 const AccountCreationOpening = ({navigation}: NavigProps<null>) => {
+  const [createUser, {isLoading, isError}] = useCreateUserMutation();
+  const handleCreateUser = async () => {
+    console.log('click');
+    try {
+      // await createUser()
+    } catch (error) {
+      console.log(error);
+    }
+    navigation?.replace('AccountCreationEmail', {from: 'createUser'});
+  };
   return (
     <View>
       <ImageBackground
@@ -54,12 +65,16 @@ const AccountCreationOpening = ({navigation}: NavigProps<null>) => {
             </Text>
             <View style={tw`my-2 flex items-center justify-center`}>
               <TButton
-              onPress={()=> navigation?.navigate('AccountCreationEmail')}
+                onPress={handleCreateUser}
+                // onPress={()=> navigation?.navigate('AccountCreationEmail')}
                 titleStyle={tw`text-black font-MontserratBold text-center mx-auto`}
                 title="Create Account"
                 containerStyle={tw`bg-white w-[90%] my-2 rounded-full`}
               />
               <TButton
+                onPress={() =>
+                  navigation?.navigate('AccountCreationEmail', {from: 'Login'})
+                }
                 titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
                 title="Sign In"
                 containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

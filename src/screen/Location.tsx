@@ -13,10 +13,52 @@ import InputText from '../components/inputs/InputText';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SvgXml } from 'react-native-svg';
 import { LeftArrow } from '../assets/icons/icon';
+import { useEffect, useState } from 'react';
+import MMKVStorage from 'react-native-mmkv-storage';
 
 type Props = {};
-
+const MMKV = new MMKVStorage.Loader().initialize();
 const Location = ({navigation}: NavigProps<null>) => {
+  const [address, setaddress] = useState()
+  console.log(address)
+  useEffect(() => {
+      const storedData = MMKV.getString('dataList');
+      console.log("storedData", storedData)
+
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        if (parsedData?.address) {
+          setaddress(parsedData?.address); // Ensure conversion to Date object
+        }
+      }
+    }, []);
+    const handleContinue = () => {
+      // Retrieve existing stored data
+      const storedData = MMKV.getString('dataList');
+      let dataList = [];
+    
+      if (storedData) {
+        try {
+          dataList = JSON.parse(storedData);
+        } catch (error) {
+          console.error('Error parsing stored data:', error);
+        }
+      }
+    
+      // Ensure dataList is an array and append new data
+      if (!Array.isArray(dataList)) {
+        dataList = [];
+      }
+    
+      // Add or update "dob" entry
+      const updatedDataList = [...dataList, { address: address }];
+    
+      // Save updated data
+      MMKV.setString('dataList', JSON.stringify(updatedDataList));
+    
+      // Navigate to the next screen
+      navigation?.navigate('gender');
+    };
   return (
     <View style={tw`flex-1 p-[4%] `}>
        <TouchableOpacity
@@ -43,8 +85,8 @@ const Location = ({navigation}: NavigProps<null>) => {
         <View style={tw` rounded-3xl bg-white mx-[4%]`}>
         <View style={tw`h-14 w-[90%] px-[4%] mx-auto`}>
             <InputText
+            onChangeText={(value) => setaddress(value)}
               placeholder="New York USA"
-             
               placeholderTextColor={'black'}
               style={tw`font-MontserratRegular`}
               cursorColor={'black'}
@@ -55,7 +97,8 @@ const Location = ({navigation}: NavigProps<null>) => {
           </View>
           <View style={tw`px-[4%] mx-auto my-6`}>
             <TButton
-              onPress={() => navigation?.navigate('gender')}
+            onPress={handleContinue}
+             
               titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
               title="Continue"
               containerStyle={tw`bg-primary rounded-full w-[90%]`}
