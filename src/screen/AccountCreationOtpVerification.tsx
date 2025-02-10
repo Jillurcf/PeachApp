@@ -32,7 +32,7 @@ const AccountCreationOtpVerificaton = ({
   const { from } = route?.params || {};
   const [verifyEmail, {isLoading, isError}] = useVerifyEmailMutation()
 
-  // console.log("30", from)
+  console.log("30", from)
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(prev => (prev > 0 ? prev - 1 : 0));
@@ -121,7 +121,7 @@ const AccountCreationOtpVerificaton = ({
         if (res?.token) {
           setStorageToken(res?.token);
         
-          if (from?.from === 'Login') {
+          if (from === 'Login') {
             // navigation?.navigate('bottomRoute');
             navigation?.replace('LoadingSplash');
           } else {

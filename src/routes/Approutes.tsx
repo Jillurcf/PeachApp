@@ -76,9 +76,9 @@ function AppRoutes() {
          animation: 'slide_from_right'
           
         }} 
-        // initialRouteName="LoadingSplash"
+        initialRouteName="LoadingSplash"
         >
-          {/* <Stack.Screen
+          <Stack.Screen
           options={{
             headerShown: false,
           }}
@@ -274,7 +274,7 @@ function AppRoutes() {
           }}
             name="createYourProfile"
             component={CreateYourProfile}
-          /> */}
+          />
           <Stack.Screen
           options={{
             headerShown: false,
