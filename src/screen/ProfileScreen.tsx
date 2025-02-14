@@ -9,12 +9,14 @@ import {
   SafeAreaView,
   Image,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import tw from '../lib/tailwind';
 import {launchImageLibrary} from 'react-native-image-picker';
 import * as Progress from 'react-native-progress';
 import {SvgXml} from 'react-native-svg';
 import {
+  CrossIcon,
   EditIcon,
   LogoutIcon,
   ProfileCameraIcon,
@@ -26,6 +28,8 @@ import NormalModal from '../components/modals/NormalModal';
 import {NavigProps} from '../interfaces/NaviProps';
 import { usePostLogoutMutation } from '../redux/apiSlices/authSlice';
 import { getStorageToken, removeStorageToken } from '../utils/utils';
+import { useGetUserQuery } from '../redux/apiSlices/userSlice';
+import { cross } from '../helper/exportedFunction';
 
 const {width, height} = Dimensions.get('window');
 
@@ -34,6 +38,9 @@ const ProfileScreen = ({navigation}) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [postLogout, {isLoading, isError}] = usePostLogoutMutation();
+  const {data} = useGetUserQuery({})
+  console.log("data+++++++", data?.data?.profile?.images)
+  console.log(imageUri)
 
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -53,22 +60,7 @@ const ProfileScreen = ({navigation}) => {
       name: file.fileName,
     });
 
-    // try {
-    //   await axios.post("https://example.com/upload", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //     onUploadProgress: (progressEvent) => {
-    //       const percent = progressEvent.loaded / progressEvent.total;
-    //       setUploadProgress(percent);
-    //     },
-    //   });
-
-    //   // Reset progress after upload
-    //   setTimeout(() => setUploadProgress(0), 2000);
-    // } catch (error) {
-    //   console.error("Upload failed:", error);
-    // }
+    
   };
 
   const Data = [
@@ -120,47 +112,45 @@ const ProfileScreen = ({navigation}) => {
     }
   }
 
+  if (isLoading) {
+    return (
+      <View style={tw`flex-1 justify-center items-center`}>
+        <ActivityIndicator size="large" color="#064145" />
+        <Text style={tw`text-primary mt-2`}>Loading ...</Text>
+      </View>
+    );
+  }
   return (
     <ScrollView style={tw`flex-1  my-12`}>
         <TouchableOpacity
         onPress={handleLogout}
         style={tw`flex-row justify-end px-[4%] gap-4`}>
-          <Text style={tw`text-black`}>Logout</Text>
+          <Text style={tw`text-black font-MontserratRegular`}>Logout</Text>
           <SvgXml xml={LogoutIcon}/>
         </TouchableOpacity>
       <View style={tw`items-center`}>
       
-        <TouchableOpacity onPress={selectImage}>
+        <View onPress={selectImage}>
           <View
-            style={tw`w-30 h-30 rounded-full overflow-hidden justify-center items-center`}>
-            {/* {imageUri ? ( */}
+            style={tw`w-30 h-30 rounded-full overflow-hidden mx-auto justify-center items-center`}>
+           
             <Image
-              source={require('../assets/images/ProfileImg.png')}
+              source={{uri: imageUri?.length ? imageUri : data?.data?.avatar}}
               style={tw`w-full h-full`}
             />
-            {/* ) : (
-          <View style={tw`justify-center items-center bg-white w-full h-full`}>
-            <Text>Select Image</Text>
+            
           </View>
-        )} */}
-            {uploadProgress > 0 && uploadProgress < 1 && (
-              <Progress.Circle
-                progress={uploadProgress}
-                size={100}
-                showsText
-                formatText={() => `${Math.round(uploadProgress * 100)}%`}
-                style={tw`absolute`}
-              />
-            )}
-          </View>
-          <View style={tw`flex-row gap-2 items-center justify-center my-4`}>
+          <View style={tw`flex items-center justify-center my-4`}>
             <Text style={tw`text-2xl font-MontserratBold text-black`}>
-              Immi, 26
+             {data?.data?.name}
             </Text>
-            <SvgXml xml={VerifiedIcon} width={20} height={20} />
+            <Text style={tw`text-2xl font-MontserratBold text-black`}> {data?.data?.email}</Text>
+            {/* <SvgXml xml={VerifiedIcon} width={20} height={20} /> */}
           </View>
-        </TouchableOpacity>
+         
+        </View>
       </View>
+     
       <View>
         <View
           style={tw`flex-row mx-auto gap-2 w-[85%] items-center justify-center`}>
@@ -193,36 +183,7 @@ const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <View style={tw`my-4 px-[4%] flex mx-auto`}>
-        <Text
-          style={tw`lg:text-lg md:text-lg sm:text-sm font-MontserratRegular text-black`}>
-          See Who Likes You and Start Matching Instantly on Peach!
-        </Text>
-      </View> */}
-      {/* <Text style={tw`justify-start px-[8%] text-black`}>Select your plan</Text>
-      <View style={tw`flex items-center justify-center w-full`}>
-        <FlatList
-          horizontal
-          data={Data}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity
-                onPress={handleSubsriptionModal}
-                style={tw`py-12 mx-2 px-3 my-4 bg-white rounded-lg`}>
-                <Text style={tw`text-md font-MontserratBold text-black`}>
-                  {item.title}
-                </Text>
-                <Text style={tw`text-xm font-MontserratRegular text-black`}>
-                  {item.Amount}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-        />
-      </View> */}
+     
     
         <NormalModal
           visible={openModal}

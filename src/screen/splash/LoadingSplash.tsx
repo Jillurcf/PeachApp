@@ -11,7 +11,7 @@ import FastImage from 'react-native-fast-image';
 
 const LoadingSplash = ({navigation}: NavigProps<null>) => {
   const token = getStorageToken();
-//   const socket = getSocket();
+  const socket = getSocket();
   const [checkToken] = useLazyTokenCheckQuery({});
   console.log(token);
   const handleCheckValidToken = async () => {
@@ -29,9 +29,9 @@ const LoadingSplash = ({navigation}: NavigProps<null>) => {
   };
   React.useEffect(() => {
     if (token) {
-    //   if (!socket) {
-    //     initiateSocket();
-    //   }
+      if (!socket) {
+        initiateSocket();
+      }
       handleCheckValidToken();
     } else {
       (navigation as any)?.replace('AccountCreationOpening');

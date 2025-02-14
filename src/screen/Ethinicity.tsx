@@ -21,7 +21,7 @@ const MMKV = new MMKVStorage.Loader().initialize();
 const Ethinicity = ({navigation}: NavigProps<null>) => {
   const [value, setValue] = useState<boolean>(false);
   const [is_show, setIs_show] = useState<boolean>(false);
-  console.log(is_show)
+  console.log(is_show);
 
   const options = [
     'American',
@@ -37,7 +37,7 @@ const Ethinicity = ({navigation}: NavigProps<null>) => {
   ];
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  console.log("++++", selectedOptions);
+  console.log('++++', selectedOptions);
   // Toggle option selection
   const toggleOption = (option: string) => {
     setSelectedOptions(prev =>
@@ -58,8 +58,8 @@ const Ethinicity = ({navigation}: NavigProps<null>) => {
       setSelectedOptions(prev => [...prev, randomOption]);
     }
   };
-const ethnicity = {value:selectedOptions, is_show}
-console.log(ethnicity)
+  const ethnicity = {value: selectedOptions, is_show};
+  console.log(ethnicity);
   useEffect(() => {
     const storedData = MMKV.getString('dataList');
     console.log('storedData', storedData);
@@ -96,7 +96,7 @@ console.log(ethnicity)
     MMKV.setString('dataList', JSON.stringify(updatedDataList));
 
     // Navigate to the next screen
-   navigation?.navigate('children')
+    navigation?.navigate('children');
   };
   return (
     <ScrollView
@@ -153,8 +153,7 @@ console.log(ethnicity)
         style={tw`z-2 flex mx-auto my-12 items-center justify-center px-[4%]`}>
         <View style={tw`my-2 flex items-center justify-center mx-auto`}>
           <TButton
-          onPress={handleContinue}
-           
+            onPress={handleContinue}
             titleStyle={tw`text-white font-MontserratBold text-center mx-auto`}
             title="Continue"
             containerStyle={tw`bg-primary w-[90%] my-2 rounded-full`}

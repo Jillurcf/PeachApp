@@ -289,57 +289,110 @@ import {
 import {SvgXml} from 'react-native-svg';
 import TButton from '../components/buttons/TButton';
 import NormalModal from '../components/modals/NormalModal';
+import {getSocket} from '../redux/services/socket';
+import {useGetUserQuery} from '../redux/apiSlices/userSlice';
+import {
+  useGetMessageQuery,
+  usePostSendMessageMutation,
+} from '../redux/apiSlices/chatSlice';
 
-const socket = io('http://localhost:3000'); // Replace with your server's IP or domain
-
-const ChatScreen = ({navigation}) => {
+const ChatScreen = ({navigation, route}) => {
   const [openModal, setOpenModal] = useState(false);
+  const [conversation_id, setConversation_id] = useState();
+  console.log('cid', conversation_id);
+  const {data} = useGetUserQuery({});
+  const {data: messageData} = useGetMessageQuery({
+    per_page: 10,
+    id: conversation_id,
+  });
+  const [postSendMessage] = usePostSendMessageMutation();
+  console.log('data++++++++', messageData?.messages?.data);
+  const receiverInfo = route?.params;
+
+  console.log('receiverInfo', receiverInfo);
+
   const [messages, setMessages] = useState([
-    {
-      text: 'Hello! How are you?',
-      user: 'Friend',
-      createdAt: new Date().setMinutes(new Date().getMinutes() - 5),
-      image: null,
-      video: null,
-    },
-    {
-      text: 'Check out this video!',
-      user: 'Friend',
-      createdAt: new Date().setMinutes(new Date().getMinutes() - 3),
-      image: null,
-      video: 'https://www.example.com/sample-video.mp4', // Example static video URL
-    },
+    
   ]); // Static incoming messages
   const [text, setText] = useState(''); // For input field
   const [mediaUri, setMediaUri] = useState(null); // For holding selected image or video URI
   const [mediaType, setMediaType] = useState(null); // 'image' or 'video'
-
+  console.log('text', mediaUri);
+  console.log('message==================', messages);
   useEffect(() => {
+    if (messageData) {
+      // setMessages(messageData?.messages?.data); // Initialize messages with fetched data
+    }
     // Listen for new messages from the server
-    socket.on('receiveMessage', message => {
-      setMessages(prev => [...prev, message]);
-    });
+    // socket.on('receiveMessage', message => {
+    //   setMessages(prev => [...prev, message]);
+    // });
 
     // Cleanup on unmount
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [messageData]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
+    // Pass receiverId dynamically as needed
     if (text.trim() || mediaUri) {
+      // Create the message object for socket emission (you may still need the user details here)
+      const messageText = text.trim() || 'Sent an image/video/document';
       const message = {
-        text,
-        user: 'User1', // Replace this with dynamic user data
+        text: messageText,
+        user: data?.data?.name, // Replace this with dynamic user data
         createdAt: new Date(),
-        image: mediaType === 'image' ? mediaUri : null,
-        video: mediaType === 'video' ? mediaUri : null,
+        media: null, // Default media to null
       };
 
-      // Send message to the server
+      // Initialize FormData to send data
+      const formData = new FormData();
+
+      // Append receiver_id and message text
+      formData.append('receiver_id', receiverInfo?.receiverId); // Add the receiver ID
+      formData.append('message', messageText);
+
+      // Append the media if present
+      if (mediaUri) {
+        let media = null;
+
+        if (mediaType === 'image') {
+          media = {
+            uri: mediaUri,
+            type: 'image/jpeg', // Set the correct mime type for images
+            name: 'image.jpg',
+          };
+        } else if (mediaType === 'video') {
+          media = {
+            uri: mediaUri,
+            type: 'video/mp4', // Set the correct mime type for videos
+            name: 'video.mp4',
+          };
+        } else if (mediaType === 'pdf') {
+          media = {
+            uri: mediaUri,
+            type: 'application/pdf', // Set the correct mime type for PDFs
+            name: 'document.pdf',
+          };
+        }
+
+        // Append media to FormData (image/video/pdf)
+        if (media) {
+          formData.append('media', media);
+        }
+      }
+
+      // Send the message data to the server
+      const postRes = await postSendMessage(formData); // Assuming postSendMessage handles the request
+      console.log('postRes', postRes?.data?.data?.conversation_id);
+      setConversation_id(postRes?.data?.data?.conversation_id);
+
+      // Emit the message to the socket (use media as well if needed)
+      message.media = mediaUri ? mediaUri : null; // Attach media data (if any) to the socket message
       socket.emit('sendMessage', message);
 
-      // Update local message state
+      // Update local message state with the new message
       setMessages(prev => [...prev, message]);
 
       // Clear input field and media
@@ -436,23 +489,39 @@ const ChatScreen = ({navigation}) => {
     );
   };
   const toggleModal = () => setOpenModal(prev => !prev);
+
+  const socket = getSocket();
+  React.useEffect(() => {
+    if (receiverInfo) {
+      const res = socket?.emit('joinRoom', {
+        userId: data?.data?.id,
+        receiverId: receiverInfo?.receiverId,
+      });
+      //  console.log("res", res)
+    }
+  }, [receiverInfo, data?.data]);
+
   return (
     <ScrollView contentContainerStyle={tw`flex-1 px-2 bg-gray-100`}>
       <View style={tw`px-[4%] flex-row justify-between items-center  my-4`}>
-        <TouchableOpacity onPress={() =>navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <SvgXml xml={LeftArrow} />
         </TouchableOpacity>
         <View style={tw`flex-row items-center gap-6`}>
-          <View>
-            <Image
-              source={require('../assets/images/ProfileImg.png')}
-              style={tw`w-12 h-12 relative`}
-            />
+          <View style={tw``}>
+            <View style={tw`w-12, relative h-12 rounded-full overflow-hidden`}>
+              <Image
+                source={{uri: receiverInfo?.reeciverImage}}
+                style={tw`w-12 h-12  rounded-full`}
+              />
+            </View>
             <View
               style={tw`w-3 h-3 bg-green-400 rounded-full absolute bottom-0 right-0`}
             />
           </View>
-          <Text style={tw`font-MontserratBold text-black`}>Danniel</Text>
+          <Text style={tw`font-MontserratBold text-black`}>
+            {receiverInfo?.receiverName}
+          </Text>
         </View>
         <TouchableOpacity onPress={toggleModal}>
           <SvgXml xml={KibubIcon} />
@@ -462,36 +531,47 @@ const ChatScreen = ({navigation}) => {
       <FlatList
         data={messages}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <View
-            style={[
-              tw`mb-3 p-3 rounded-lg  w-[85%] text-black`,
-              item.user === 'User1'
-                ? tw`bg-blue-200 self-end text-black`
-                : tw`bg-green-200 self-start text-black`,
-            ]}>
-            <Text style={tw`font-MontserratRegular text-black`}>{item.user}</Text>
-            {item.image && (
-              <Image
-                source={{uri: item.image}}
-                style={tw`h-40 w-full rounded-lg my-2`}
-                resizeMode="cover"
-              />
-            )}
-            {item.video && (
-              <Video
-                source={{uri: item.video}}
-                style={tw`h-40 w-full rounded-lg my-2`}
-                resizeMode="cover"
-                controls
-              />
-            )}
-            <Text style={tw`text-black font-MontserratRegular`}>{item.text}</Text>
-            <Text style={tw`text-xs text-black mt-2`}>
-              {new Date(item.createdAt).toLocaleTimeString()}
-            </Text>
-          </View>
-        )}
+        renderItem={({item}) => {
+          console.log('messageItem', item);
+          return (
+            <View
+              style={[
+                tw`mb-3 p-3 rounded-lg  w-[85%] text-black`,
+                item?.user
+                  ? tw`bg-blue-200 self-end text-black`
+                  : tw`bg-green-200 self-start text-black`,
+              ]}>
+               
+              <View>
+              <Text style={tw`font-MontserratRegular text-black`}>
+                {item.user}
+              </Text>
+              {item.media && item.media.startsWith('file://') && (
+                <Image
+                  source={{uri: item.media}}
+                  style={tw`h-40 w-full rounded-lg my-2`}
+                  resizeMode="cover"
+                />
+              )}
+              {item.video && (
+                <Video
+                  source={{uri: item.video}}
+                  style={tw`h-40 w-full rounded-lg my-2`}
+                  resizeMode="cover"
+                  controls
+                />
+              )}
+              <Text style={tw`text-black font-MontserratRegular`}>
+                {item.text}
+              </Text>
+              <Text style={tw`text-xs text-black mt-2`}>
+                {new Date(item.createdAt).toLocaleTimeString()}
+              </Text>
+            </View>
+           
+            </View>
+          );
+        }}
         contentContainerStyle={tw`p-4`}
       />
 
@@ -508,7 +588,7 @@ const ChatScreen = ({navigation}) => {
             <SvgXml xml={VideoCam} width={20} height={20} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => pickMedia('video')} style={tw`mr-2`}>
+          <TouchableOpacity onPress={() => pickMedia('')} style={tw`mr-2`}>
             <SvgXml xml={AttachmentIcon} width={20} height={20} />
           </TouchableOpacity>
           <View style={tw`flex-row w-[75%] gap-1 px-[2%]`}>
@@ -518,7 +598,6 @@ const ChatScreen = ({navigation}) => {
               placeholderTextColor={'black'}
               cursorColor={'black'}
               value={text}
-              
               onChangeText={setText}
             />
             <TouchableOpacity
@@ -554,7 +633,7 @@ const ChatScreen = ({navigation}) => {
           <Button title="Remove" onPress={() => setMediaUri(null)} />
         </View>
       )}
-      <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         {/* Button to open the modal */}
         {/* <Button title="Open Modal"  /> */}
 
@@ -577,9 +656,15 @@ const ChatScreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View>
-              <Text style={tw`font-MontserratBold text-black text-xl`}>Delete Conversation</Text>
-              <Text style={tw`font-MontserratBold text-black text-xl py-4`}>Block</Text>
-              <Text style={tw`font-MontserratBold text-red-900 text-xl`}>Delete </Text>
+              <Text style={tw`font-MontserratBold text-black text-xl`}>
+                Delete Conversation
+              </Text>
+              <Text style={tw`font-MontserratBold text-black text-xl py-4`}>
+                Block
+              </Text>
+              <Text style={tw`font-MontserratBold text-red-900 text-xl`}>
+                Delete{' '}
+              </Text>
             </View>
           </View>
         </NormalModal>

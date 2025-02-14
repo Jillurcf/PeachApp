@@ -10,7 +10,7 @@ const homeSlice = api.injectEndpoints({
               }),
               // transformErrorResponse: (response) => response?.data,
               transformResponse: (response) => {
-                console.log("API Response:", response); // Debugging API response
+                // console.log("API Response:", response); // Debugging API response
                 return response; // Adjust this if needed
               },
               providesTags: ['user',]

@@ -20,6 +20,7 @@ import {SvgXml} from 'react-native-svg';
 import {LeftArrow} from '../assets/icons/icon';
 import { useVerifyEmailMutation } from '../redux/apiSlices/authSlice';
 import { setStorageToken } from '../utils/utils';
+import { useGetUserQuery } from '../redux/apiSlices/userSlice';
 
 type Props = {};
 
@@ -31,6 +32,8 @@ const AccountCreationOtpVerificaton = ({
   const [timer, setTimer] = useState(60); // 60 seconds countdown
   const { from } = route?.params || {};
   const [verifyEmail, {isLoading, isError}] = useVerifyEmailMutation()
+  const {data, } = useGetUserQuery({})
+  console.log("userData", data)
 
   console.log("30", from)
   useEffect(() => {

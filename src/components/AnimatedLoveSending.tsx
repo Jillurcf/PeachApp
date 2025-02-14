@@ -1,44 +1,53 @@
-import React, { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
   Easing,
+  useDerivedValue,
 } from 'react-native-reanimated';
-import { SvgXml } from 'react-native-svg';
+import {SvgXml} from 'react-native-svg';
 import tw from '../lib/tailwind';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 type AnimatedStarRatingProps = {
   LoveIcon: string;
+  onRatingChange?: (rating: number) => void;
 };
 
-const AnimatedLoveSending = ({ LoveIcon }: AnimatedStarRatingProps) => {
+const AnimatedLoveSending = ({
+  LoveIcon,
+  onRatingChange,
+}: AnimatedStarRatingProps) => {
   const [ratings, setRatings] = useState<number[]>([]); // Array to track active animations
-  const iconPositions = useSharedValue<{ x: number; y: number }[]>([]); // Shared value for icon positions
+  const iconPositions = useSharedValue<{x: number; y: number}[]>([]); // Shared value for icon positions
 
+  const derivedIconPositions = useDerivedValue(
+    () => [...iconPositions.value],
+    [],
+  );
   // Function to add a flourish when the user taps on the star
   const addFlourish = () => {
     const newId = Math.random(); // Use Math.random() for a unique key
-    setRatings((prev) => [...prev, newId]);
+    setRatings(prev => {
+      const updatedRatings = [...prev, newId];
+      onRatingChange?.(updatedRatings.length);
+
+      return updatedRatings;
+    });
 
     // Set the position to the center of the screen for the flourish
     iconPositions.value = [
       ...iconPositions.value,
-      { x: width / 2, y: height / 2 }, // Always center
+      {x: width / 2, y: height / 2}, // Always center
     ];
   };
 
   const removeFlourish = (id: number) => {
-    setRatings((prev) => prev.filter((ratingId) => ratingId !== id));
+    setRatings(prev => prev.filter(ratingId => ratingId !== id));
   };
 
   return (
@@ -50,19 +59,18 @@ const AnimatedLoveSending = ({ LoveIcon }: AnimatedStarRatingProps) => {
             key={index}
             onPress={() => {
               addFlourish();
-            }}
-          >
+            }}>
             <SvgXml xml={LoveIcon} width={40} height={40} />
           </TouchableOpacity>
         ))}
       </View>
 
       {/* Flourishing Stars */}
-      {ratings.map((id) => (
+      {ratings.map((id, index) => (
         <FlourishIcon
           key={id}
-          x={iconPositions.value[ratings.indexOf(id)]?.x || width / 2}
-          y={iconPositions.value[ratings.indexOf(id)]?.y || height / 2}
+          x={derivedIconPositions.value[index]?.x || width / 2}
+          y={derivedIconPositions.value[index]?.y || height / 2}
           onComplete={() => removeFlourish(id)}
           StarIcon={LoveIcon}
         />
@@ -131,7 +139,7 @@ const FlourishIcon = ({
   onComplete: () => void;
   StarIcon: string;
 }) => {
-  const position = useSharedValue({ x, y });
+  const position = useSharedValue({x, y});
   const opacity = useSharedValue(1);
   const scale = useSharedValue(1);
 
@@ -141,22 +149,25 @@ const FlourishIcon = ({
       left: position.value.x - 300, // Adjust for star size
       top: position.value.y - 20,
       opacity: opacity.value,
-      transform: [{ scale: scale.value }],
+      transform: [{scale: scale.value}],
     };
   });
 
   React.useEffect(() => {
     // Animate position upwards and fade out
     position.value = withTiming(
-      { x: position.value.x + Math.random() * 50 - 25, y: -290 }, // Move up to the top
-      { duration: 1600, easing: Easing.out(Easing.quad) }
+      {x: position.value.x + Math.random() * 50 - 25, y: -290}, // Move up to the top
+      {duration: 1600, easing: Easing.out(Easing.quad)},
     );
 
     // Slightly grow the star
-    scale.value = withTiming(1.5, { duration: 500 });
+    scale.value = withTiming(1.5, {duration: 500});
 
     // Fade out the star
-    opacity.value = withTiming(0, { duration: 1200, easing: Easing.in(Easing.quad) });
+    opacity.value = withTiming(0, {
+      duration: 1200,
+      easing: Easing.in(Easing.quad),
+    });
 
     // Clean up after animation
     const removeTimer = setTimeout(() => {

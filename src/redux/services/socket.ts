@@ -1,6 +1,6 @@
 import {Socket, io} from 'socket.io-client';
 
-const SOCKET_URL = 'http://137.184.184.228:3000'; // Replace with your server URL
+const SOCKET_URL = 'http://10.0.80.13:3000'; // Replace with your server URL
 
 let socket: Socket | null = null;
 
