@@ -25,7 +25,7 @@ type ItemData = {
 
 const ConnectedChatScreen = ({navigation}: NavigProps<null>) => {
   const {data, isLoading, isError} = useGetMatchQuery({});
-const {data:contactData} = useGetContactQuery([]);
+const {data:contactData} = useGetContactQuery({});
   console.log('data', contactData?.conversation?.data);
   const [notifications, setNotifications] = useState([
     {
@@ -129,9 +129,10 @@ const {data:contactData} = useGetContactQuery([]);
       read_at: null,
     },
   ]);
-  const handleRead = () => {
+  const handleRead = (item) => {
+    console.log("id from connected chat screen", item?.id)
     console.log('red');
-    navigation?.navigate('chatScreen');
+    navigation?.navigate('chatScreen', {id: item?.id, receiverId: item?.receiver_id ,receiverName: item?.name, reeciverImage:item?.avatar });
   };
 
   const handleMessage = (item) => {
@@ -201,22 +202,32 @@ const {data:contactData} = useGetContactQuery([]);
                 <Text style={tw`text-black`}>{item.latest_message?.message}</Text>
 
                 {/* Read/Unread Status */}
-                {item.unread_messages !== 0 ? (
+                {item.unread_messages === 0 ? (
                   <TouchableOpacity
-                    onPress={() => handleRead(item?.id)}
+                    onPress={() => handleRead(item)}
                     style={tw`flex-row items-center mt-2`}>
+                      
                     <Text style={tw`text-blue-500 px-2`}>
                       {item.latest_message?.created_at}
                     </Text>
                     <View
                       style={tw`w-5 h-5 items-center justify-center bg-red-500 rounded-full`}>
-                      <Text>3</Text>
+                      <Text>{item.unread_messages}</Text>
                     </View>
                   </TouchableOpacity>
                 ) : (
-                  <Text style={tw`text-gray-500 mt-2`}>
-                    {item.latest_message?.created_at}
-                  </Text>
+                  <TouchableOpacity
+                    onPress={() => handleRead(item)}
+                    style={tw`flex-row items-center mt-2`}>
+                      
+                    <Text style={tw`text-blue-500 px-2`}>
+                      {item.latest_message?.created_at}
+                    </Text>
+                    <View
+                      style={tw`w-5 h-5 items-center justify-center bg-red-500 rounded-full`}>
+                      <Text>{item.unread_messages}</Text>
+                    </View>
+                  </TouchableOpacity>
                 )}
               </View>
             </View>

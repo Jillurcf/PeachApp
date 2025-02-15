@@ -272,10 +272,11 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  Alert,
 } from 'react-native';
 import Video from 'react-native-video'; // Ensure this is installed: npm install react-native-video
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import io from 'socket.io-client';
+
 import tw from 'twrnc'; // Tailwind for React Native
 import {
   AttachmentIcon,
@@ -289,113 +290,110 @@ import {
 import {SvgXml} from 'react-native-svg';
 import TButton from '../components/buttons/TButton';
 import NormalModal from '../components/modals/NormalModal';
-import {getSocket} from '../redux/services/socket';
+
 import {useGetUserQuery} from '../redux/apiSlices/userSlice';
 import {
   useGetMessageQuery,
   usePostSendMessageMutation,
 } from '../redux/apiSlices/chatSlice';
+import {getSocket} from '../redux/services/socket';
 
 const ChatScreen = ({navigation, route}) => {
   const [openModal, setOpenModal] = useState(false);
   const [conversation_id, setConversation_id] = useState();
   console.log('cid', conversation_id);
   const {data} = useGetUserQuery({});
-  const {data: messageData} = useGetMessageQuery({
+  const {data: messageData, refetch} = useGetMessageQuery({
     per_page: 10,
     id: conversation_id,
   });
   const [postSendMessage] = usePostSendMessageMutation();
   console.log('data++++++++', messageData?.messages?.data);
   const receiverInfo = route?.params;
+  const id = route?.params.id;
+  useEffect(() => {
+    setConversation_id(id);
+  }, [id]);
+  console.log('id++++++++++++++++++++++++', id);
 
   console.log('receiverInfo', receiverInfo);
 
-  const [messages, setMessages] = useState([
-    
-  ]); // Static incoming messages
+  const [messages, setMessages] = useState([]); // Static incoming messages
   const [text, setText] = useState(''); // For input field
   const [mediaUri, setMediaUri] = useState(null); // For holding selected image or video URI
   const [mediaType, setMediaType] = useState(null); // 'image' or 'video'
   console.log('text', mediaUri);
-  console.log('message==================', messages);
+  // console.log('message==================', messages);
+  const socket = getSocket();
+
+  // Join the chat room and listen for real-time messages
   useEffect(() => {
-    if (messageData) {
-      // setMessages(messageData?.messages?.data); // Initialize messages with fetched data
-    }
-    // Listen for new messages from the server
-    // socket.on('receiveMessage', message => {
-    //   setMessages(prev => [...prev, message]);
-    // });
+    if (receiverInfo && data?.data?.id) {
+      socket.emit('joinRoom', {
+        userId: data?.data?.id,
+        receiverId: receiverInfo?.receiverId,
+      });
 
-    // Cleanup on unmount
-    return () => {
-      socket.disconnect();
-    };
-  }, [messageData]);
-
-  const sendMessage = async () => {
-    // Pass receiverId dynamically as needed
-    if (text.trim() || mediaUri) {
-      // Create the message object for socket emission (you may still need the user details here)
-      const messageText = text.trim() || 'Sent an image/video/document';
-      const message = {
-        text: messageText,
-        user: data?.data?.name, // Replace this with dynamic user data
-        createdAt: new Date(),
-        media: null, // Default media to null
+    
+      const receiveMessageListener = () => {
+        refetch();
       };
 
-      // Initialize FormData to send data
-      const formData = new FormData();
+      socket.on(`receive_message`, receiveMessageListener);
+      // console.log("reciveImge ++++++++++++++++++++++++++++++++++++", receiveImage)
 
-      // Append receiver_id and message text
-      formData.append('receiver_id', receiverInfo?.receiverId); // Add the receiver ID
+      return () => {
+        socket.off('receive_message', receiveMessageListener);
+      };
+    }
+  }, [receiverInfo, data?.data]);
+
+  // Fetch initial chat messages
+  useEffect(() => {
+    if (messageData) {
+      setMessages(messageData?.messages?.data);
+    }
+  }, [messageData, conversation_id]);
+
+  const sendMessage = async () => {
+    if (text.trim() || mediaUri) {
+      const messageText = text.trim() || 'Sent an image/video/document';
+      const message = {
+        message: messageText,
+        user: data?.data?.name,
+        createdAt: new Date(),
+        media: null,
+      };
+
+      const formData = new FormData();
+      formData.append('receiver_id', receiverInfo?.receiverId);
       formData.append('message', messageText);
 
-      // Append the media if present
       if (mediaUri) {
-        let media = null;
-
-        if (mediaType === 'image') {
-          media = {
-            uri: mediaUri,
-            type: 'image/jpeg', // Set the correct mime type for images
-            name: 'image.jpg',
-          };
-        } else if (mediaType === 'video') {
-          media = {
-            uri: mediaUri,
-            type: 'video/mp4', // Set the correct mime type for videos
-            name: 'video.mp4',
-          };
-        } else if (mediaType === 'pdf') {
-          media = {
-            uri: mediaUri,
-            type: 'application/pdf', // Set the correct mime type for PDFs
-            name: 'document.pdf',
-          };
-        }
-
-        // Append media to FormData (image/video/pdf)
-        if (media) {
-          formData.append('media', media);
-        }
+        let media = {
+          uri: mediaUri,
+          type: mediaType === 'photo' ? 'image/jpeg' : 'video/mp4',
+          name: mediaType === 'photo' ? 'image.jpg' : 'video.mp4',
+        };
+        formData.append('media', media);
       }
-
-      // Send the message data to the server
-      const postRes = await postSendMessage(formData); // Assuming postSendMessage handles the request
-      console.log('postRes', postRes?.data?.data?.conversation_id);
+      console.log('formData', formData);
+      const postRes = await postSendMessage(formData);
       setConversation_id(postRes?.data?.data?.conversation_id);
 
-      // Emit the message to the socket (use media as well if needed)
-      message.media = mediaUri ? mediaUri : null; // Attach media data (if any) to the socket message
-      socket.emit('sendMessage', message);
+      // Emit message via socket
+      message.media = mediaUri || null;
+      socket.emit('send_message', {
+        conversation_id: postRes?.data?.data?.conversation_id,
+        userId: data?.data?.id,
+        receiverId: receiverInfo?.receiverId,
+        message: messageText,
+        media: mediaUri || null,
+      });
 
-      // Update local message state with the new message
-      setMessages(prev => [...prev, message]);
-
-      // Clear input field and media
+      // Update local state for instant message visibility
+      // setMessages(prev => [...prev, message]);
+      setMessages(prev => [...prev, { message: messageText, media: mediaUri }]);
       setText('');
       setMediaUri(null);
       setMediaType(null);
@@ -425,24 +423,28 @@ const ChatScreen = ({navigation, route}) => {
     }
   }
 
-  const pickMedia = type => {
+  const pickMedia = (type) => {
     launchImageLibrary(
       {
-        mediaType: type,
+        mediaType: type, 
         quality: 1,
+        selectionLimit: 1, // Allow only one image/video selection
       },
       response => {
         if (response.didCancel) {
-          console.log('User cancelled media picker');
+          console.log('User cancelled media selection');
         } else if (response.errorMessage) {
           console.error('MediaPicker Error: ', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
-          setMediaUri(response.assets[0].uri); // Set the selected media URI
+          console.log("Selected media:", response.assets[0]); // Debugging log
+  
+          setMediaUri(response.assets[0].uri);
           setMediaType(type);
         }
-      },
+      }
     );
   };
+  
 
   const capturePhoto = async () => {
     // Request camera permission before launching camera
@@ -455,6 +457,7 @@ const ChatScreen = ({navigation, route}) => {
         saveToPhotos: true,
       },
       response => {
+        console.log("photos", response)
         if (response.didCancel) {
           console.log('User cancelled photo capture');
         } else if (response.errorMessage) {
@@ -466,6 +469,28 @@ const ChatScreen = ({navigation, route}) => {
       },
     );
   };
+
+  const pickPhotoFromGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 1,
+        selectionLimit: 1, // Allow only one image
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('User cancelled media selection');
+        } else if (response.errorMessage) {
+          console.error('MediaPicker Error: ', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          console.log("Selected Image:", response.assets[0]); // Debugging log
+          setMediaUri(response.assets[0].uri);
+          setMediaType('image');
+        }
+      }
+    );
+  };
+  
 
   const recordVideo = async () => {
     // Request camera permission before recording video
@@ -490,19 +515,32 @@ const ChatScreen = ({navigation, route}) => {
   };
   const toggleModal = () => setOpenModal(prev => !prev);
 
-  const socket = getSocket();
-  React.useEffect(() => {
-    if (receiverInfo) {
-      const res = socket?.emit('joinRoom', {
-        userId: data?.data?.id,
-        receiverId: receiverInfo?.receiverId,
-      });
-      //  console.log("res", res)
-    }
-  }, [receiverInfo, data?.data]);
+  // React.useEffect(() => {
 
+  // }, [receiverInfo, data?.data]);
+  const selectMediaType = () => {
+    Alert.alert(
+      "Choose Media",
+      "Select the type of media you want to upload",
+      [
+        {
+          text: "Image",
+          onPress: () => pickPhotoFromGallery(),
+        },
+        {
+          text: "Video",
+          onPress: () => pickMedia('video'),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+  
   return (
-    <ScrollView contentContainerStyle={tw`flex-1 px-2 bg-gray-100`}>
+    <View style={tw`flex-1 px-2 bg-gray-100`}>
       <View style={tw`px-[4%] flex-row justify-between items-center  my-4`}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <SvgXml xml={LeftArrow} />
@@ -529,46 +567,55 @@ const ChatScreen = ({navigation, route}) => {
       </View>
       {/* Message List */}
       <FlatList
+        keyboardShouldPersistTaps="always"
+        inverted
         data={messages}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => {
-          console.log('messageItem', item);
+          // console.log('messageItem', item);
           return (
             <View
               style={[
                 tw`mb-3 p-3 rounded-lg  w-[85%] text-black`,
-                item?.user
+                item?.is_sender === true
                   ? tw`bg-blue-200 self-end text-black`
                   : tw`bg-green-200 self-start text-black`,
               ]}>
-               
               <View>
-              <Text style={tw`font-MontserratRegular text-black`}>
-                {item.user}
-              </Text>
-              {item.media && item.media.startsWith('file://') && (
-                <Image
-                  source={{uri: item.media}}
-                  style={tw`h-40 w-full rounded-lg my-2`}
-                  resizeMode="cover"
-                />
-              )}
-              {item.video && (
-                <Video
-                  source={{uri: item.video}}
-                  style={tw`h-40 w-full rounded-lg my-2`}
-                  resizeMode="cover"
-                  controls
-                />
-              )}
-              <Text style={tw`text-black font-MontserratRegular`}>
-                {item.text}
-              </Text>
-              <Text style={tw`text-xs text-black mt-2`}>
-                {new Date(item.createdAt).toLocaleTimeString()}
-              </Text>
-            </View>
-           
+                <Text style={tw`font-MontserratRegular text-black`}>
+                  {item.sender?.first_name + item.sender?.last_name}
+                </Text>
+                {item.media && (
+                  <>
+                    {item.media.includes('.mp4') ||
+                    item.media.includes('.mov') ? (
+                      <Video
+                        source={{uri: item.media}}
+                        style={tw`h-30 w-full rounded-lg my-2`}
+                        resizeMode="cover"
+                        controls
+                      />
+                    ) : (
+                      <Image
+                        source={{uri: item.media}}
+                        style={tw`h-30 w-full rounded-lg my-2`}
+                        resizeMode="cover"
+                      />
+                    )}
+                  </>
+                )}
+                <Text style={tw`text-black font-MontserratRegular`}>
+                  {item.message}
+                </Text>
+                <View style={tw`flex-row justify-between`}>
+                  <Text style={tw`text-xs flex-row text-end text-black mt-2`}>
+                  {item.created_at_formatted}
+                </Text>
+                  <Text style={tw`text-xs flex-row text-end text-black mt-2`}>
+                  {item.created_at_date}
+                </Text>
+                </View>
+              </View>
             </View>
           );
         }}
@@ -588,7 +635,7 @@ const ChatScreen = ({navigation, route}) => {
             <SvgXml xml={VideoCam} width={20} height={20} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => pickMedia('')} style={tw`mr-2`}>
+          <TouchableOpacity onPress={() => selectMediaType()} style={tw`mr-2`}>
             <SvgXml xml={AttachmentIcon} width={20} height={20} />
           </TouchableOpacity>
           <View style={tw`flex-row w-[75%] gap-1 px-[2%]`}>
@@ -670,7 +717,7 @@ const ChatScreen = ({navigation, route}) => {
         </NormalModal>
       </View>
       <StatusBar translucent={false} />
-    </ScrollView>
+    </View>
   );
 };
 

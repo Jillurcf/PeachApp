@@ -58,6 +58,7 @@ import {
 } from '../redux/apiSlices/userSlice';
 import {Switch} from 'react-native-ui-lib';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { usePostStoreUserInfoMutation } from '../redux/apiSlices/authSlice';
 
 // type Topic =
 //   | 'Online Shopping'
@@ -190,10 +191,13 @@ const EditProfile = ({navigation}) => {
     prompt: [],
   });
 
+  console.log("userData============================", userData)
+
   // State for modal visibility
   const [modalVisible, setModalVisible] = useState(false);
   const {data, isLoading, isError} = useGetUserQuery({});
   const {data: profile} = useGetPorfileQuery({});
+  const [postStoreUserInfo] = usePostStoreUserInfoMutation();
   console.log('++++', profile);
 
   // console.log('user Data', data?.data);
@@ -529,6 +533,50 @@ const EditProfile = ({navigation}) => {
     });
   };
 
+
+  // ++++++++++++++++++++++++++ Save button action ++++++++++++++++++++++++++++++++++++++
+  const handleStoreInfo = async () => {
+    try {
+      console.log('userData+++', userData);
+  
+      const formattedData = {
+        first_name: userData.first_name?.trim() || '',
+        last_name: userData.last_name?.trim() || '',
+        dob: userData.dob || '',
+        address: userData.address || '',
+        gender: JSON.stringify(userData.gender || {}),
+        dating_with: userData.dating_with || '',
+        height: userData.height || "",
+        passions: userData.passions || [],
+        ethnicity: JSON.stringify(userData.ethnicity || {}),
+        have_children: JSON.stringify(userData.have_children || {}),
+        home_town: JSON.stringify(userData.home_town || {}),
+        work_place: JSON.stringify(userData.work_place || {}),
+        job: JSON.stringify(userData.job || {}),
+        school: JSON.stringify(userData.school || {}),
+        edu_lvl: JSON.stringify(userData.edu_lvl || {}),
+        religion: JSON.stringify(userData.religion || {}),
+        drink: JSON.stringify(userData.drink || {}),
+        smoke: JSON.stringify(userData.smoke || {}),
+        smoke_weed: JSON.stringify(userData.smoke_weed || {}),
+        drugs: JSON.stringify(userData.drugs || {}),
+        age_range: JSON.stringify(userData.age_range || {}),
+        interests: userData.interests || [],
+        max_distance: userData.max_distance || 0,
+        is_notify: userData.is_notify || 0,
+        lat: userData.lat || '',
+        lng: userData.lng || ''
+      };
+  
+      console.log('Formatted Data:', formattedData);
+  
+      const response = await postStoreUserInfo(formattedData);
+      console.log('API Response:', response);
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+  
   return (
     <ScrollView style={tw`flex-1 `} nestedScrollEnabled={true}>
       <TouchableOpacity
@@ -1336,7 +1384,7 @@ const EditProfile = ({navigation}) => {
         </View>
         <View style={tw`flex-row items-center justify-center gap-1  my-4`}>
           <TButton
-            onPress={showToast}
+            onPress={handleStoreInfo}
             containerStyle={tw`bg-black w-[90%]`}
             title="Save changes"
           />
