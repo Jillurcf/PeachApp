@@ -308,13 +308,13 @@ const ChatScreen = ({navigation, route}) => {
     id: conversation_id,
   });
   const [postSendMessage] = usePostSendMessageMutation();
-  console.log('data++++++++', messageData?.messages?.data);
+  // console.log('data++++++++', messageData?.messages?.data);
   const receiverInfo = route?.params;
   const id = route?.params.id;
   useEffect(() => {
     setConversation_id(id);
   }, [id]);
-  console.log('id++++++++++++++++++++++++', id);
+  console.log('receiver info++++++++++++++++++++++++', receiverInfo);
 
   console.log('receiverInfo', receiverInfo);
 
@@ -553,9 +553,13 @@ const ChatScreen = ({navigation, route}) => {
                 style={tw`w-12 h-12  rounded-full`}
               />
             </View>
-            <View
-              style={tw`w-3 h-3 bg-green-400 rounded-full absolute bottom-0 right-0`}
-            />
+            {receiverInfo?.is_active === 0 ?
+                <View
+                style={tw`w-3 h-3 bg-gray-400 rounded-full absolute bottom-0 right-4`}
+              />
+                : <View
+                  style={tw`w-3 h-3 bg-green-500 rounded-full absolute bottom-0 right-4`}
+                /> }
           </View>
           <Text style={tw`font-MontserratBold text-black`}>
             {receiverInfo?.receiverName}

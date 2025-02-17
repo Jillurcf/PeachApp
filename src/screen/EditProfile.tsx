@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -55,6 +56,7 @@ import Toast from 'react-native-toast-message';
 import {
   useGetPorfileQuery,
   useGetUserQuery,
+  usePostUpdateProfileMutation,
 } from '../redux/apiSlices/userSlice';
 import {Switch} from 'react-native-ui-lib';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -151,9 +153,9 @@ const EditProfile = ({navigation}) => {
   const [selectedItems, setSelectedItems] = useState<Topic[]>([]);
   const [location, setLocation] = useState('');
   const [isShowState, setIsShowState] = useState<Record<string, boolean>>({});
-  console.log(location);
+  // console.log("isShowState", isShowState);
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
-  console.log('150', currentLocation);
+  // console.log('150', currentLocation);
   const [isFetchingLocation, setIsFetchingLocation] = useState(true);
   const [newInterest, setNewInterest] = useState('');
   const [topics, setTopics] = useState<string[]>([]);
@@ -186,18 +188,20 @@ const EditProfile = ({navigation}) => {
     smoke_weed: {value: '', is_show: ''},
     drugs: {value: '', is_show: ''},
   });
+
   const [profileData, setProfileData] = useState({
     images: [],
     prompt: [],
   });
-
-  console.log("userData============================", userData)
+// console.log("profileData", profileData)
+  // console.log("userData============================", userData)
 
   // State for modal visibility
   const [modalVisible, setModalVisible] = useState(false);
   const {data, isLoading, isError} = useGetUserQuery({});
   const {data: profile} = useGetPorfileQuery({});
   const [postStoreUserInfo] = usePostStoreUserInfoMutation();
+  const [postUpdateProfile] = usePostUpdateProfileMutation()
   console.log('++++', profile);
 
   // console.log('user Data', data?.data);
@@ -294,7 +298,7 @@ const EditProfile = ({navigation}) => {
         prompt: profile?.data?.prompt || [],
       });
     }
-  }, [data]);
+  }, [data, profile]);
 
   const toggleSelection = (item: Topic): void => {
     setSelectedItems(prevSelected => {
@@ -537,37 +541,77 @@ const EditProfile = ({navigation}) => {
   // ++++++++++++++++++++++++++ Save button action ++++++++++++++++++++++++++++++++++++++
   const handleStoreInfo = async () => {
     try {
-      console.log('userData+++', userData);
+      
   
       const formattedData = {
         first_name: userData.first_name?.trim() || '',
         last_name: userData.last_name?.trim() || '',
         dob: userData.dob || '',
         address: userData.address || '',
-        gender: JSON.stringify(userData.gender || {}),
+        gender: JSON.stringify({
+            value: userData.gender || {},
+            is_show: isShowState.gender
+        }),
         dating_with: userData.dating_with || '',
         height: userData.height || "",
         passions: userData.passions || [],
-        ethnicity: JSON.stringify(userData.ethnicity || {}),
-        have_children: JSON.stringify(userData.have_children || {}),
-        home_town: JSON.stringify(userData.home_town || {}),
-        work_place: JSON.stringify(userData.work_place || {}),
-        job: JSON.stringify(userData.job || {}),
-        school: JSON.stringify(userData.school || {}),
-        edu_lvl: JSON.stringify(userData.edu_lvl || {}),
-        religion: JSON.stringify(userData.religion || {}),
-        drink: JSON.stringify(userData.drink || {}),
-        smoke: JSON.stringify(userData.smoke || {}),
-        smoke_weed: JSON.stringify(userData.smoke_weed || {}),
-        drugs: JSON.stringify(userData.drugs || {}),
+        ethnicity: JSON.stringify({
+            value: userData.ethnicity || {},
+            is_show: isShowState?.ethnicity
+        }),
+        have_children: JSON.stringify({
+            value: userData.have_children || {},
+            is_show: isShowState?.have_children
+        }),
+        home_town: JSON.stringify({
+            value: userData.home_town || {},
+            is_show: isShowState?.home_town
+        }),
+        work_place: JSON.stringify({
+            value: userData.work_place || {},
+            is_show: isShowState?.work_place
+        }),
+        job: JSON.stringify({
+            value: userData.job || {},
+            is_show: isShowState?.job
+        }),
+        school: JSON.stringify({
+            value: userData.school || {},
+            is_show: isShowState?.school
+        }),
+        edu_lvl: JSON.stringify({
+            value: userData.edu_lvl || {},
+            is_show: isShowState?.edu_lvl
+        }),
+        religion: JSON.stringify({
+            value: userData.religion || {},
+            is_show: isShowState?.religion
+        }),
+        drink: JSON.stringify({
+            value: userData.drink || {},
+            is_show: isShowState?.drink
+        }),
+        smoke: JSON.stringify({
+            value: userData.smoke || {},
+            is_show: isShowState?.smoke
+        }),
+        smoke_weed: JSON.stringify({
+            value: userData.smoke_weed || {},
+            is_show: isShowState?.smoke_weed
+        }),
+        drugs: JSON.stringify({
+            value: userData.drugs || {},
+            is_show: isShowState?.drugs
+        }),
         age_range: JSON.stringify(userData.age_range || {}),
-        interests: userData.interests || [],
+        interests: topics || [], // Updated to use setTopics data
         max_distance: userData.max_distance || 0,
         is_notify: userData.is_notify || 0,
         lat: userData.lat || '',
-        lng: userData.lng || ''
-      };
-  
+        lng: userData.lng || '',
+       
+    };
+    showToast()
       console.log('Formatted Data:', formattedData);
   
       const response = await postStoreUserInfo(formattedData);
@@ -576,7 +620,45 @@ const EditProfile = ({navigation}) => {
       console.log('Error:', error);
     }
   };
-  
+  const handleEditProfile = async () => {
+    console.log("handle edit profile")
+    try{
+      console.log( "try catch block" , profileData?.images)
+      const formData = new FormData()
+      profileData?.images.forEach((image, index) => {
+        formData.append(`images[${index}]`, {
+          
+            uri: image,
+            type: 'image/jpeg', // Ensure correct MIME type
+            name: `image_${index}.jpg`
+        });
+    });
+// formData?.append("_method", "PATCH")
+    // formData?.append('prompt', profileData?.prompt)
+
+    profileData?.prompt.forEach((item) => {
+      formData.append('prompt[]', item);
+     })
+
+   console.log("formData", formData)
+    const res = await postUpdateProfile(formData)
+    if(res) {
+      showToast
+    }
+    console.log("profile update res", res)
+    }catch(error) {
+      console.log(error)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <View style={tw`flex-1 justify-center items-center`}>
+        <ActivityIndicator size="large" color="#064145" />
+        <Text style={tw`text-primary mt-2`}>Loading ...</Text>
+      </View>
+    );
+  }
   return (
     <ScrollView style={tw`flex-1 `} nestedScrollEnabled={true}>
       <TouchableOpacity
@@ -1397,7 +1479,7 @@ const EditProfile = ({navigation}) => {
           data={profileData?.images}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
-            console.log('item', item);
+            // console.log('item', item);
             return (
               <View style={{position: 'relative', marginRight: 10}}>
                 <Image
@@ -1489,7 +1571,7 @@ const EditProfile = ({navigation}) => {
       </View>
       <View style={tw`flex-row items-center justify-center gap-1  my-4`}>
         <TButton
-          onPress={showToast}
+          onPress={handleEditProfile}
           containerStyle={tw`bg-black w-[90%]`}
           title="Save changes"
         />

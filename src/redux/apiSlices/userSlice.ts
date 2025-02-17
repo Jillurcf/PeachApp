@@ -52,6 +52,18 @@ const userSlice = api.injectEndpoints({
             }),
             invalidatesTags: ['user'],
         }),
+        postUpdateProfile: builder.mutation({
+            query: formData => ({
+              url: `/user/update-profile`,
+              headers : {
+                'Content-Type': 'multipart/form-data'
+            },
+              method: 'POST',
+              body: formData,
+      
+            }),
+            invalidatesTags: ['user'],
+        }),
     })
 });
 
@@ -59,4 +71,5 @@ export const {useGetUserQuery,
     usePostHandle_iteractionMutation,
     usePostUpdateUserImgMutation,
     useGetPorfileQuery,
+    usePostUpdateProfileMutation,
 } = userSlice;

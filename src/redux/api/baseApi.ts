@@ -83,6 +83,7 @@ export const api = createApi({
     'wallet',
     'comment',
     'order',
+    'notification'
   ],
 });
 

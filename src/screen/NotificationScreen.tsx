@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, FlatList, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StatusBar, Image } from "react-native";
 import { Avatar, Badge } from "react-native-ui-lib"; // Using rnulib components
 
 import tw from "../lib/tailwind";
+import { useGetNotificationQuery, usePutMarkAsReadNotificationMutation } from "../redux/apiSlices/notificationSlices";
 
 const NotificationsScreen = () => {
+  const {data, isLoading, isError} = useGetNotificationQuery({});
+  const [putMarkAsReadNotification] = usePutMarkAsReadNotificationMutation();
+  console.log("notification data", data)
   // Static Data for Notifications
   const [notifications, setNotifications] = useState([
     {
@@ -110,14 +114,17 @@ const NotificationsScreen = () => {
   ]);
 
   // Count of unread notifications
-  const nullCount = notifications.filter((item) => !item.read_at).length;
+  const nullCount = data?.data.filter((item) => !item?.read_at).length;
 
-  // Handlers
+  // // Handlers
   const handleBack = () => {
     console.log("Back pressed");
   };
 
-  const handleRead = (id) => {
+  const handleRead = async (id) => {
+    console.log(id)
+    const res = await putMarkAsReadNotification(id)
+    console.log("marked as read", res)
     setNotifications((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, read_at: new Date().toISOString() } : item
@@ -125,6 +132,10 @@ const NotificationsScreen = () => {
     );
   };
 
+
+  const handleNotifation = () => {
+    console.log("click")
+  }
   return (
     <View style={tw`px-8 flex-1 my-6`}>
      
@@ -145,42 +156,49 @@ const NotificationsScreen = () => {
 
       {/* Notifications List */}
       <FlatList
-        data={notifications}
+        data={data?.data}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={tw`flex-row items-center gap-2 py-2`}>
-            {/* Avatar */}
-            {item.data.creator_image && (
-              <Avatar
-                source={item.data.creator_image}
-                size={40}
-                containerStyle={tw`mr-4`}
-              />
-            )}
-
-            {/* Notification Content */}
-            <View style={tw`flex-1 border-b border-gray-200 pb-2`}>
-              <Text style={tw`text-black`}>{item.data.message}</Text>
-
-              {/* Read/Unread Status */}
-              {item.read_at === null ? (
-                <TouchableOpacity
-                  onPress={() => handleRead(item?.id)}
-                  style={tw`flex-row items-center mt-2`}
-                >
-                  <Text style={tw`text-blue-500 px-2`}>
-                    {new Date(item.created_at).toLocaleString()}
-                  </Text>
-                  <View style={tw`w-3 h-3 bg-red-500 rounded-full`} />
-                </TouchableOpacity>
-              ) : (
-                <Text style={tw`text-gray-500 mt-2`}>
-                  {new Date(item.created_at).toLocaleString()}
-                </Text>
-              )}
-            </View>
-          </View>
-        )}
+        renderItem={({ item }) => {
+          console.log("notification item", item?.id)
+          return (
+            (
+              <TouchableOpacity 
+              onPress={handleNotifation}
+              style={tw`flex-row items-center gap-2 py-2`}>
+                {/* Avatar */}
+                {item?.data?.avatar && (
+                  <Image
+                    source={{uri: item?.data?.avatar}}
+                   style={tw`w-12 h-12 rounded-full`}
+                  
+                  />
+                )}
+    
+                {/* Notification Content */}
+                <View style={tw`flex-1 border-b border-gray-200 pb-2`}>
+                  <Text style={tw`text-black`}>{item?.data?.message}</Text>
+    
+                  {/* Read/Unread Status */}
+                  {item.read_at === null ? (
+                    <TouchableOpacity
+                      onPress={() => handleRead(item?.id)}
+                      style={tw`flex-row items-center mt-2`}
+                    >
+                      <Text style={tw`text-blue-500 px-2`}>
+                      {item.created_at_formatted}
+                      </Text>
+                      <View style={tw`w-3 h-3 bg-red-500 rounded-full`} />
+                    </TouchableOpacity>
+                  ) : (
+                    <Text style={tw`text-gray-500 mt-2`}>
+                      {item.created_at_formatted}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            )
+          )
+        }}
       />
       <StatusBar translucent={false}/>
     </View>

@@ -26,7 +26,8 @@ type ItemData = {
 const ConnectedChatScreen = ({navigation}: NavigProps<null>) => {
   const {data, isLoading, isError} = useGetMatchQuery({});
 const {data:contactData} = useGetContactQuery({});
-  console.log('data', contactData?.conversation?.data);
+  // console.log('contact data', contactData?.conversation?.data);
+  console.log("new match data",data?.matches?.data.length)
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -130,47 +131,50 @@ const {data:contactData} = useGetContactQuery({});
     },
   ]);
   const handleRead = (item) => {
-    console.log("id from connected chat screen", item?.id)
+    console.log("id from connected chat screen", item)
     console.log('red');
-    navigation?.navigate('chatScreen', {id: item?.id, receiverId: item?.receiver_id ,receiverName: item?.name, reeciverImage:item?.avatar });
+    navigation?.navigate('chatScreen', {id: item?.id, is_active: item?.is_active, receiverId: item?.receiver_id ,receiverName: item?.name, reeciverImage:item?.avatar });
   };
 
   const handleMessage = (item) => {
-    console.log('click', item?.id)
+    console.log('click', item)
     navigation?.navigate('chatScreen', {receiverId: item?.id, receiverName: item?.first_name + item?.last_name, reeciverImage:item?.avatar});
   }
 
   return (
     <ScrollView style={tw`flex-1 my-12 h-screen px-[4%]`}>
       <View style={tw`flex-row justify-between w-full`}>
-        <Text style={tw`font-MontserratBold text-black text-xl`}>Chats</Text>
+        <Text style={tw`font-MontserratBold text-black text-xl mb-4`}>Chats</Text>
         <SvgXml xml={Notification} width={25} height={25} />
       </View>
-      <View style={tw`my-6 `}>
-        <Text style={tw`font-MontserratBold text-black text-lg py-2`}>
-          New Match
-        </Text>
-        <FlatList
-          horizontal={true}
-          data={data?.matches?.data}
-          renderItem={({item}) => {
-            // console.log('item', item);
-            return (
-              <TouchableOpacity
-              onPress={()=>handleMessage(item)}
-              >
-                <View style={tw` h-18 w-18 mr-2 overflow-hidden`}>
-                  <Image
-                    style={tw`w-18 h-18 rounded-full`}
-                    source={{uri: item?.avatar}}
-                  />
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      {data?.matches?.data.length !== 0 && 
+       <View style={tw`my-6 `}>
+       <Text style={tw`font-MontserratBold text-black text-lg py-2`}>
+         New Match
+       </Text>
+       <FlatList
+         horizontal={true}
+         data={data?.matches?.data}
+         renderItem={({item}) => {
+           // console.log('item', item);
+           return (
+             <TouchableOpacity
+             onPress={()=>handleMessage(item)}
+             >
+               <View style={tw` h-18 w-18 mr-2 overflow-hidden`}>
+                 <Image
+                   style={tw`w-18 h-18 rounded-full`}
+                   source={{uri: item?.avatar}}
+                 />
+               </View>
+             </TouchableOpacity>
+           );
+         }}
+         keyExtractor={item => item.id}
+       />
+     </View>
+      }
+     
       <View>
         <Text style={tw`text-black font-MontserratBold`}>Message</Text>
         {/* Notifications List */}
@@ -188,7 +192,7 @@ const {data:contactData} = useGetContactQuery({});
                     containerStyle={tw`mr-4`}
                   />
                 )}
-                {item?.is_status === 0 ?
+                {item?.is_active === 0 ?
                 <View
                 style={tw`w-3 h-3 bg-gray-400 rounded-full absolute bottom-0 right-4`}
               />
