@@ -49,11 +49,16 @@ console.log(prompt)
 
       console.log('formData', formData);
       const response = await postStoreProfile(formData);
-      console.log('======', response);
+      console.log('======', response?.data?.success);
+      if(response?.data?.success === true){
+        navigation?.navigate('likeSendingScreen');
+      }else{
+        Alert.alert("Something went wrong please try again")
+      }
     } catch (error) {
       console.log(error);
     }
-    navigation?.navigate('likeSendingScreen');
+   
   };
   return (
     <ScrollView contentContainerStyle={tw`items-center justify-center `}>

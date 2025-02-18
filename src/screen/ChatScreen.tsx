@@ -301,7 +301,7 @@ import {getSocket} from '../redux/services/socket';
 const ChatScreen = ({navigation, route}) => {
   const [openModal, setOpenModal] = useState(false);
   const [conversation_id, setConversation_id] = useState();
-  console.log('cid', conversation_id);
+  // console.log('cid', conversation_id);
   const {data} = useGetUserQuery({});
   const {data: messageData, refetch} = useGetMessageQuery({
     per_page: 10,
@@ -314,7 +314,7 @@ const ChatScreen = ({navigation, route}) => {
   useEffect(() => {
     setConversation_id(id);
   }, [id]);
-  console.log('receiver info++++++++++++++++++++++++', receiverInfo);
+  // console.log('receiver info++++++++++++++++++++++++', receiverInfo);
 
   console.log('receiverInfo', receiverInfo);
 

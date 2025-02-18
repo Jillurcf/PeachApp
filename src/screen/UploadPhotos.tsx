@@ -32,7 +32,7 @@ const UploadPhotos = ({ navigation }: NavigProps<null>) => {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [capturedVideo, setCapturedVideo] = useState<string | null>(null);
 
-  console.log(selectedImages)
+  console.log("selected images",selectedImages)
   // Fetch images from MMKV storage on component mount
   useEffect(() => {
     const fetchImages = () => {
@@ -213,7 +213,14 @@ const UploadPhotos = ({ navigation }: NavigProps<null>) => {
       {/* Continue button */}
       <View style={tw`flex mb-6 my-12 items-center justify-center w-full`}>
         <TButton
-          onPress={() => navigation?.navigate('promptScreen', {selectedImages: selectedImages})}
+          onPress={() =>{
+            if(selectedImages.length >= 4) {
+              navigation?.navigate('promptScreen', {selectedImages: selectedImages})
+            }else{
+              Alert.alert('You must select at least 4 images!')
+            }
+            }
+          } 
           titleStyle={tw`text-white font-MontserratBold text-center`}
           title="Continue"
           containerStyle={tw`bg-primary w-[90%] rounded-full`}

@@ -28,14 +28,16 @@ const Study = ({navigation}: NavigProps<null>) => {
     'Prefer not to say',
   ];
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string>('');
 
   // Toggle option selection
   const toggleOption = (option: string) => {
-    setSelectedOptions(prev =>
-      prev.includes(option)
-        ? prev.filter(item => item !== option)
-        : [...prev, option],
+    setSelectedOptions(
+      option
+      // prev =>
+      // prev.includes(option)
+      //   ? prev.filter(item => item !== option)
+      //   : [...prev, option],
     );
   };
 

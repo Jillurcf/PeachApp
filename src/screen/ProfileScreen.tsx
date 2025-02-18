@@ -39,7 +39,7 @@ const ProfileScreen = ({navigation}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [postLogout, {isLoading, isError}] = usePostLogoutMutation();
   const {data} = useGetUserQuery({})
-  console.log("data+++++++", data?.data?.profile?.images)
+  // console.log("data+++++++", data?.data?.profile?.images)
   console.log(imageUri)
 
   const selectImage = () => {
@@ -153,8 +153,8 @@ const ProfileScreen = ({navigation}) => {
      
       <View>
         <View
-          style={tw`flex-row mx-auto gap-2 w-[85%] items-center justify-center`}>
-          <TouchableOpacity
+          style={tw`flex-row mx-auto gap-12 my-12 w-[85%] items-center justify-center`}>
+          {/* <TouchableOpacity
             onPress={selectImage}
             style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>
             <SvgXml xml={ProfileCameraIcon} width={30} height={30} />
@@ -162,7 +162,7 @@ const ProfileScreen = ({navigation}) => {
               style={tw`font-MontserratRegular py-1 text-black text-center`}>
               Add
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => navigation.navigate('editProfile')}
             style={tw`bg-white p-4 items-center justify-center rounded-lg w-4/12`}>

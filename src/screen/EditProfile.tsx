@@ -60,52 +60,7 @@ import {
 } from '../redux/apiSlices/userSlice';
 import {Switch} from 'react-native-ui-lib';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { usePostStoreUserInfoMutation } from '../redux/apiSlices/authSlice';
-
-// type Topic =
-//   | 'Online Shopping'
-//   | 'Amateur Cook'
-//   | 'Anime'
-//   | 'Horror Films'
-//   | 'Skincare';
-// const DATA = [
-//   {
-//     id: '1',
-//     profile: {
-//       name: 'Lana',
-//       age: 26,
-//       distance: '0.5 mi. away from you',
-//       image: require('../assets/images/ExploreImg.png'),
-//       interests: [
-//         'Online shopping',
-//         'Amateur cook',
-//         'Anime',
-//         'Horror films',
-//         'Skincare',
-//       ],
-//     },
-//   },
-//   {
-//     id: '2',
-//     profile: {
-//       name: 'John',
-//       age: 30,
-//       distance: '1.0 mi. away from you',
-//       image: require('../assets/images/openingImg.png'),
-//       interests: ['Photography', 'Travel', 'Music', 'Technology', 'Cooking'],
-//     },
-//   },
-//   {
-//     id: '3',
-//     profile: {
-//       name: 'Sophia',
-//       age: 24,
-//       distance: '2.3 mi. away from you',
-//       image: require('../assets/images/promptImg.png'),
-//       interests: ['Art', 'Yoga', 'Nature', 'Reading', 'Fitness'],
-//     },
-//   },
-// ];
+import {usePostStoreUserInfoMutation} from '../redux/apiSlices/authSlice';
 
 interface useInfo {
   first_name: string;
@@ -159,6 +114,12 @@ const EditProfile = ({navigation}) => {
   const [isFetchingLocation, setIsFetchingLocation] = useState(true);
   const [newInterest, setNewInterest] = useState('');
   const [topics, setTopics] = useState<string[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const {data, isLoading, isError} = useGetUserQuery({});
+  const {data: profile} = useGetPorfileQuery({});
+  const [postStoreUserInfo] = usePostStoreUserInfoMutation();
+  const [postUpdateProfile] = usePostUpdateProfileMutation();
+  console.log('topics', data?.data);
 
   const [userData, setUserData] = useState<useInfo>({
     first_name: '',
@@ -193,18 +154,13 @@ const EditProfile = ({navigation}) => {
     images: [],
     prompt: [],
   });
-// console.log("profileData", profileData)
-  // console.log("userData============================", userData)
+  console.log('profileData', profileData);
 
   // State for modal visibility
-  const [modalVisible, setModalVisible] = useState(false);
-  const {data, isLoading, isError} = useGetUserQuery({});
-  const {data: profile} = useGetPorfileQuery({});
-  const [postStoreUserInfo] = usePostStoreUserInfoMutation();
-  const [postUpdateProfile] = usePostUpdateProfileMutation()
-  console.log('++++', profile);
 
-  // console.log('user Data', data?.data);
+  // console.log('++++', profile);
+
+  // console.log('user Data+++++++++++++++++', data?.data?.edu_lvl);
   // const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
@@ -277,6 +233,7 @@ const EditProfile = ({navigation}) => {
           is_show: data?.data?.drugs?.is_show,
         },
       }));
+
       setIsShowState({
         gender: data.data.gender?.is_show ?? false,
         ethnicity: data.data.ethnicity?.is_show ?? false,
@@ -537,71 +494,68 @@ const EditProfile = ({navigation}) => {
     });
   };
 
-
   // ++++++++++++++++++++++++++ Save button action ++++++++++++++++++++++++++++++++++++++
   const handleStoreInfo = async () => {
     try {
-      
-  
       const formattedData = {
         first_name: userData.first_name?.trim() || '',
         last_name: userData.last_name?.trim() || '',
         dob: userData.dob || '',
         address: userData.address || '',
         gender: JSON.stringify({
-            value: userData.gender || {},
-            is_show: isShowState.gender
+          value: userData.gender || {},
+          is_show: isShowState.gender,
         }),
         dating_with: userData.dating_with || '',
-        height: userData.height || "",
+        height: userData.height || '',
         passions: userData.passions || [],
         ethnicity: JSON.stringify({
-            value: userData.ethnicity || {},
-            is_show: isShowState?.ethnicity
+          value: userData.ethnicity || {},
+          is_show: isShowState?.ethnicity,
         }),
         have_children: JSON.stringify({
-            value: userData.have_children || {},
-            is_show: isShowState?.have_children
+          value: userData.have_children || {},
+          is_show: isShowState?.have_children,
         }),
         home_town: JSON.stringify({
-            value: userData.home_town || {},
-            is_show: isShowState?.home_town
+          value: userData.home_town || {},
+          is_show: isShowState?.home_town,
         }),
         work_place: JSON.stringify({
-            value: userData.work_place || {},
-            is_show: isShowState?.work_place
+          value: userData.work_place || {},
+          is_show: isShowState?.work_place,
         }),
         job: JSON.stringify({
-            value: userData.job || {},
-            is_show: isShowState?.job
+          value: userData.job || {},
+          is_show: isShowState?.job,
         }),
         school: JSON.stringify({
-            value: userData.school || {},
-            is_show: isShowState?.school
+          value: userData.school || {},
+          is_show: isShowState?.school,
         }),
         edu_lvl: JSON.stringify({
-            value: userData.edu_lvl || {},
-            is_show: isShowState?.edu_lvl
+          value: userData.edu_lvl || {},
+          is_show: isShowState?.edu_lvl,
         }),
         religion: JSON.stringify({
-            value: userData.religion || {},
-            is_show: isShowState?.religion
+          value: userData.religion || {},
+          is_show: isShowState?.religion,
         }),
         drink: JSON.stringify({
-            value: userData.drink || {},
-            is_show: isShowState?.drink
+          value: userData.drink || {},
+          is_show: isShowState?.drink,
         }),
         smoke: JSON.stringify({
-            value: userData.smoke || {},
-            is_show: isShowState?.smoke
+          value: userData.smoke || {},
+          is_show: isShowState?.smoke,
         }),
         smoke_weed: JSON.stringify({
-            value: userData.smoke_weed || {},
-            is_show: isShowState?.smoke_weed
+          value: userData.smoke_weed || {},
+          is_show: isShowState?.smoke_weed,
         }),
         drugs: JSON.stringify({
-            value: userData.drugs || {},
-            is_show: isShowState?.drugs
+          value: userData.drugs || {},
+          is_show: isShowState?.drugs,
         }),
         age_range: JSON.stringify(userData.age_range || {}),
         interests: topics || [], // Updated to use setTopics data
@@ -609,11 +563,10 @@ const EditProfile = ({navigation}) => {
         is_notify: userData.is_notify || 0,
         lat: userData.lat || '',
         lng: userData.lng || '',
-       
-    };
-    showToast()
+      };
+      showToast();
       console.log('Formatted Data:', formattedData);
-  
+
       const response = await postStoreUserInfo(formattedData);
       console.log('API Response:', response);
     } catch (error) {
@@ -621,35 +574,34 @@ const EditProfile = ({navigation}) => {
     }
   };
   const handleEditProfile = async () => {
-    console.log("handle edit profile")
-    try{
-      console.log( "try catch block" , profileData?.images)
-      const formData = new FormData()
+    console.log('handle edit profile');
+    try {
+      console.log('try catch block', profileData?.images);
+      const formData = new FormData();
       profileData?.images.forEach((image, index) => {
         formData.append(`images[${index}]`, {
-          
-            uri: image,
-            type: 'image/jpeg', // Ensure correct MIME type
-            name: `image_${index}.jpg`
+          uri: image,
+          type: 'image/jpeg', // Ensure correct MIME type
+          name: `image_${index}.jpg`,
         });
-    });
-// formData?.append("_method", "PATCH")
-    // formData?.append('prompt', profileData?.prompt)
+      });
+      // formData?.append("_method", "PATCH")
+      // formData?.append('prompt', profileData?.prompt)
+      console.log('prompt data++++++++++++++++++++++', profileData?.prompt);
+      profileData?.prompt.forEach(item => {
+        formData.append('prompt[]', item);
+      });
 
-    profileData?.prompt.forEach((item) => {
-      formData.append('prompt[]', item);
-     })
-
-   console.log("formData", formData)
-    const res = await postUpdateProfile(formData)
-    if(res) {
-      showToast
+      console.log('formData', formData);
+      const res = await postUpdateProfile(formData);
+      if (res?.data?.success === true) {
+        showToast();
+      }
+      console.log('profile update res', res?.data?.success);
+    } catch (error) {
+      console.log(error);
     }
-    console.log("profile update res", res)
-    }catch(error) {
-      console.log(error)
-    }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -660,7 +612,10 @@ const EditProfile = ({navigation}) => {
     );
   }
   return (
-    <ScrollView style={tw`flex-1 `} nestedScrollEnabled={true}>
+    <ScrollView
+      style={tw`flex-1 `}
+      keyboardShouldPersistTaps="handled"
+      nestedScrollEnabled={true}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={tw`flex-row gap-4 my-6 p-[4%]`}>
@@ -782,7 +737,7 @@ const EditProfile = ({navigation}) => {
               />
             </View>
           </View>
-          <View style={tw``}>
+          <View style={{flex: 1}}>
             <GooglePlacesAutocomplete
               placeholder="Search for a location"
               query={{
@@ -812,14 +767,14 @@ const EditProfile = ({navigation}) => {
               styles={{
                 textInputContainer: tw`bg-white border border-gray-300 rounded-lg p-2 mt-4`,
                 textInput: tw`text-black font-MontserratRegular`,
-                listView: tw`bg-white border border-gray-300 rounded-lg`,
+                listView: {height: 200}, // Restrict height to avoid full nesting
               }}
               keyboardShouldPersistTaps="handled"
               value={location}
             />
           </View>
 
-          <MapView
+          {/* <MapView
             style={tw`w-full h-24`}
             provider={PROVIDER_GOOGLE}
             region={currentLocation}
@@ -829,7 +784,7 @@ const EditProfile = ({navigation}) => {
               coordinate={currentLocation}
               // onPress={() => setShowPopup(true)}
             />
-          </MapView>
+          </MapView> */}
         </View>
         <View style={tw` px-[4%]`}>
           <View style={tw`flex-row gap-2 items-center`}>
@@ -1019,7 +974,7 @@ const EditProfile = ({navigation}) => {
                     },
                   }))
                 }
-                placeholder="Occationally"
+                // placeholder="Occationally"
                 placeholderTextColor={tw`text-black`}
               />
             </View>
@@ -1479,43 +1434,54 @@ const EditProfile = ({navigation}) => {
           data={profileData?.images}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
-            // console.log('item', item);
             return (
               <View style={{position: 'relative', marginRight: 10}}>
                 <Image
                   source={{uri: item}}
-                  style={{width: 100, height: 100, borderRadius: 8}}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 8,
+                  }}
                 />
 
-                {/* Cross Icon to delete the image */}
-                <TouchableOpacity
-                  onPress={() => handleDeletePhoto(index)}
-                  style={{
-                    position: 'absolute',
-                    top: 5,
-                    right: 5,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    borderRadius: 15,
-                    padding: 5,
-                  }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>X</Text>
-                </TouchableOpacity>
+                
 
                 {/* Button to change the image */}
-                <TouchableOpacity
-                  onPress={() => handleChangePhoto(index)}
-                  style={{
-                    position: 'absolute',
-                    bottom: 5,
-                    left: 5,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    borderRadius: 15,
-                    padding: 5,
-                  }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Change
-                  </Text>
-                </TouchableOpacity>
+                <View style={tw``}>
+                  <TouchableOpacity
+                    onPress={() => handleChangePhoto(index)}
+                    style={{
+                      position: 'absolute',
+                      bottom: 5,
+                      left: 5,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      borderRadius: 15,
+                      padding: 5,
+                      zIndex: 10, // Ensure it's above the image
+                    }}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                      Change
+                    </Text>
+                  </TouchableOpacity>
+                  
+                {/* Cross Icon to delete the image */}
+                  <TouchableOpacity
+                    onPress={() => handleDeletePhoto(index)}
+                    style={{
+                      position: 'absolute',
+                      bottom: 72,
+                      right: 5,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      borderRadius: 15,
+                      padding: 5,
+                      zIndex: 10, // Ensure it's above the image
+                    }}>
+                    <Text style={{color: 'red', fontWeight: 'bold'}}>
+                      X
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}
@@ -1556,7 +1522,15 @@ const EditProfile = ({navigation}) => {
                     {/* <SvgXml xml={UnivesityIcon} width={20} height={20} /> */}
                     <View style={tw`w-full relative`}>
                       <InputText
-                      defaultValue={p}
+                        onChangeText={value => {
+                          setProfileData(prev => ({
+                            ...prev,
+                            prompt: prev.prompt.map((item, index) =>
+                              index === i ? value : item,
+                            ),
+                          }));
+                        }}
+                        defaultValue={p}
                         containerStyle={tw`border-b border-0`}
                         placeholder="Exploring life, one adventure at a time 🌍✨"
                         placeholderTextColor={tw`text-black`}
@@ -1566,7 +1540,6 @@ const EditProfile = ({navigation}) => {
                 </View>
               );
             })}
-          
         </View>
       </View>
       <View style={tw`flex-row items-center justify-center gap-1  my-4`}>

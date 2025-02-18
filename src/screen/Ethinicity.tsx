@@ -36,14 +36,15 @@ const Ethinicity = ({navigation}: NavigProps<null>) => {
     'Prefer Not to Say',
   ];
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string>('');
+
   console.log('++++', selectedOptions);
   // Toggle option selection
   const toggleOption = (option: string) => {
-    setSelectedOptions(prev =>
-      prev.includes(option)
-        ? prev.filter(item => item !== option)
-        : [...prev, option],
+    setSelectedOptions(
+      // prev.includes(option)
+      //   ? prev.filter(item => item !== option)
+         option
     );
   };
 
