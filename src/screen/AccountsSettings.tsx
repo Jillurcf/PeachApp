@@ -141,7 +141,7 @@ const AccountSettings = ({navigation}) => {
           </View>
 
           {/* Notification Settings */}
-          <View style={tw`p-4 bg-white mt-4 rounded-lg`}>
+          {/* <View style={tw`p-4 bg-white mt-4 rounded-lg`}>
             <Text style={tw`text-lg font-MontserratBold text-black mb-4`}>
               Notification Settings
             </Text>
@@ -179,7 +179,7 @@ const AccountSettings = ({navigation}) => {
                 onValueChange={setInAppEnabled}
               />
             </View>
-          </View>
+          </View> */}
         </View>
 
         {/* Update Password */}

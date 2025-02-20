@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SvgXml} from 'react-native-svg';
 import tw from '../lib/tailwind';
+import { usePostHandle_iteractionMutation } from '../redux/apiSlices/userSlice';
 
 const {width, height} = Dimensions.get('window');
 
@@ -19,37 +20,71 @@ type AnimatedStarRatingProps = {
 };
 
 const AnimatedLoveSending = ({
+  id,
   LoveIcon,
   onRatingChange,
 }: AnimatedStarRatingProps) => {
   const [ratings, setRatings] = useState<number[]>([]); // Array to track active animations
+   const [postHandle_iteraction] = usePostHandle_iteractionMutation();
   const iconPositions = useSharedValue<{x: number; y: number}[]>([]); // Shared value for icon positions
-
+console.log("ratings", ratings)
   const derivedIconPositions = useDerivedValue(
     () => [...iconPositions.value],
     [],
   );
   // Function to add a flourish when the user taps on the star
-  const addFlourish = () => {
+  const addFlourish =async () => {
     const newId = Math.random(); // Use Math.random() for a unique key
+   
     setRatings(prev => {
       const updatedRatings = [...prev, newId];
       onRatingChange?.(updatedRatings.length);
-
       return updatedRatings;
     });
-
+    const result = 'like';
+  
+    // Extract the first value from the ratings array
+    const newRatings = ratings[0]; // Assuming you only need the first value from the array
+  
+    try {
+      const formData = new FormData();
+      formData.append('matched_user_id', id);
+      
+      // Append the string value of the rating, not the array
+      formData.append('status', result); // Ensure it's a string
+  
+      console.log('formData', formData);
+  
+      const response = await postHandle_iteraction(formData);
+      console.log('interaction response', response);
+    } catch (error) {
+      console.log(error);
+    }
+  
     // Set the position to the center of the screen for the flourish
     iconPositions.value = [
       ...iconPositions.value,
       {x: width / 2, y: height / 2}, // Always center
     ];
   };
+  
 
   const removeFlourish = (id: number) => {
     setRatings(prev => prev.filter(ratingId => ratingId !== id));
   };
-
+  const handleInteraction = async id => {
+    console.log('click', id);
+    try {
+      const formData = new FormData();
+      formData.append('matched_user_id', id);
+      formData.append('status', rating);
+      console.log('formData', formData);
+      const response = await postHandle_iteraction(formData);
+      console.log('interacion response', response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Rating Icons */}

@@ -9,6 +9,9 @@ import {
   ScrollView,
   FlatList,
   StatusBar,
+  Alert,
+  Share,
+  Linking,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -142,7 +145,7 @@ type Topic =
   | 'Horror Films'
   | 'Skincare';
 
-const ExploreScreen = () => {
+const ExploreScreen = ({route}) => {
   const topics: Topic[] = [
     'Online Shopping',
     'Amateur Cook',
@@ -162,7 +165,10 @@ const ExploreScreen = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [rating, setRating] = useState(0);
   const {data: userData} = useGetUserQuery({});
-  console.log('userData', userData?.data?.id);
+  console.log(
+    'rating+++++++++++++++++++++++++++++++++++++++++++++++++',
+    rating,
+  );
   const {data, isLoading, isError} = useGetHomeQuery({
     perPage: 10,
   });
@@ -246,28 +252,60 @@ const ExploreScreen = () => {
       ],
     },
   });
-
+  const selectedProfiles = {
+    profile: { name: 'JohnDoe' } // Replace with dynamic profile data
+  };
+  const profileUrl = `myapp://profile/${selectedProfiles.profile.name.toLowerCase()}`;
+  
+ // Function to Copy Profile Link to Clipboard
+ const handleCopyProfile = () => {
+  Clipboard.setString(profileUrl);
+  Alert.alert('Copied!', 'Profile link copied to clipboard.');
+};
   // Function to handle "Share Profile" action
-  const handleShareProfile = () => {
-    const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
+  const handleShareProfile =async () => {
+  //   const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
 
-    // You can log it to test the generated URL
-    console.log(profileUrl);
+  //   // You can log it to test the generated URL
+  //   console.log(profileUrl);
 
-    // Optionally, copy it to the clipboard
-    Clipboard.setString(profileUrl);
-    // Alert.alert('Profile URL Copied', 'You can now paste this URL anywhere!');
-  };
+  //   // Optionally, copy it to the clipboard
+  //   Clipboard.setString(profileUrl);
+  //   // Alert.alert('Profile URL Copied', 'You can now paste this URL anywhere!');
+  // };
+ 
+  // const handleCopyProfile = () => {
+  //   Clipboard.setString(profileUrl);
+  //   Alert.alert('Copied!', 'Profile link copied to clipboard.');
+  // };
 
-  // Function to navigate to the profile page (simulating the dynamic URL)
-  const handleViewProfile = () => {
-    const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
+  
+  // // Function to navigate to the profile page (simulating the dynamic URL)
+  // const handleViewProfile = () => {
+  //   const profileUrl = `https://example.com/profile/${selectedProfile.profile.name.toLowerCase()}`;
 
-    // Simulate navigation to the profile screen with the profile name
-    navigation.navigate('ProfileScreen', {
-      profileName: selectedProfile.profile.name,
+  //   // Simulate navigation to the profile screen with the profile name
+  //   navigation.navigate('ProfileScreen', {
+  //     profileName: selectedProfile.profile.name,
+  //   });
+
+  try {
+    await Share.share({
+      message: `Check out this profile: ${profileUrl}`,
     });
+  } catch (error) {
+    Alert.alert('Error', 'Failed to share profile link.');
+  }
   };
+
+ // Function to Open Profile in App
+ const handleOpenProfile = () => {
+  Linking.openURL(profileUrl).catch((err) =>
+    Alert.alert('Error', 'Failed to open link. Ensure the app is installed.')
+  );
+};
+
+
   // const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
 
@@ -285,18 +323,39 @@ const ExploreScreen = () => {
   };
 
   const handleInteraction = async id => {
+    if (!id) {
+      console.log('No ID provided');
+      return;
+    }
+
     console.log('click', id);
+
     try {
       const formData = new FormData();
       formData.append('matched_user_id', id);
-      formData.append('status', rating);
+      formData.append('status', rating || 'default_rating');
       console.log('formData', formData);
-      const response = await postHandle_iteraction(formData);
-      console.log('interacion response', response);
+
+      // const response = await postHandle_iteraction(formData);
+
+      // // Log the raw response to debug
+      // console.log('Raw response:', response);
+
+      // Check if the response is valid JSON before trying to parse it
+      // const contentType = response.headers.get('Content-Type');
+      // if (contentType && contentType.includes('application/json')) {
+      //   const parsedResponse = await response.json();
+      //   console.log('Parsed interaction response:', parsedResponse);
+      // } else {
+      //   // If it's not JSON, log the response text
+      //   const responseText = await response.text();
+      //   console.log('Non-JSON response:', responseText);
+      // }
     } catch (error) {
-      console.log(error);
+      console.log('Error during interaction:', error);
     }
   };
+
   const socket = getSocket();
   React.useEffect(() => {
     if (userData) {
@@ -391,6 +450,7 @@ const ExploreScreen = () => {
                       onPress={() => handleInteraction(item?.id)}
                       style={tw`w-12 h-12 justify-center items-center rounded-full`}>
                       <AnimatedLoveSending
+                        id={item?.id}
                         LoveIcon={LoveIcon}
                         onRatingChange={setRating}
                       />

@@ -15,6 +15,18 @@ const userSlice = api.injectEndpoints({
               },
               providesTags: ['user',]
         }),
+        getUserDetails: builder.query({
+            query: (id) => ({
+                url: `/user/user-details/${id}`,
+                method: "GET"
+              }),
+              // transformErrorResponse: (response) => response?.data,
+              transformResponse: (response) => {
+                // console.log("API Response:", response); 
+                return response; 
+              },
+              providesTags: ['user',]
+        }),
         getPorfile: builder.query({
             query: () => ({
                 url: `/user/profile`,
@@ -72,4 +84,5 @@ export const {useGetUserQuery,
     usePostUpdateUserImgMutation,
     useGetPorfileQuery,
     usePostUpdateProfileMutation,
+    useGetUserDetailsQuery,
 } = userSlice;

@@ -74,22 +74,42 @@ const Height = ({navigation}: NavigProps<null>) => {
           <View style={tw`my-6`}>
             <WheelPicker
            
-              items={[
-                {label: "5.3' (161 cm)", value: "5.3' (161 cm)"},
-                {label: "5.4' (161 cm)", value: "5.4' (161 cm)"},
-                {label: "5.5' (161 cm)", value: "5.5' (161 cm)"},
-                {label: "5.6' (161 cm)", value: "5.6' (161 cm)"},
-                {label: "5.7' (161 cm)", value: "5.7' (161 cm)"},
-                {label: "5.8' (161 cm)", value: "5.8' (161 cm)"},
-                {label: "5.9' (161 cm)", value: "5.9' (161 cm)"},
-                {label: "5.10' (161 cm)", value: "5.10' (161 cm)"},
-                {label: "5.11' (161 cm)", value: "5.311 (161 cm)"},
-                {label: "5.12' (161 cm)", value: "5.3'12(161 cm)"},
-                {label: "5.13' (161 cm)", value: "5.3' 13161 cm)"},
-                {label: "5.14' (161 cm)", value: "5.3' (1461 cm)"},
-                {label: "5.15' (161 cm)", value: "5.3' (1151 cm)"},
-              
-              ]}
+           items={[
+            { label: "4.0' (121 cm)", value: "4.0' (121 cm)" },
+            { label: "4.1' (125 cm)", value: "4.1' (125 cm)" },
+            { label: "4.2' (127 cm)", value: "4.2' (127 cm)" },
+            { label: "4.3' (130 cm)", value: "4.3' (130 cm)" },
+            { label: "4.4' (132 cm)", value: "4.4' (132 cm)" },
+            { label: "4.5' (137 cm)", value: "4.5' (137 cm)" },
+            { label: "4.6' (137 cm)", value: "4.6' (137 cm)" },
+            { label: "4.7' (140 cm)", value: "4.7' (140 cm)" },
+            { label: "4.8' (142 cm)", value: "4.8' (142 cm)" },
+            { label: "4.9' (145 cm)", value: "4.9' (145 cm)" },
+            { label: "5.0' (152 cm)", value: "5.0' (152 cm)" },
+            { label: "5.1' (155 cm)", value: "5.1' (155 cm)" },
+            { label: "5.2' (157 cm)", value: "5.2' (157 cm)" },
+            { label: "5.3' (161 cm)", value: "5.3' (161 cm)" },
+            { label: "5.4' (163 cm)", value: "5.4' (163 cm)" },
+            { label: "5.5' (165 cm)", value: "5.5' (165 cm)" },
+            { label: "5.6' (168 cm)", value: "5.6' (168 cm)" },
+            { label: "5.7' (170 cm)", value: "5.7' (170 cm)" },
+            { label: "5.8' (173 cm)", value: "5.8' (173 cm)" },
+            { label: "5.9' (175 cm)", value: "5.9' (175 cm)" },
+            { label: "5.10' (178 cm)", value: "5.10' (178 cm)" },
+            { label: "5.11' (180 cm)", value: "5.11' (180 cm)" },
+            { label: "6.0' (183 cm)", value: "6.0' (183 cm)" },
+            { label: "6.1' (185 cm)", value: "6.1' (185 cm)" },
+            { label: "6.2' (188 cm)", value: "6.2' (188 cm)" },
+            { label: "6.3' (191 cm)", value: "6.3' (191 cm)" },
+            { label: "6.4' (193 cm)", value: "6.4' (193 cm)" },
+            { label: "6.5' (196 cm)", value: "6.5' (196 cm)" },
+            { label: "6.6' (198 cm)", value: "6.6' (198 cm)" },
+            { label: "6.7' (201 cm)", value: "6.7' (201 cm)" },
+            { label: "6.8' (203 cm)", value: "6.8' (203 cm)" },
+            { label: "6.9' (206 cm)", value: "6.9' (206 cm)" },
+            { label: "7.0' (213 cm)", value: "7.0' (213 cm)" }
+          ]}
+          
               initialValue={''}
               onChange={(value) => setCurrentValue(value)}
               // itemHeight={200}

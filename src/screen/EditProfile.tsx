@@ -503,58 +503,58 @@ const EditProfile = ({navigation}) => {
         dob: userData.dob || '',
         address: userData.address || '',
         gender: JSON.stringify({
-          value: userData.gender || {},
-          is_show: isShowState.gender,
+          value: userData.gender.value || '',
+          is_show: isShowState.gender
         }),
         dating_with: userData.dating_with || '',
         height: userData.height || '',
         passions: userData.passions || [],
         ethnicity: JSON.stringify({
-          value: userData.ethnicity || {},
+          value: userData.ethnicity?.value || '',
           is_show: isShowState?.ethnicity,
         }),
         have_children: JSON.stringify({
-          value: userData.have_children || {},
+          value: userData.have_children?.value || '',
           is_show: isShowState?.have_children,
         }),
         home_town: JSON.stringify({
-          value: userData.home_town || {},
+          value: userData.home_town?.value || '',
           is_show: isShowState?.home_town,
         }),
         work_place: JSON.stringify({
-          value: userData.work_place || {},
+          value: userData.work_place?.value || '',
           is_show: isShowState?.work_place,
         }),
         job: JSON.stringify({
-          value: userData.job || {},
+          value: userData.job?.value || '',
           is_show: isShowState?.job,
         }),
         school: JSON.stringify({
-          value: userData.school || {},
+          value: userData.school?.value || '',
           is_show: isShowState?.school,
         }),
         edu_lvl: JSON.stringify({
-          value: userData.edu_lvl || {},
+          value: userData.edu_lvl?.value || '',
           is_show: isShowState?.edu_lvl,
         }),
         religion: JSON.stringify({
-          value: userData.religion || {},
+          value: userData.religion?.value || '',
           is_show: isShowState?.religion,
         }),
         drink: JSON.stringify({
-          value: userData.drink || {},
+          value: userData.drink?.value || '',
           is_show: isShowState?.drink,
         }),
         smoke: JSON.stringify({
-          value: userData.smoke || {},
+          value: userData.smoke?.value || '',
           is_show: isShowState?.smoke,
         }),
         smoke_weed: JSON.stringify({
-          value: userData.smoke_weed || {},
+          value: userData.smoke_weed?.value || '',
           is_show: isShowState?.smoke_weed,
         }),
         drugs: JSON.stringify({
-          value: userData.drugs || {},
+          value: userData.drugs?.value || '',
           is_show: isShowState?.drugs,
         }),
         age_range: JSON.stringify(userData.age_range || {}),
@@ -1227,7 +1227,7 @@ const EditProfile = ({navigation}) => {
                     ...prev,
                     religion: {
                       ...prev.religion,
-                      value: va,
+                      value: value,
                     },
                   }))
                 }
