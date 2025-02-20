@@ -160,7 +160,7 @@ const NotificationsScreen = ({navigation, route}) => {
             />
           )}
         </View>
-        <Text style={tw`text-blue-500`}>View All</Text>
+        {/* <Text style={tw`text-blue-500`}>View All</Text> */}
       </View>
 
       {/* Notifications List */}

@@ -68,7 +68,7 @@ const Notification_interaction = ({navigation, route}) => {
   const [report, setReport] = useState();
   const id = route?.params?.id;
   const {data, isLoading, isError} = useGetUserDetailsQuery(id);
-  console.log('single notification', data?.data?.profile?.images);
+  console.log('single notification', data?.data?.id);
 
   const handleBlockUser = async id => {
     console.log('click', id);
