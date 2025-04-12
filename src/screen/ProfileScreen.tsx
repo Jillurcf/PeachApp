@@ -26,10 +26,10 @@ import {
 } from '../assets/icons/icon';
 import NormalModal from '../components/modals/NormalModal';
 import {NavigProps} from '../interfaces/NaviProps';
-import { usePostLogoutMutation } from '../redux/apiSlices/authSlice';
-import { getStorageToken, removeStorageToken } from '../utils/utils';
-import { useGetUserQuery } from '../redux/apiSlices/userSlice';
-import { cross } from '../helper/exportedFunction';
+import {usePostLogoutMutation} from '../redux/apiSlices/authSlice';
+import {getStorageToken, removeStorageToken} from '../utils/utils';
+import {useGetUserQuery} from '../redux/apiSlices/userSlice';
+import {cross} from '../helper/exportedFunction';
 
 const {width, height} = Dimensions.get('window');
 
@@ -38,9 +38,9 @@ const ProfileScreen = ({navigation}) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [postLogout, {isLoading, isError}] = usePostLogoutMutation();
-  const {data} = useGetUserQuery({})
+  const {data} = useGetUserQuery({});
   // console.log("data+++++++", data?.data?.profile?.images)
-  console.log(imageUri)
+  console.log(imageUri);
 
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -59,8 +59,6 @@ const ProfileScreen = ({navigation}) => {
       type: file.type,
       name: file.fileName,
     });
-
-    
   };
 
   const Data = [
@@ -85,32 +83,32 @@ const ProfileScreen = ({navigation}) => {
     setOpenModal(true);
   };
 
-  const handleLogout = async()=> {
+  const handleLogout = async () => {
     // console.log('click')
     try {
       const token = getStorageToken();
-          console.log("token", token)
+      console.log('token', token);
       // Trigger your logout API call
       const response = await postLogout(token);
       // console.log('Logout API Response:', response);
-      removeStorageToken()
+      removeStorageToken();
       // Sign out the user using GoogleSignin
       // await GoogleSignin.signOut();
       // console.log('Google Signout Successful');
-      
+
       // Log success message
       // console.log('User signed out successfully');
-  
+
       // Navigate to the Login screen
       navigation?.replace('LoadingSplash');
-    
+
       // Close the logout confirmation modal
       // setLogoutConfirmationModalVisible(false);
     } catch (error) {
       // Handle errors
       console.error('Error signing out:', error);
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -122,35 +120,34 @@ const ProfileScreen = ({navigation}) => {
   }
   return (
     <ScrollView style={tw`flex-1  my-12`}>
-        <TouchableOpacity
+      <TouchableOpacity
         onPress={handleLogout}
         style={tw`flex-row justify-end px-[4%] gap-4`}>
-          <Text style={tw`text-black font-MontserratRegular`}>Logout</Text>
-          <SvgXml xml={LogoutIcon}/>
-        </TouchableOpacity>
+        <Text style={tw`text-black font-MontserratRegular`}>Logout</Text>
+        <SvgXml xml={LogoutIcon} />
+      </TouchableOpacity>
       <View style={tw`items-center`}>
-      
         <View onPress={selectImage}>
           <View
             style={tw`w-30 h-30 rounded-full overflow-hidden mx-auto justify-center items-center`}>
-           
             <Image
               source={{uri: imageUri?.length ? imageUri : data?.data?.avatar}}
               style={tw`w-full h-full`}
             />
-            
           </View>
           <View style={tw`flex items-center justify-center my-4`}>
             <Text style={tw`text-2xl font-MontserratBold text-black`}>
-             {data?.data?.name}
+              {data?.data?.name}
             </Text>
-            <Text style={tw`text-2xl font-MontserratBold text-black`}> {data?.data?.email}</Text>
+            <Text style={tw`text-2xl font-MontserratBold text-black`}>
+              {' '}
+              {data?.data?.email}
+            </Text>
             {/* <SvgXml xml={VerifiedIcon} width={20} height={20} /> */}
           </View>
-         
         </View>
       </View>
-     
+
       <View>
         <View
           style={tw`flex-row mx-auto gap-12 my-12 w-[85%] items-center justify-center`}>
@@ -183,110 +180,107 @@ const ProfileScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-     
-    
-        <NormalModal
-          visible={openModal}
-          setVisible={setOpenModal}
-          animationType="fade"
-          containerStyle={tw`p-4 mt-[10%] border-gray-300`}>
-          <View style={tw`bg-white border-gray-300 border p-4 rounded-2xl`}>
-            <Text
-              style={tw`text-center text-2xl font-MontserratBold text-black py-4`}>
-              Your Benifits
+
+      <NormalModal
+        visible={openModal}
+        setVisible={setOpenModal}
+        animationType="fade"
+        containerStyle={tw`p-4 mt-[10%] border-gray-300`}>
+        <View style={tw`bg-white border-gray-300 border p-4 rounded-2xl`}>
+          <Text
+            style={tw`text-center text-2xl font-MontserratBold text-black py-4`}>
+            Your Benifits
+          </Text>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold text-black `}>
+              Unlimited Like
             </Text>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <Text style={tw`text-xl font-MontserratBold text-black `}>
-                Unlimited Like
-              </Text>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold text-black`}>
+              See Who like you
+            </Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold text-black`}>
+              1 Free bosst per month
+            </Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold text-black`}>
+              5 free super like per week
+            </Text>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
               <Text style={tw`text-xl font-MontserratBold text-black`}>
-                See Who like you
+                Global match
               </Text>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <Text style={tw`text-xl font-MontserratBold text-black`}>
-                1 Free bosst per month
-              </Text>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <Text style={tw`text-xl font-MontserratBold text-black`}>
-                5 free super like per week
-              </Text>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <View>
-                <Text style={tw`text-xl font-MontserratBold text-black`}>
-                  Global match
-                </Text>
-                <Text style={tw`font-MontserratRegular text-black`}>
-                  Connect and chat with people worldwide.
-                </Text>
-              </View>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <View>
-                <Text style={tw`text-xl font-MontserratBold text-black`}>
-                  Control your profile
-                </Text>
-                <Text style={tw`font-MontserratRegular text-black`}>
-                  Decide what others can see about you.
-                </Text>
-              </View>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <View>
-                <Text style={tw`text-xl font-MontserratBold text-black`}>
-                  Control who see you
-                </Text>
-                <Text style={tw`font-MontserratRegular text-black`}>
-                  Manage your visibility
-                </Text>
-              </View>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <View>
-                <Text style={tw`text-xl font-MontserratBold text-black`}>
-                  Control who follow you
-                </Text>
-                <Text style={tw`font-MontserratRegular text-black`}>
-                  Find the type of people you are looking for
-                </Text>
-              </View>
-            </View>
-            <View style={tw`flex-row gap-4`}>
-              <SvgXml xml={TickIcon} width={20} height={20} />
-              <Text style={tw`text-xl font-MontserratBold text-black`}>
-                Add free experiences
+              <Text style={tw`font-MontserratRegular text-black`}>
+                Connect and chat with people worldwide.
               </Text>
             </View>
           </View>
-
-          <View
-            style={tw`flex-row w-[60%] mx-auto justify-between items-center`}>
-            <TouchableOpacity
-              onPress={() => setOpenModal(false)}
-              style={tw`mt-4 bg-gray-600 py-2 px-6 rounded-lg`}>
-              <Text style={tw`text-white text-center`}>Select</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => setOpenModal(false)}
-              style={tw`mt-4 bg-red-400 py-2 px-6 rounded-lg`}>
-              <Text style={tw`text-white text-center`}>Close</Text>
-            </TouchableOpacity>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+              <Text style={tw`text-xl font-MontserratBold text-black`}>
+                Control your profile
+              </Text>
+              <Text style={tw`font-MontserratRegular text-black`}>
+                Decide what others can see about you.
+              </Text>
+            </View>
           </View>
-        </NormalModal>
-   
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+              <Text style={tw`text-xl font-MontserratBold text-black`}>
+                Control who see you
+              </Text>
+              <Text style={tw`font-MontserratRegular text-black`}>
+                Manage your visibility
+              </Text>
+            </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <View>
+              <Text style={tw`text-xl font-MontserratBold text-black`}>
+                Control who follow you
+              </Text>
+              <Text style={tw`font-MontserratRegular text-black`}>
+                Find the type of people you are looking for
+              </Text>
+            </View>
+          </View>
+          <View style={tw`flex-row gap-4`}>
+            <SvgXml xml={TickIcon} width={20} height={20} />
+            <Text style={tw`text-xl font-MontserratBold text-black`}>
+              Add free experiences
+            </Text>
+          </View>
+        </View>
+
+        <View style={tw`flex-row w-[60%] mx-auto justify-between items-center`}>
+          <TouchableOpacity
+            onPress={() => setOpenModal(false)}
+            style={tw`mt-4 bg-gray-600 py-2 px-6 rounded-lg`}>
+            <Text style={tw`text-white text-center`}>Select</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setOpenModal(false)}
+            style={tw`mt-4 bg-red-400 py-2 px-6 rounded-lg`}>
+            <Text style={tw`text-white text-center`}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </NormalModal>
     </ScrollView>
   );
 };

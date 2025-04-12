@@ -107,7 +107,7 @@ const Study = ({navigation}: NavigProps<null>) => {
           <SvgXml xml={LeftArrow} width={25} height={25} />
           <View style={tw`w-[90%]`}>
             <Text style={tw`font-MontserratBlack text-primary text-2xl`}>
-              What is the height level you attained?
+              What is the height level of education you attained?
             </Text>
           </View>
         </TouchableOpacity>

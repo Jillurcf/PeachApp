@@ -22,7 +22,7 @@ const baseQueryWithRath: BaseQueryFn<BaseQueryArgs, unknown, unknown> = async (
   try {
     const result: AxiosResponse = await axios({
       // baseURL: 'http://192.168.12.140:8000/api',
-      baseURL: 'http://10.0.80.13:8001/api',
+      baseURL: 'http://182.252.68.227:8008/api',
       ...args,
       url: args.url,
       method: args.method,

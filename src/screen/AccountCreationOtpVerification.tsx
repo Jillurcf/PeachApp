@@ -81,6 +81,8 @@ const AccountCreationOtpVerificaton = ({
       />
     ));
   };
+
+  
   const handleNext = async () => {
     console.log('click');
   
